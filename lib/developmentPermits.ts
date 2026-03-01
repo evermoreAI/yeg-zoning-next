@@ -43,7 +43,7 @@ export async function getPermitsNearby(lat: number, lon: number): Promise<Develo
   const maxLon = (lon + LON_DELTA).toFixed(6)
 
   const where  = `latitude>'${minLat}' AND latitude<'${maxLat}' AND longitude>'${minLon}' AND longitude<'${maxLon}'`
-  const url    = `${BASE_URL}?$where=${encodeURIComponent(where)}&$order=permit_date DESC&$limit=10`
+  const url    = `${BASE_URL}?$where=${encodeURIComponent(where)}&$order=permit_date DESC&$limit=25`
 
   let lastErr: Error | null = null
 

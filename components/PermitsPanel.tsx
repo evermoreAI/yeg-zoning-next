@@ -41,15 +41,7 @@ export default function PermitsPanel({ permits, loading }: PermitsPanelProps) {
             Nearby Development — 500m radius
           </span>
         </div>
-        <a
-          href="https://www.edmonton.ca/business_economy/development-applications"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[9px] text-[#c8a951] hover:underline"
-          style={{ fontFamily: 'var(--font-rajdhani)' }}
-        >
-          View all ↗
-        </a>
+
       </div>
 
       {/* Skeletons */}
@@ -63,7 +55,7 @@ export default function PermitsPanel({ permits, loading }: PermitsPanelProps) {
       )}
 
       {/* Permit cards — max 5 */}
-      {!loading && permits.slice(0, 5).map(p => {
+      {!loading && permits.map(p => {
         const st = statusStyle(p.status)
         return (
           <div key={p.id} className="p-3 rounded-lg mb-2"

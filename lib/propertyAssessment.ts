@@ -1,71 +1,66 @@
 /**
  * lib/propertyAssessment.ts
  *
- * Fetches property assessment data from Edmonton Open Data.
+ * Fetches the nearest property assessment record from Edmonton Open Data.
  * Dataset: q7d6-ambg (Property Assessment Current Year)
  *
- * Strategy: query by neighbourhood name (text-indexed), then find the
- * nearest record to the searched lat/lon using Haversine distance.
- * The lat/lon columns in this dataset are text — numeric range queries
- * fail due to string sort ordering, so proximity filtering is done in JS.
- *
- * Architecture rule: all API logic here, zero in UI components.
+ * The lat/lon columns in this dataset are TEXT — numeric range queries
+ * fail due to string sort order. Strategy:
+ *   1. Determine neighbourhood from the permits dataset (1km radius)
+ *   2. Query assessment by neighbourhood name (text-indexed, fast)
+ *   3. Find nearest record via Haversine distance in JS
  */
 
-const BASE_URL    = 'https://data.edmonton.ca/resource/q7d6-ambg.json'
-const MAX_RETRIES = 3
-const TIMEOUT_MS  = 8_000
-const MAX_RADIUS_M = 200  // reject matches more than 200m away
+const ASSESSMENT_URL = 'https://data.edmonton.ca/resource/q7d6-ambg.json'
+const PERMITS_URL    = 'https://data.edmonton.ca/resource/q4gd-6q9r.json'
+const MAX_RETRIES    = 2
+const TIMEOUT_MS     = 7_000
+const MAX_RADIUS_M   = 200
 
 export interface PropertyAssessment {
-  account_number:  string
-  address:         string
-  neighbourhood:   string
-  assessed_value:  number   // CAD
-  tax_class:       string
-  distance_m:      number   // metres from queried lat/lon
+  account_number: string
+  address:        string
+  neighbourhood:  string
+  assessed_value: number
+  tax_class:      string
+  distance_m:     number
 }
 
 /**
- * Fetch the nearest property assessment record within 200m.
- *
- * @param lat           Latitude (WGS84)
- * @param lon           Longitude (WGS84)
- * @param neighbourhood Neighbourhood name (UPPER CASE) — from GIS or permits
- * @returns             Nearest assessment or null
+ * Fetch nearest assessment within 200m.
+ * Accepts optional neighbourhood to skip the permit lookup.
  */
 export async function getNearestAssessment(
   lat: number,
   lon: number,
-  neighbourhood: string,
+  neighbourhood?: string,
 ): Promise<PropertyAssessment | null> {
-  if (!neighbourhood) return null
+  // Step 1: resolve neighbourhood if not supplied
+  const hood = neighbourhood || await resolveNeighbourhood(lat, lon)
+  if (!hood) return null
 
-  const hood = neighbourhood.toUpperCase().replace(/'/g, "''")
-  const url  = `${BASE_URL}?$where=${encodeURIComponent(
-    `neighbourhood='${hood}'`
+  // Step 2: fetch all assessment rows in that neighbourhood (≤200)
+  const escaped = hood.toUpperCase().replace(/'/g, "''")
+  const url = `${ASSESSMENT_URL}?$where=${encodeURIComponent(
+    `neighbourhood='${escaped}'`
   )}&$select=account_number,house_number,street_name,neighbourhood,assessed_value,tax_class,latitude,longitude&$limit=200`
 
-  let lastErr: Error | null = null
-
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-    if (attempt > 0) await sleep(1000 * Math.pow(2, attempt - 1))
+    if (attempt > 0) await sleep(1000 * attempt)
     try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(TIMEOUT_MS) })
+      const res  = await fetch(url, { signal: AbortSignal.timeout(TIMEOUT_MS) })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
-
       const rows: Record<string, string>[] = await res.json()
       if (!rows.length) return null
 
-      // Find nearest record by Haversine distance
+      // Step 3: find nearest by Haversine
       let nearest: PropertyAssessment | null = null
       let nearestDist = Infinity
 
       for (const row of rows) {
-        const rLat = parseFloat(row.latitude ?? '')
+        const rLat = parseFloat(row.latitude  ?? '')
         const rLon = parseFloat(row.longitude ?? '')
         if (isNaN(rLat) || isNaN(rLon)) continue
-
         const dist = haversineM(lat, lon, rLat, rLon)
         if (dist < nearestDist) {
           nearestDist = dist
@@ -82,26 +77,42 @@ export async function getNearestAssessment(
 
       if (!nearest || nearestDist > MAX_RADIUS_M) return null
       return nearest
-
     } catch (e) {
-      lastErr = e as Error
       console.error(`[assessment] attempt ${attempt + 1} failed:`, e)
     }
   }
-
-  console.error('[assessment] all retries failed:', lastErr)
   return null
+}
+
+/**
+ * Look up neighbourhood using the permits dataset (1km radius).
+ * Permits have reliable neighbourhood names and text-comparable lat/lon.
+ */
+async function resolveNeighbourhood(lat: number, lon: number): Promise<string> {
+  // 0.009 deg lat ≈ 1km; 0.013 deg lon ≈ 1km at Edmonton latitude
+  const url = `${PERMITS_URL}?$where=${encodeURIComponent(
+    `latitude>'${(lat - 0.009).toFixed(5)}' AND latitude<'${(lat + 0.009).toFixed(5)}' AND longitude>'${(lon - 0.013).toFixed(5)}' AND longitude<'${(lon + 0.013).toFixed(5)}'`
+  )}&$select=neighbourhood&$limit=1&$order=permit_date DESC`
+
+  try {
+    const res  = await fetch(url, { signal: AbortSignal.timeout(5_000) })
+    if (!res.ok) return ''
+    const rows = await res.json() as { neighbourhood?: string }[]
+    return rows[0]?.neighbourhood ?? ''
+  } catch {
+    return ''
+  }
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
 function haversineM(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const R   = 6_371_000  // Earth radius in metres
-  const φ1  = (lat1 * Math.PI) / 180
-  const φ2  = (lat2 * Math.PI) / 180
-  const Δφ  = ((lat2 - lat1) * Math.PI) / 180
-  const Δλ  = ((lon2 - lon1) * Math.PI) / 180
-  const a   = Math.sin(Δφ / 2) ** 2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) ** 2
+  const R  = 6_371_000
+  const φ1 = (lat1 * Math.PI) / 180
+  const φ2 = (lat2 * Math.PI) / 180
+  const Δφ = ((lat2 - lat1) * Math.PI) / 180
+  const Δλ = ((lon2 - lon1) * Math.PI) / 180
+  const a  = Math.sin(Δφ / 2) ** 2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) ** 2
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
@@ -109,9 +120,6 @@ function sleep(ms: number): Promise<void> {
   return new Promise(r => setTimeout(r, ms))
 }
 
-/** Format assessed value as CAD string: $584,000 */
 export function formatAssessedValue(value: number): string {
-  return value > 0
-    ? `$${value.toLocaleString('en-CA')}`
-    : 'Not available'
+  return value > 0 ? `$${value.toLocaleString('en-CA')}` : 'Not available'
 }

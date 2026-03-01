@@ -82,14 +82,12 @@ export async function GET(req: NextRequest) {
     if (momentum && (momentum as PromiseSettledResult<typeof momentumData>).status === 'fulfilled')
       momentumData = (momentum as PromiseFulfilledResult<typeof momentumData>).value
 
-    // Assessment: use neighbourhood from nearest permit (already fetched above)
-    const neighbourhood = permitsData[0]?.neighbourhood ?? ''
-    if (neighbourhood) {
-      try {
-        assessmentData = await getNearestAssessment(lat, lon, neighbourhood)
-      } catch (e) {
-        console.warn('[zone] assessment lookup failed:', e)
-      }
+    // Assessment: pass neighbourhood from permits if available, else self-resolve
+    try {
+      const hood = permitsData[0]?.neighbourhood
+      assessmentData = await getNearestAssessment(lat, lon, hood)
+    } catch (e) {
+      console.warn('[zone] assessment lookup failed:', e)
     }
   } catch (e) {
     console.warn('[zone] enrichment skipped:', (e as Error).message)

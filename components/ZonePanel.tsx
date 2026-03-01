@@ -12,6 +12,7 @@ import CombinedGate from './CombinedGate'
 import BookmarkButton from './BookmarkButton'
 import PermitsPanel           from './PermitsPanel'
 import ApprovalIntelligence   from './ApprovalIntelligence'
+import DCRulesPanel            from './DCRulesPanel'
 import { tierAtLeast, type Tier } from '@/lib/tierContext'
 
 // ── Sub-components ─────────────────────────────────────────────────────────
@@ -242,11 +243,19 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
 
         {/* DC warning */}
         {zone.dc_warning && (
-          <div className="mb-3 px-3 py-2.5 rounded-md bg-[rgba(139,26,26,0.2)] border border-[#8b1a1a] border-l-4 border-l-[#cf6679]">
-            <div className="text-[#cf6679] text-xs font-medium leading-snug">
-              ⚠ This is a Direct Control zone with custom development rules. Contact the City of Edmonton for specific provisions.
+          zone.dc_rules ? (
+            /* DC rules extracted — show full panel */
+            <div className="mb-3">
+              <DCRulesPanel rules={zone.dc_rules} />
             </div>
-          </div>
+          ) : (
+            /* Fallback: red warning card when no rules available */
+            <div className="mb-3 px-3 py-2.5 rounded-md bg-[rgba(139,26,26,0.2)] border border-[#8b1a1a] border-l-4 border-l-[#cf6679]">
+              <div className="text-[#cf6679] text-xs font-medium leading-snug">
+                ⚠ Direct Control zone — site-specific rules. Contact the City of Edmonton for provisions.
+              </div>
+            </div>
+          )
         )}
 
         {/* Amendment banner */}

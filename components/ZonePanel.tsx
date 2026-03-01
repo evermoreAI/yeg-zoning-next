@@ -7,6 +7,7 @@ import FeasibilityPanel        from './FeasibilityPanel'
 import { calculateFeasibility } from '@/lib/feasibility'
 import GateBlur from './GateBlur'
 import BookmarkButton from './BookmarkButton'
+import EmailCapture from './EmailCapture'
 import { tierAtLeast, type Tier } from '@/lib/tierContext'
 
 // ── Sub-components ─────────────────────────────────────────────────────────
@@ -336,6 +337,7 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
 
       </div>
       <Disclaimer />
+      <EmailCapture />
     </div>
   )
 }

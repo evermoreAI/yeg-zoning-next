@@ -120,6 +120,7 @@ async function fetchAndParse(url: string, zoneCode: string): Promise<DCZoneRules
   const usesStart = content.search(/\d+\.\s+Uses\b|\bUses\b\s*\n|\bPermitted Uses\b/i)
   const critStart = content.search(/Development Criteria|Development Standards|Site Criteria|Conditions/i)
 
+  const conditionWords = /\b(shall|provided|following|as follows|minimum|maximum|must|required|hereby)\b/i
   let allUses: string[] = []
   if (usesStart >= 0) {
     const usesEnd   = critStart > usesStart ? critStart : usesStart + 2000
@@ -135,14 +136,11 @@ async function fetchAndParse(url: string, zoneCode: string): Promise<DCZoneRules
   if (discStart > 0) {
     const discBlock = content.slice(discStart, discStart + 1000)
     const items = [...discBlock.matchAll(/[a-z]\.\s+([A-Z][a-zA-Z ,\/()-]{4,80}?)(?=\s+[a-z]\s*\.|$)/g)]
-    discretionary_uses = items
-      .map(m => m[1].trim())
-      .filter(u => !conditionWords.test(u))
+    discretionary_uses = items.map(m => m[1].trim()).filter(u => !conditionWords.test(u))
     // Remove from permitted if overlap
     allUses = allUses.filter(u => !discretionary_uses.includes(u))
   }
   // Filter out conditions masquerading as uses
-  const conditionWords = /\b(shall|provided|following|as follows|minimum|maximum|must|required|hereby)\b/i
   const permitted_uses = allUses
     .filter(u => !conditionWords.test(u))
     .slice(0, 15)

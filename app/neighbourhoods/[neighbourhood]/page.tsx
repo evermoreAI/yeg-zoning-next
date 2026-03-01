@@ -206,9 +206,10 @@ export function generateStaticParams() {
 // ── Metadata ──────────────────────────────────────────────────────────────────
 
 export async function generateMetadata(
-  { params }: { params: { neighbourhood: string } }
+  { params }: { params: Promise<{ neighbourhood: string }> }
 ): Promise<Metadata> {
-  const data = NEIGHBOURHOODS[params.neighbourhood]
+  const { neighbourhood } = await params
+  const data = NEIGHBOURHOODS[neighbourhood]
   if (!data) return { title: 'Not Found' }
   return {
     title: data.title,
@@ -236,8 +237,9 @@ function SectionLabel({ n, children }: { n: string; children: React.ReactNode })
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 
-export default function NeighbourhoodPage({ params }: { params: { neighbourhood: string } }) {
-  const data = NEIGHBOURHOODS[params.neighbourhood]
+export default async function NeighbourhoodPage({ params }: { params: Promise<{ neighbourhood: string }> }) {
+  const { neighbourhood } = await params
+  const data = NEIGHBOURHOODS[neighbourhood]
   if (!data) notFound()
 
   const { name, headline, subheadline, intro, dominantZone, units2025, character,

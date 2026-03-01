@@ -41,3 +41,34 @@ body::after {
 * {
   box-sizing: border-box;
 }
+
+/* ── Mapbox GL control overrides ─────────────────────── */
+.mapboxgl-ctrl-group {
+  background: #141820 !important;
+  border: 1px solid #2a2e38 !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+}
+.mapboxgl-ctrl-group button {
+  background: #141820 !important;
+  width: 36px !important;
+  height: 36px !important;
+  border-bottom: 1px solid #2a2e38 !important;
+}
+.mapboxgl-ctrl-group button:last-child {
+  border-bottom: none !important;
+}
+.mapboxgl-ctrl-group button:hover {
+  background: #1e2630 !important;
+}
+.mapboxgl-ctrl-icon {
+  filter: invert(0.8) !important;
+}
+.mapboxgl-ctrl-attrib {
+  background: rgba(10,12,16,0.7) !important;
+  color: #4a5568 !important;
+  font-size: 10px !important;
+}
+.mapboxgl-ctrl-attrib a {
+  color: #4a5568 !important;
+}

@@ -1,10 +1,13 @@
 'use client'
 
 import type { FeasibilityResult } from '@/lib/types'
+import type { NeighbourhoodRents } from '@/lib/rentalData'
 import { formatCAD, formatCADMonthly } from '@/lib/feasibility'
+import RentalMarketCard from './RentalMarketCard'
 
 interface FeasibilityPanelProps {
   result: FeasibilityResult
+  rents?: NeighbourhoodRents | null
 }
 
 // ── Sub-components ─────────────────────────────────────────────────────────
@@ -60,7 +63,7 @@ function Flag({ type, text }: { type: 'amber' | 'green'; text: string }) {
 
 // ── Main component ─────────────────────────────────────────────────────────
 
-export default function FeasibilityPanel({ result }: FeasibilityPanelProps) {
+export default function FeasibilityPanel({ result, rents }: FeasibilityPanelProps) {
   if (!result.calculable) return null
 
   return (
@@ -98,6 +101,9 @@ export default function FeasibilityPanel({ result }: FeasibilityPanelProps) {
       </Section>
 
       {/* Revenue */}
+      {/* Rental Market Card — live Rentfaster data */}
+      {rents && <RentalMarketCard rents={rents} />}
+
       <Section heading="ESTIMATED GROSS REVENUE">
         <FinancialRow
           label="Monthly (all units)"

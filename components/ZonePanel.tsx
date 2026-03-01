@@ -488,7 +488,7 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
                   {(() => {
                     const feasibility = calculateFeasibility(zone, zone.rental_data)
                     if (!feasibility) return null
-                    return <FeasibilityPanel result={feasibility} />
+                    return <FeasibilityPanel result={feasibility} rents={zone.rental_data} />
                   })()}
                 </GateBlur>
               )}

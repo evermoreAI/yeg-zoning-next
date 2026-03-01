@@ -15,6 +15,55 @@
  * Cache: 1h per neighbourhood (lat/lon rounded to 2dp).
  */
 
+import * as fs   from 'fs'
+import * as path from 'path'
+
+// ── Rentfaster.json loader (server-side, file read at runtime) ────────────────
+interface RFStats {
+  listing_count:       number
+  rent_bachelor:       number | null
+  rent_1br:            number | null
+  rent_2br:            number | null
+  rent_3br:            number | null
+  median_dom:          number | null
+  vacancy_pressure_pct: number | null
+  listings_over_30d:   number
+}
+interface RFData {
+  updated:    string
+  total_listings: number
+  neighbourhoods: Record<string, RFStats>
+}
+
+let _rfCache: RFData | null = null
+let _rfCacheTs = 0
+const RF_PATH   = path.join(process.cwd(), 'scraper', 'rentfaster.json')
+const RF_TTL    = 24 * 60 * 60 * 1_000
+
+function loadRentfaster(): RFData | null {
+  const now = Date.now()
+  if (_rfCache && now - _rfCacheTs < RF_TTL) return _rfCache
+  try {
+    if (fs.existsSync(RF_PATH)) {
+      _rfCache   = JSON.parse(fs.readFileSync(RF_PATH, 'utf8'))
+      _rfCacheTs = now
+      return _rfCache
+    }
+  } catch {}
+  return null
+}
+
+export function getRentfasterStats(neighbourhood: string): RFStats | null {
+  const data = loadRentfaster()
+  if (!data) return null
+  return data.neighbourhoods[neighbourhood.toUpperCase()] ?? null
+}
+
+export function getRentfasterUpdated(): string | null {
+  const data = loadRentfaster()
+  return data?.updated ?? null
+}
+
 import { MARKET_DATA } from './marketData'
 
 const OUTSCRAPER_KEY = process.env.OUTSCRAPER_API_KEY ?? ''
@@ -35,6 +84,7 @@ export interface NeighbourhoodRents {
   source_label:     string
   source:           'neighbourhood' | 'city_average'
   updated:          string
+  rf_stats?:        RFStats | null
 }
 
 // ── Static neighbourhood table ────────────────────────────────────────────────
@@ -101,37 +151,58 @@ export async function getNeighbourhoodRents(
 
   // 2. Lookup neighbourhood-specific rents
   const hood = neighbourhood.toUpperCase()
+  // 1. Rentfaster live data (best source)
+  const rfStats    = getRentfasterStats(hood)
+  const rfUpdated  = getRentfasterUpdated()
+  const rfDate     = rfUpdated ? new Date(rfUpdated).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' }) : 'today'
   const tableEntry = NEIGHBOURHOOD_RENTS[hood]
 
   let result: NeighbourhoodRents
 
-  if (tableEntry && listingCount >= 0) {
-    // Have neighbourhood data — use it (even with 0 listings from Outscraper)
-    const count = listingCount
+  if (rfStats && rfStats.listing_count >= 1) {
+    // Live Rentfaster data — best source
+    const rf = rfStats
     result = {
-      neighbourhood: hood,
+      neighbourhood:  hood,
+      rent_1br_low:   rf.rent_1br   ? Math.round(rf.rent_1br  * 0.92) : MARKET_DATA.rent_1br_low,
+      rent_1br_high:  rf.rent_1br   ? Math.round(rf.rent_1br  * 1.08) : MARKET_DATA.rent_1br_high,
+      rent_2br_low:   rf.rent_2br   ? Math.round(rf.rent_2br  * 0.92) : MARKET_DATA.rent_2br_low,
+      rent_2br_high:  rf.rent_2br   ? Math.round(rf.rent_2br  * 1.08) : MARKET_DATA.rent_2br_high,
+      rent_3br_low:   rf.rent_3br   ? Math.round(rf.rent_3br  * 0.92) : MARKET_DATA.rent_3br_low,
+      rent_3br_high:  rf.rent_3br   ? Math.round(rf.rent_3br  * 1.08) : MARKET_DATA.rent_3br_high,
+      listing_count:  rf.listing_count,
+      source_label:   `Based on ${rf.listing_count} active listings in ${toTitleCase(hood)} — updated ${rfDate}`,
+      source:         'neighbourhood',
+      updated:        rfDate,
+      rf_stats:       rf,
+    }
+  } else if (tableEntry) {
+    // CMHC neighbourhood table fallback
+    result = {
+      neighbourhood:  hood,
       ...tableEntry,
-      listing_count: count,
-      source_label:  count >= 5
-        ? `Based on ${count} active listings near ${toTitleCase(hood)} + CMHC 2024 data`
-        : `Based on Edmonton CMHC 2024 rental data — ${toTitleCase(hood)}`,
-      source: 'neighbourhood',
-      updated: 'CMHC Nov 2024',
+      listing_count:  listingCount,
+      source_label:   `Based on Edmonton CMHC 2024 rental data — ${toTitleCase(hood)}`,
+      source:         'neighbourhood',
+      updated:        'CMHC Nov 2024',
+      rf_stats:       null,
     }
   } else {
-    // Fallback to city average
+    // City-wide fallback
+    const cw = getRentfasterStats('_EDMONTON_CITYWIDE')
     result = {
-      neighbourhood: hood || 'Edmonton',
-      rent_1br_low:  MARKET_DATA.rent_1br_low,
-      rent_1br_high: MARKET_DATA.rent_1br_high,
-      rent_2br_low:  MARKET_DATA.rent_2br_low,
-      rent_2br_high: MARKET_DATA.rent_2br_high,
-      rent_3br_low:  MARKET_DATA.rent_3br_low,
-      rent_3br_high: MARKET_DATA.rent_3br_high,
-      listing_count: listingCount,
-      source_label:  `Based on Edmonton city-wide average rents — CMHC 2024`,
-      source: 'city_average',
-      updated: 'CMHC Nov 2024',
+      neighbourhood:  hood || 'Edmonton',
+      rent_1br_low:   cw?.rent_1br ? Math.round(cw.rent_1br * 0.92) : MARKET_DATA.rent_1br_low,
+      rent_1br_high:  cw?.rent_1br ? Math.round(cw.rent_1br * 1.08) : MARKET_DATA.rent_1br_high,
+      rent_2br_low:   cw?.rent_2br ? Math.round(cw.rent_2br * 0.92) : MARKET_DATA.rent_2br_low,
+      rent_2br_high:  cw?.rent_2br ? Math.round(cw.rent_2br * 1.08) : MARKET_DATA.rent_2br_high,
+      rent_3br_low:   cw?.rent_3br ? Math.round(cw.rent_3br * 0.92) : MARKET_DATA.rent_3br_low,
+      rent_3br_high:  cw?.rent_3br ? Math.round(cw.rent_3br * 1.08) : MARKET_DATA.rent_3br_high,
+      listing_count:  cw?.listing_count ?? listingCount,
+      source_label:   `Based on Edmonton city-wide market data — ${rfDate}`,
+      source:         'city_average',
+      updated:        rfDate,
+      rf_stats:       cw ?? null,
     }
   }
 

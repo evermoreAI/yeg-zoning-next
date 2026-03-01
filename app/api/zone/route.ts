@@ -63,6 +63,8 @@ export async function GET(req: NextRequest) {
     display.amendment_text    = amendment.description
   }
 
+  let dcRules: Awaited<ReturnType<typeof getDCZoneRules>> = null
+
   // DC zone rules — fetch from zoningbylaw.edmonton.ca when DC zone detected
   if (display.dc_warning && display.bylaw_url) {
     try {
@@ -95,7 +97,6 @@ export async function GET(req: NextRequest) {
   let rezoningAlert: Awaited<ReturnType<typeof checkRezoningNearby>> = null
   let permitStatsData: Awaited<ReturnType<typeof getPermitStats>> = null
   let rentalData: Awaited<ReturnType<typeof getNeighbourhoodRents>> | null = null
-  let dcRules: Awaited<ReturnType<typeof getDCZoneRules>> = null
 
   try {
     const timeout = new Promise<never>((_, reject) =>

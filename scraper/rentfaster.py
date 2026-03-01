@@ -99,8 +99,11 @@ def aggregate(listings: list[dict]) -> dict:
             ]
             return round(statistics.median(prices)) if prices else None
 
-        # Days on market
-        dom_values = [x['days'] for x in active if x['days'] is not None and x['days'] >= 0]
+        # Days on market — exclude outliers over 90 days, use median
+        dom_values = [
+            x['days'] for x in active 
+            if x['days'] is not None and 0 <= x['days'] <= 90
+        ]
         median_dom = round(statistics.median(dom_values)) if dom_values else None
 
         # Vacancy pressure: % of active listings over 30 days
@@ -119,15 +122,16 @@ def aggregate(listings: list[dict]) -> dict:
             'listings_over_30d': over_30,
         }
 
-    # Also compute city-wide averages
+    # Also compute city-wide averages (excluding 90+ day outliers)
     all_active = [x for items in hood.values() for x in items if not x['rented']]
+    all_dom = [x['days'] for x in all_active if x['days'] is not None and 0 <= x['days'] <= 90]
     result['_EDMONTON_CITYWIDE'] = {
         'listing_count': len(all_active),
         'rent_bachelor': _citywide_avg(all_active, 0),
         'rent_1br':      _citywide_avg(all_active, 1),
         'rent_2br':      _citywide_avg(all_active, 2),
         'rent_3br':      _citywide_avg(all_active, 3),
-        'median_dom':    round(statistics.median([x['days'] for x in all_active if x['days'] is not None])) if any(x['days'] is not None for x in all_active) else None,
+        'median_dom':    round(statistics.median(all_dom)) if all_dom else None,
         'vacancy_pressure_pct': None,
         'listings_over_30d': sum(1 for x in all_active if x['days'] is not None and x['days'] > 30),
     }
@@ -167,7 +171,7 @@ def main():
     print(f'[rentfaster] Wrote {len(stats)} neighbourhoods to {OUTPUT}')
 
     # Preview a few
-    for name in ['MCKERNAN', 'GARNEAU', 'ROSENTHAL', '_EDMONTON_CITYWIDE']:
+    for name in ['DOWNTOWN', 'MCKERNAN', 'GARNEAU', 'ROSENTHAL', '_EDMONTON_CITYWIDE']:
         s = stats.get(name)
         if s:
             print(f'  {name}: count={s["listing_count"]} 2BR={s["rent_2br"]} DOM={s["median_dom"]}d vac={s["vacancy_pressure_pct"]}%')

@@ -27,8 +27,9 @@ export async function POST(req: NextRequest) {
       }),
     })
     if (!r.ok) {
-      console.error('[subscribe] Resend error:', await r.text())
-      return NextResponse.json({ ok: false, error: 'Email send failed.' }, { status: 500 })
+      const errBody = await r.text()
+      console.error('[subscribe] Resend error:', errBody)
+      return NextResponse.json({ ok: false, error: 'Email send failed.', detail: errBody }, { status: 500 })
     }
   } else {
     // No key: log email to Vercel dashboard logs (visible under Functions > subscribe)

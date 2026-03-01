@@ -170,10 +170,12 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
   const [expanded, setExpanded] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  // Reset scroll to top on every new zone result
+  // Reset scroll to top on every new zone result (key on fetched_at to catch same-zone re-searches)
   useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = 0
-  }, [zone])
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0
+    }
+  }, [zone?.fetched_at, zone?.zone_code])
 
   // ── Empty ────────────────────────────────────────────────────────────────
   if (!loading && !zone) {
@@ -295,18 +297,37 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
               )}
             </div>
             {address && <div className="text-[#4a5568] text-[10px] mt-1 truncate">{address}</div>}
-            {zone.assessment && (
-              <div className="flex items-center gap-1.5 mt-1.5">
-                <span className="text-[9px] text-[#8a8070]">ASSESSED</span>
-                <span className="text-[10px] font-semibold text-[#c8a951]" style={{ fontFamily: 'var(--font-mono)' }}>
-                  {formatAssessedValue(zone.assessment.assessed_value)}
-                </span>
-                <span className="text-[9px] text-[#4a5568]">· {zone.assessment.distance_m}m away</span>
-              </div>
-            )}
-            {zone.neighbourhoodScore && (
+            {/* Assessment: show value, skeleton-inline if still fetching, muted error if unavailable */}
+            {zone.assessment !== undefined ? (
+              zone.assessment ? (
+                <div className="flex items-center gap-1.5 mt-1.5">
+                  <span className="text-[9px] text-[#8a8070]">ASSESSED</span>
+                  <span className="text-[10px] font-semibold text-[#c8a951]" style={{ fontFamily: 'var(--font-mono)' }}>
+                    {formatAssessedValue(zone.assessment.assessed_value)}
+                  </span>
+                  <span className="text-[9px] text-[#4a5568]">· {zone.assessment.distance_m}m away</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5 mt-1.5">
+                  <span className="text-[9px] text-[#4a5568]">Assessment data temporarily unavailable</span>
+                </div>
+              )
+            ) : null}
+            {/* Neighbourhood score — show card, "Updating..." if sub-scores seem stale, or gate */}
+            {(zone.neighbourhoodScore || zone.found) && (
               <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro">
-                <NeighbourhoodScoreCard score={zone.neighbourhoodScore} />
+                {zone.neighbourhoodScore ? (
+                  // Flag suspiciously low scores as potentially still loading
+                  zone.neighbourhoodScore.overall_score <= 5 ? (
+                    <div className="mt-3 px-3 py-2 rounded-lg flex items-center gap-2"
+                         style={{ background: '#141820', border: '1px solid #2a2e38' }}>
+                      <span className="inline-block w-3 h-3 border-2 border-[#2a2e38] border-t-[#c8a951] rounded-full animate-spin flex-shrink-0" />
+                      <span className="text-[#4a5568] text-[10px] uppercase tracking-widest">Neighbourhood score updating…</span>
+                    </div>
+                  ) : (
+                    <NeighbourhoodScoreCard score={zone.neighbourhoodScore} />
+                  )
+                ) : null}
               </GateBlur>
             )}
           </div>
@@ -410,12 +431,16 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
         )}
 
 
-        {/* Nearby development permits — Pro+ tier */}
+        {/* Nearby development permits — Pro+ tier, skeleton while loading */}
         <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro">
-          <PermitsPanel
-            permits={zone.permits ?? []}
-            loading={false}
-          />
+          {zone.permits !== undefined ? (
+            <PermitsPanel permits={zone.permits} loading={false} />
+          ) : (
+            <div className="mt-2 space-y-2">
+              <div className="h-14 bg-[#141820] rounded-lg border border-[#2a2e38] animate-pulse" />
+              <div className="h-14 bg-[#141820] rounded-lg border border-[#2a2e38] animate-pulse" />
+            </div>
+          )}
         </GateBlur>
 
         {/* Email capture — always last, gold top separator */}

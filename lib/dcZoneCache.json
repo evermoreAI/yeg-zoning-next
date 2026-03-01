@@ -1,0 +1,34 @@
+{
+  "https://zoningbylaw.edmonton.ca/dc1-12034": {
+    "data": {
+      "url": "https://zoningbylaw.edmonton.ca/dc1-12034",
+      "zone_code": "DC1",
+      "purpose": "To establish a Direct Development Control District incorporating site planning and architectural development criteria such that renovations or additions to the Ross Flats Apartment building, or any new development on the site, are compatible with the designation of this building as a Municipal Historic Resource.",
+      "permitted_uses": [
+        "Apartment Housing",
+        "Child Care Services",
+        "Foster Homes",
+        "Major Home Occupations",
+        "Minor Home Occupations",
+        "Residential Sales Centre",
+        "Landscaped yards shall be provided as follows"
+      ],
+      "discretionary_uses": [
+        "The minimum landscaped yard on t"
+      ],
+      "max_height": "maximum Height may be increased to 9.0 m",
+      "setback_front": "",
+      "setback_rear": "",
+      "setback_side": "",
+      "special_conditions": [
+        "shall consult with the Heritage Planner of the Planning and Development Department.",
+        "shall comply with the \"General Guidelines for Rehabilitation\" (attached hereto as Appendix 1).",
+        "Heritage Planner, the external appearance of the Ross Flats Apartment building as defined and as existing at the time of designation as a Municipal Historic Resource.",
+        "required in the designation bylaw, including roof line, doors, windows (including sash and openings), trim, exterior finishing materials and architectural features."
+      ],
+      "bylaw_ref": "Bylaw 12034",
+      "fetched_at": "2026-03-01T22:25:33.113Z"
+    },
+    "ts": 1772403932844
+  }
+}

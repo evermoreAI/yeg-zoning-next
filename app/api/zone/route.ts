@@ -63,7 +63,16 @@ export async function GET(req: NextRequest) {
     display.amendment_text    = amendment.description
   }
 
-  // Neighbourhood score: fires in parallel with enrichment, has its own 20s ceiling
+  // DC zone rules — fetch from zoningbylaw.edmonton.ca when DC zone detected
+  if (display.dc_warning && display.bylaw_url) {
+    try {
+      dcRules = await getDCZoneRules(display.bylaw_url, display.zone_code)
+    } catch (e) {
+      console.warn('[zone] DC rules fetch failed:', (e as Error).message)
+    }
+  }
+
+    // Neighbourhood score: fires in parallel with enrichment, has its own 20s ceiling
   const scorePromise = (async () => {
     try {
       return await Promise.race([

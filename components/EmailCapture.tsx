@@ -46,9 +46,9 @@ export default function EmailCapture() {
   }
 
   return (
-    <div className="mt-3 p-3 rounded-lg" style={{ background: '#0d1117', border: '1px solid #c8a951' }}>
-      <p className="text-[#e8e0d0] text-[11px] font-semibold mb-2 leading-snug">
-        Get early access to Pro — enter your email to be notified at launch.
+    <div>
+      <p className="text-[#e8e0d0] text-[12px] font-semibold mb-3 leading-snug">
+        🔔 Get notified when Pro launches
       </p>
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input

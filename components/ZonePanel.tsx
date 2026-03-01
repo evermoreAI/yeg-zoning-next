@@ -374,21 +374,37 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
         {/* ── Tier-gated content ─────────────────────────────────────────── */}
 
         {tier === 'free' ? (
-          /* FREE: single combined gate — score teaser as preview content */
+          /* FREE: real data teaser blurred, then single combined gate */
           <div className="mt-2">
-            {/* Neighbourhood score teaser (blurred) */}
             <div className="relative overflow-hidden rounded-t-lg"
-                 style={{ maxHeight: 76, pointerEvents: 'none', userSelect: 'none' }}
+                 style={{ maxHeight: 88, pointerEvents: 'none', userSelect: 'none' }}
                  aria-hidden>
-              <div style={{ opacity: 0.28, filter: 'blur(3px)' }}>
-                <div className="p-3" style={{ background: 'rgba(45,106,45,0.15)', border: '1px solid #2d6a2d', borderBottom: 'none' }}>
+              <div style={{ filter: 'blur(4px)', opacity: 0.45 }}>
+                {/* Teaser row 1 — neighbourhood score bar (real label, plausible values) */}
+                <div className="px-3 pt-3 pb-2"
+                     style={{ background: 'rgba(45,106,45,0.15)', border: '1px solid #2d6a2d' }}>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-bold tracking-widest uppercase text-[#6ab86a]"
-                          style={{ fontFamily: 'var(--font-rajdhani)' }}>● HIGH NEIGHBOURHOOD</span>
-                    <span className="text-sm font-semibold text-[#6ab86a]" style={{ fontFamily: 'var(--font-mono)' }}>71</span>
+                    <span className="text-[11px] font-bold tracking-widest uppercase"
+                          style={{ color: '#6ab86a', fontFamily: 'var(--font-rajdhani)' }}>
+                      {zone.neighbourhoodScore
+                        ? `${zone.neighbourhoodScore.overall} NEIGHBOURHOOD`
+                        : '● HIGH NEIGHBOURHOOD'}
+                    </span>
+                    <span className="text-sm font-semibold"
+                          style={{ color: '#6ab86a', fontFamily: 'var(--font-mono)' }}>
+                      {zone.neighbourhoodScore?.overall_score ?? 74}
+                    </span>
                   </div>
                   <div className="space-y-1.5">
-                    {[['Transit',75],['Amenities',100],['Commercial',60],['Development',55]].map(([l,v]) => (
+                    {(zone.neighbourhoodScore
+                      ? [
+                          ['Transit',     zone.neighbourhoodScore.transit.score],
+                          ['Amenities',   zone.neighbourhoodScore.amenities.score],
+                          ['Commercial',  zone.neighbourhoodScore.commercial.score],
+                          ['Development', zone.neighbourhoodScore.development.score],
+                        ]
+                      : [['Transit',75],['Amenities',100],['Commercial',60],['Development',55]]
+                    ).map(([l, v]) => (
                       <div key={l as string} className="flex items-center gap-2">
                         <span className="text-[9px] text-[#8a8070] w-20">{l}</span>
                         <div className="flex-1 h-1 rounded-full bg-[#1e2530] overflow-hidden">
@@ -398,11 +414,20 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
                     ))}
                   </div>
                 </div>
+                {/* Teaser row 2 — feasibility number */}
+                {!zone.dc_warning && (
+                  <div className="mt-1 px-3 py-2 flex items-center justify-between"
+                       style={{ background: '#141820', border: '1px solid #2a2e38' }}>
+                    <span className="text-[9px] text-[#4a5568] uppercase tracking-widest">⚡ Construction estimate</span>
+                    <span className="text-sm font-semibold text-[#c8a951]"
+                          style={{ fontFamily: 'var(--font-mono)' }}>$1.44M–$2.00M</span>
+                  </div>
+                )}
               </div>
-              {/* Smooth 40px fade into gate card */}
-              <div className="absolute inset-x-0 bottom-0" style={{ height: 40, background: 'linear-gradient(to bottom, transparent, #141820)' }} />
+              {/* 40px gradient fade into gate card */}
+              <div className="absolute inset-x-0 bottom-0"
+                   style={{ height: 44, background: 'linear-gradient(to bottom, transparent, #141820)' }} />
             </div>
-            {/* Single combined gate card */}
             <CombinedGate />
           </div>
         ) : (
@@ -474,8 +499,9 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
           </>
         )}
 
-        {/* Email capture — always last, gold top separator */}
-        <div className="mt-4 pt-3 pb-2" style={{ borderTop: '1px solid #c8a951' }}>
+        {/* Email capture — footer notification strip */}
+        <div className="mt-6 -mx-4 px-4 pt-6 pb-4"
+             style={{ background: '#1a1f2e', borderTop: '2px solid #c8a951' }}>
           <EmailCapture />
         </div>
 

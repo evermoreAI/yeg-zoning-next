@@ -231,13 +231,51 @@ export const ZONES: Record<string, ZoneConfig> = {
   },
 
   RH: {
-    plain_name: 'High Rise Residential',
-    short_desc: '9–20 storeys. High density apartments.',
-    max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
-    max_site_coverage_pct: null, max_height_storeys: 20, max_height_m: null,
-    bylaw_12800_equiv: 'RA9', applies_to: 'High density residential nodes',
-    pending_amendment: null, dc_override: false, color: '#3a5f8a',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rh', layer2: null,
+    // Bylaw 20001 — Row Housing Medium (RH)
+    // TODO: confirm exact section; verify unit cap and height against zoningbylaw.edmonton.ca
+    plain_name: 'Row Housing Medium',
+    short_desc: 'Medium-density row housing. Up to 12 units, maximum 4 storeys, 50% site coverage.',
+    max_units_midblock: 12,
+    max_units_midblock_min_lot_sqm: 600,
+    max_site_coverage_pct: 50,
+    max_height_storeys: 4,
+    max_height_m: null,
+    bylaw_12800_equiv: 'RF5 / RA7',
+    applies_to: 'Medium density residential areas',
+    pending_amendment: null,
+    dc_override: false,
+    color: '#3a5f8a',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rh',
+    layer2: {
+      permitted_uses: [
+        'Row housing',
+        'Stacked row housing',
+        'Semi-detached house',
+        'Secondary suite',
+        'Home-based business',
+        'Child care facility (small)',
+        'Urban agriculture',
+      ],
+      discretionary_uses: [
+        'Single detached house',
+        'Garden suite',
+        'Live-work unit',
+        'Bed and breakfast',
+        'Neighbourhood retail (ground floor)',
+      ],
+      setbacks_m: {
+        front: 3.0,
+        rear:  4.0,
+        side:  1.5,
+      },
+      setback_note: 'Typical minimums — verify exact setbacks with City of Edmonton.',
+      corner_lot_note: 'Corner lots may support additional units. Verify with City of Edmonton via 311.',
+      links: {
+        bylaw:                    'https://zoningbylaw.edmonton.ca/bylaw/rh',
+        assessment:               'https://www.edmonton.ca/business_economy/property-assessment',
+        development_applications: 'https://www.edmonton.ca/business_economy/development-applications',
+      },
+    },
   },
 
   RR: {
@@ -251,13 +289,52 @@ export const ZONES: Record<string, ZoneConfig> = {
   },
 
   MU: {
-    plain_name: 'Mixed Use',
-    short_desc: 'Nodes and corridors. Residential and commercial combined.',
-    max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
-    max_site_coverage_pct: null, max_height_storeys: null, max_height_m: null,
-    bylaw_12800_equiv: 'CMX', applies_to: 'Transit nodes, arterial road corridors, ARP areas',
-    pending_amendment: null, dc_override: false, color: '#8b6914',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/mu', layer2: null,
+    // Bylaw 20001 — Medium Scale Mixed Use (MU)
+    // TODO: verify exact unit cap and height limits against zoningbylaw.edmonton.ca
+    plain_name: 'Medium Scale Mixed Use',
+    short_desc: 'Residential and commercial combined. Up to 12 units, 6 storeys, ground floor retail.',
+    max_units_midblock: 12,
+    max_units_midblock_min_lot_sqm: null,
+    max_site_coverage_pct: 60,
+    max_height_storeys: 6,
+    max_height_m: null,
+    bylaw_12800_equiv: 'CMX',
+    applies_to: 'Transit nodes, arterial road corridors, and ARP areas',
+    pending_amendment: null,
+    dc_override: false,
+    color: '#8b6914',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/mu',
+    layer2: {
+      permitted_uses: [
+        'Multi-unit residential (upper floors)',
+        'Ground floor retail',
+        'Restaurant or café',
+        'Office (upper floors)',
+        'Personal service shop',
+        'Child care facility',
+        'Urban agriculture',
+        'Live-work unit',
+      ],
+      discretionary_uses: [
+        'Drive-through facility',
+        'Gas station (neighbourhood scale)',
+        'Hotel or motel',
+        'Entertainment venue',
+        'Brewery or distillery (small)',
+      ],
+      setbacks_m: {
+        front: 0.0,   // MU zones typically build to property line
+        rear:  3.0,
+        side:  0.0,
+      },
+      setback_note: 'MU zones often have zero or minimal front setbacks — verify with City of Edmonton.',
+      corner_lot_note: 'Corner MU lots may support additional height or density. Verify with City of Edmonton via 311.',
+      links: {
+        bylaw:                    'https://zoningbylaw.edmonton.ca/bylaw/mu',
+        assessment:               'https://www.edmonton.ca/business_economy/property-assessment',
+        development_applications: 'https://www.edmonton.ca/business_economy/development-applications',
+      },
+    },
   },
 
   MUN: {

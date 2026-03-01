@@ -232,8 +232,7 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
         {zone.dc_warning && (
           <div className="mb-3 px-3 py-2.5 rounded-md bg-[rgba(139,26,26,0.2)] border border-[#8b1a1a] border-l-4 border-l-[#cf6679]">
             <div className="text-[#cf6679] text-xs font-medium leading-snug">
-              ⚠ DIRECT CONTROL ZONE — Site-specific rules override all standard regulations.
-              Verify directly with City of Edmonton.
+              ⚠ This is a Direct Control zone with custom development rules. Contact the City of Edmonton for specific provisions.
             </div>
           </div>
         )}
@@ -323,17 +322,27 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
         </GateBlur>
 
         {/* Layer 3 — Feasibility — Investor tier */}
-        <GateBlur locked={!tierAtLeast(tier, 'investor')} tier="investor">
-          {(() => {
-            const feasibility = calculateFeasibility(zone)
-            if (!feasibility) return null
-            return (
-              <div className="mt-2">
-                <FeasibilityPanel result={feasibility} />
-              </div>
-            )
-          })()}
-        </GateBlur>
+        {zone.dc_warning ? (
+          <div className="mt-3 p-3 rounded-md"
+               style={{ background: 'rgba(139,26,26,0.12)', border: '1px solid #8b1a1a' }}>
+            <p className="text-[#cf6679] text-[11px] leading-relaxed">
+              ⚡ Feasibility analysis not available for DC zones — rules vary by parcel.
+              Contact the City of Edmonton for site-specific development potential.
+            </p>
+          </div>
+        ) : (
+          <GateBlur locked={!tierAtLeast(tier, 'investor')} tier="investor">
+            {(() => {
+              const feasibility = calculateFeasibility(zone)
+              if (!feasibility) return null
+              return (
+                <div className="mt-2">
+                  <FeasibilityPanel result={feasibility} />
+                </div>
+              )
+            })()}
+          </GateBlur>
+        )}
 
       </div>
       <Disclaimer />

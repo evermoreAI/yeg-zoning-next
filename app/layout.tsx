@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${rajdhani.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="bg-[#0a0c10] text-[#e8e0d0] antialiased overflow-hidden">
+      <body className="bg-[#0a0c10] text-[#e8e0d0] antialiased">
         <TierProvider>{children}</TierProvider>
       </body>
     </html>

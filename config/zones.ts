@@ -12,26 +12,49 @@
  */
 
 // ---------------------------------------------------------------------------
-// ACTIVE AMENDMENTS — check before every public hearing
-// ---------------------------------------------------------------------------
+// ACTIVE AMENDMENTS
 // April 7 2026: RS height limit public hearing — may change to 9.5m
-// Feb 17 2026:  RS 8-unit mid-block cap CONFIRMED STABLE (Council vote 8-4)
+// Feb 17 2026:  RS 8-unit mid-block cap CONFIRMED STABLE (Council 8-4)
 // ---------------------------------------------------------------------------
 
+export interface ZoneLinks {
+  bylaw:                   string | null
+  assessment:              string | null
+  development_applications: string | null
+}
+
+export interface ZoneSetbacks {
+  front: number   // metres
+  rear:  number   // metres
+  side:  number   // metres — interior side
+}
+
+export interface ZoneLayer2 {
+  permitted_uses:     string[]
+  discretionary_uses: string[]
+  setbacks_m:         ZoneSetbacks
+  setback_note:       string
+  corner_lot_note:    string
+  links:              ZoneLinks
+}
+
 export interface ZoneConfig {
-  plain_name: string
-  short_desc: string
-  max_units_midblock: number | null
+  // Layer 1
+  plain_name:                   string
+  short_desc:                   string
+  max_units_midblock:           number | null
   max_units_midblock_min_lot_sqm: number | null
-  max_site_coverage_pct: number | null
-  max_height_storeys: number | null
-  max_height_m: number | null
-  bylaw_12800_equiv: string | null
-  applies_to: string
-  pending_amendment: string | null  // null = stable
-  dc_override: boolean
-  color: string                     // map overlay colour
-  bylaw_url: string | null
+  max_site_coverage_pct:        number | null
+  max_height_storeys:           number | null
+  max_height_m:                 number | null
+  bylaw_12800_equiv:            string | null
+  applies_to:                   string
+  pending_amendment:            string | null
+  dc_override:                  boolean
+  color:                        string
+  bylaw_url:                    string | null
+  // Layer 2 — null for zones without detail data yet
+  layer2:                       ZoneLayer2 | null
 }
 
 export const ZONES: Record<string, ZoneConfig> = {
@@ -42,255 +65,205 @@ export const ZONES: Record<string, ZoneConfig> = {
     // Bylaw 20001 Section 2.10 — Small Scale Residential
     plain_name: 'Small Scale Residential',
     short_desc: 'Allows up to 8 units on lots 600m² or larger. Some commercial uses permitted.',
-    max_units_midblock: 8,                  // confirmed stable Feb 17 2026 (Council 8-4)
-    max_units_midblock_min_lot_sqm: 600,    // Bylaw 20001 RS — lot threshold for 8-unit eligibility
-    max_site_coverage_pct: 45,             // Bylaw 20001 RS s.2.10
-    max_height_storeys: 3,                 // Bylaw 20001 RS — PENDING April 7 2026 hearing
-    max_height_m: null,                    // under review — do not display a fixed number
+    max_units_midblock: 8,                   // confirmed stable Feb 17 2026 (Council 8-4)
+    max_units_midblock_min_lot_sqm: 600,     // Bylaw 20001 RS — lot threshold for 8-unit eligibility
+    max_site_coverage_pct: 45,              // Bylaw 20001 RS s.2.10
+    max_height_storeys: 3,                  // Bylaw 20001 RS — PENDING April 7 2026 hearing
+    max_height_m: null,                     // under review — do not display a fixed number
     bylaw_12800_equiv: 'RF1 / RF3',
     applies_to: 'Mature neighbourhoods inside Anthony Henday Drive',
-    // Pending amendment: proposed reduction to 9.5m max height — outcome unknown
     pending_amendment: 'Height limit subject to change — public hearing April 7 2026. Verify with City of Edmonton before making development decisions.',
     dc_override: false,
     color: '#4a7c59',
     bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rs',
+    layer2: {
+      // Permitted uses: Bylaw 20001 RS zone — as-of-right, no DO approval needed
+      permitted_uses: [
+        'Single detached house',
+        'Secondary suite',
+        'Garden suite',
+        'Semi-detached house',
+        'Row housing',
+        'Home-based business',
+        'Child care facility (small)',
+        'Urban agriculture',
+      ],
+      // Discretionary uses: require Development Officer approval — not guaranteed
+      discretionary_uses: [
+        'Neighbourhood café or bistro',
+        'Neighbourhood retail (small scale)',
+        'Medical or dental office',
+        'Personal service shop (e.g. hair salon)',
+        'Secondary suite in semi-detached',
+        'Bed and breakfast',
+      ],
+      // Setbacks: Bylaw 20001 RS — contextual rules in effect since July 2025
+      // Typical minimums — actual values vary by neighbourhood
+      setbacks_m: {
+        front: 3.0,   // Bylaw 20001 contextual front setback
+        rear:  4.0,   // Bylaw 20001 rear setback
+        side:  1.2,   // Bylaw 20001 interior side setback
+      },
+      setback_note: 'Contextual setbacks apply — actual values vary by neighbourhood. Verify with City of Edmonton.',
+      corner_lot_note: 'Corner lots may support more than 8 units. Verify current rules with City of Edmonton via 311.',
+      links: {
+        bylaw:                    'https://zoningbylaw.edmonton.ca/bylaw/rs',
+        assessment:               'https://www.edmonton.ca/business_economy/property-assessment',
+        development_applications: 'https://www.edmonton.ca/business_economy/development-applications',
+      },
+    },
   },
 
   RSF: {
-    // Bylaw 20001 — Small Scale Residential (suburban)
     plain_name: 'Small Scale Residential Suburban',
     short_desc: 'Suburban equivalent of RS zone. Higher site coverage allowed.',
-    max_units_midblock: null,
-    max_units_midblock_min_lot_sqm: null,
-    max_site_coverage_pct: 55,
-    max_height_storeys: null,
-    max_height_m: null,
-    bylaw_12800_equiv: 'RF1',
-    applies_to: 'Suburban areas outside mature neighbourhoods',
-    pending_amendment: null,
-    dc_override: false,
-    color: '#5a8c69',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rsf',
+    max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
+    max_site_coverage_pct: 55, max_height_storeys: null, max_height_m: null,
+    bylaw_12800_equiv: 'RF1', applies_to: 'Suburban areas outside mature neighbourhoods',
+    pending_amendment: null, dc_override: false, color: '#5a8c69',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rsf', layer2: null,
   },
 
   RSL: {
-    // Bylaw 20001 — Small Scale Residential Low
     plain_name: 'Small Scale Residential Low',
     short_desc: 'Lower density residential. Fewer units than RS.',
-    max_units_midblock: null,
-    max_units_midblock_min_lot_sqm: null,
-    max_site_coverage_pct: null,
-    max_height_storeys: null,
-    max_height_m: null,
-    bylaw_12800_equiv: 'RF1',
-    applies_to: 'Lower density residential areas',
-    pending_amendment: null,
-    dc_override: false,
-    color: '#3a6c49',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rsl',
+    max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
+    max_site_coverage_pct: null, max_height_storeys: null, max_height_m: null,
+    bylaw_12800_equiv: 'RF1', applies_to: 'Lower density residential areas',
+    pending_amendment: null, dc_override: false, color: '#3a6c49',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rsl', layer2: null,
   },
 
   RSM: {
-    // Bylaw 20001 — Small Medium Scale Residential
     plain_name: 'Small to Medium Scale Residential',
     short_desc: '3–4 storeys. Rezoning harder outside transit nodes and arterial roads.',
-    max_units_midblock: null,
-    max_units_midblock_min_lot_sqm: null,
-    max_site_coverage_pct: 45,
-    max_height_storeys: 4,
-    max_height_m: 10.0,
-    bylaw_12800_equiv: 'RF3 / RF4',
-    applies_to: 'Near transit stations and arterial roads',
-    pending_amendment: null,
-    dc_override: false,
-    color: '#6b8f71',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rsm',
+    max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
+    max_site_coverage_pct: 45, max_height_storeys: 4, max_height_m: 10.0,
+    bylaw_12800_equiv: 'RF3 / RF4', applies_to: 'Near transit stations and arterial roads',
+    pending_amendment: null, dc_override: false, color: '#6b8f71',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rsm', layer2: null,
   },
 
   RM: {
-    // Bylaw 20001 — Medium Scale Residential
     plain_name: 'Medium Scale Residential',
     short_desc: '4–8 storeys. Medium density apartments and stacked housing.',
-    max_units_midblock: null,
-    max_units_midblock_min_lot_sqm: null,
-    max_site_coverage_pct: null,
-    max_height_storeys: 8,
-    max_height_m: null,
-    bylaw_12800_equiv: 'RA7 / RA8',
-    applies_to: 'Medium density residential areas',
-    pending_amendment: null,
-    dc_override: false,
-    color: '#5b7fa6',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rm',
+    max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
+    max_site_coverage_pct: null, max_height_storeys: 8, max_height_m: null,
+    bylaw_12800_equiv: 'RA7 / RA8', applies_to: 'Medium density residential areas',
+    pending_amendment: null, dc_override: false, color: '#5b7fa6',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rm', layer2: null,
   },
 
   RH: {
-    // Bylaw 20001 — High Rise Residential
     plain_name: 'High Rise Residential',
     short_desc: '9–20 storeys. High density apartments.',
-    max_units_midblock: null,
-    max_units_midblock_min_lot_sqm: null,
-    max_site_coverage_pct: null,
-    max_height_storeys: 20,
-    max_height_m: null,
-    bylaw_12800_equiv: 'RA9',
-    applies_to: 'High density residential nodes',
-    pending_amendment: null,
-    dc_override: false,
-    color: '#3a5f8a',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rh',
+    max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
+    max_site_coverage_pct: null, max_height_storeys: 20, max_height_m: null,
+    bylaw_12800_equiv: 'RA9', applies_to: 'High density residential nodes',
+    pending_amendment: null, dc_override: false, color: '#3a5f8a',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rh', layer2: null,
   },
 
   RR: {
-    // Bylaw 20001 — Rural Residential
     plain_name: 'Rural Residential',
     short_desc: 'Rural and agricultural edge areas.',
-    max_units_midblock: null,
-    max_units_midblock_min_lot_sqm: null,
-    max_site_coverage_pct: null,
-    max_height_storeys: null,
-    max_height_m: null,
-    bylaw_12800_equiv: 'AG',
-    applies_to: 'Rural and agricultural edge areas',
-    pending_amendment: null,
-    dc_override: false,
-    color: '#3a5c3a',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rr',
+    max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
+    max_site_coverage_pct: null, max_height_storeys: null, max_height_m: null,
+    bylaw_12800_equiv: 'AG', applies_to: 'Rural and agricultural edge areas',
+    pending_amendment: null, dc_override: false, color: '#3a5c3a',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rr', layer2: null,
   },
 
-  // ── Mixed Use ─────────────────────────────────────────────────────────────
-
   MU: {
-    // Bylaw 20001 — Mixed Use
     plain_name: 'Mixed Use',
     short_desc: 'Nodes and corridors. Residential and commercial combined.',
-    max_units_midblock: null,
-    max_units_midblock_min_lot_sqm: null,
-    max_site_coverage_pct: null,
-    max_height_storeys: null,
-    max_height_m: null,
-    bylaw_12800_equiv: 'CMX',
-    applies_to: 'Transit nodes, arterial road corridors, ARP areas',
-    pending_amendment: null,
-    dc_override: false,
-    color: '#8b6914',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/mu',
+    max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
+    max_site_coverage_pct: null, max_height_storeys: null, max_height_m: null,
+    bylaw_12800_equiv: 'CMX', applies_to: 'Transit nodes, arterial road corridors, ARP areas',
+    pending_amendment: null, dc_override: false, color: '#8b6914',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/mu', layer2: null,
   },
 
   MUN: {
-    // Bylaw 20001 — Mixed Use Neighbourhood
     plain_name: 'Mixed Use Neighbourhood',
     short_desc: 'Neighbourhood-scale mixed use.',
-    max_units_midblock: null,
-    max_units_midblock_min_lot_sqm: null,
-    max_site_coverage_pct: null,
-    max_height_storeys: null,
-    max_height_m: null,
-    bylaw_12800_equiv: null,
-    applies_to: 'Neighbourhood centres',
-    pending_amendment: null,
-    dc_override: false,
-    color: '#9b7924',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/mun',
+    max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
+    max_site_coverage_pct: null, max_height_storeys: null, max_height_m: null,
+    bylaw_12800_equiv: null, applies_to: 'Neighbourhood centres',
+    pending_amendment: null, dc_override: false, color: '#9b7924',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/mun', layer2: null,
   },
 
-  // ── Commercial ───────────────────────────────────────────────────────────
-
   CN: {
-    plain_name: 'Neighbourhood Commercial',
-    short_desc: 'Small-scale neighbourhood-serving commercial uses.',
+    plain_name: 'Neighbourhood Commercial', short_desc: 'Small-scale neighbourhood-serving commercial uses.',
     max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
     max_site_coverage_pct: null, max_height_storeys: null, max_height_m: null,
     bylaw_12800_equiv: 'CSC', applies_to: 'Neighbourhood commercial nodes',
     pending_amendment: null, dc_override: false, color: '#a0522d',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/cn',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/cn', layer2: null,
   },
   CG: {
-    plain_name: 'General Commercial',
-    short_desc: 'General commercial strip development.',
+    plain_name: 'General Commercial', short_desc: 'General commercial strip development.',
     max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
     max_site_coverage_pct: null, max_height_storeys: null, max_height_m: null,
     bylaw_12800_equiv: 'CB2', applies_to: 'Commercial arterial roads',
     pending_amendment: null, dc_override: false, color: '#b0622d',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/cg',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/cg', layer2: null,
   },
   CB: {
-    plain_name: 'Commercial Business',
-    short_desc: 'Office and service commercial.',
+    plain_name: 'Commercial Business', short_desc: 'Office and service commercial.',
     max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
     max_site_coverage_pct: null, max_height_storeys: null, max_height_m: null,
     bylaw_12800_equiv: 'CB1', applies_to: 'Business commercial areas',
     pending_amendment: null, dc_override: false, color: '#c0722d',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/cb',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/cb', layer2: null,
   },
-
-  // ── Business / Industrial ────────────────────────────────────────────────
-
   BE: {
-    plain_name: 'Business Employment',
-    short_desc: 'Employment and light industrial uses.',
+    plain_name: 'Business Employment', short_desc: 'Employment and light industrial uses.',
     max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
     max_site_coverage_pct: null, max_height_storeys: null, max_height_m: null,
     bylaw_12800_equiv: 'IB', applies_to: 'Business parks and employment areas',
     pending_amendment: null, dc_override: false, color: '#696969',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/be',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/be', layer2: null,
   },
   IM: {
-    plain_name: 'Medium Industrial',
-    short_desc: 'Medium impact industrial uses.',
+    plain_name: 'Medium Industrial', short_desc: 'Medium impact industrial uses.',
     max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
     max_site_coverage_pct: null, max_height_storeys: null, max_height_m: null,
     bylaw_12800_equiv: 'IM', applies_to: 'Industrial areas',
     pending_amendment: null, dc_override: false, color: '#595959',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/im',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/im', layer2: null,
   },
   IH: {
-    plain_name: 'Heavy Industrial',
-    short_desc: 'Heavy impact industrial uses.',
+    plain_name: 'Heavy Industrial', short_desc: 'Heavy impact industrial uses.',
     max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
     max_site_coverage_pct: null, max_height_storeys: null, max_height_m: null,
     bylaw_12800_equiv: 'IH', applies_to: 'Heavy industrial areas',
     pending_amendment: null, dc_override: false, color: '#494949',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/ih',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/ih', layer2: null,
   },
-
-  // ── Direct Control — ALWAYS show red warning ─────────────────────────────
 
   DC1: {
-    // Bylaw 20001 — Direct Control Provision
-    plain_name: 'Direct Control',
-    short_desc: 'Site-specific rules override all standard zone regulations.',
+    plain_name: 'Direct Control', short_desc: 'Site-specific rules override all standard zone regulations.',
     max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
     max_site_coverage_pct: null, max_height_storeys: null, max_height_m: null,
-    bylaw_12800_equiv: 'DC1',
-    applies_to: 'Site-specific direct control parcels',
-    pending_amendment: null,
-    dc_override: true,   // CRITICAL — never show standard zone rules for DC
-    color: '#8b1a1a',
-    bylaw_url: null,
+    bylaw_12800_equiv: 'DC1', applies_to: 'Site-specific direct control parcels',
+    pending_amendment: null, dc_override: true, color: '#8b1a1a',
+    bylaw_url: null, layer2: null,
   },
   DC2: {
-    plain_name: 'Direct Control',
-    short_desc: 'Site-specific rules override all standard zone regulations.',
+    plain_name: 'Direct Control', short_desc: 'Site-specific rules override all standard zone regulations.',
     max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
     max_site_coverage_pct: null, max_height_storeys: null, max_height_m: null,
-    bylaw_12800_equiv: 'DC2',
-    applies_to: 'Site-specific direct control parcels',
-    pending_amendment: null,
-    dc_override: true,
-    color: '#8b1a1a',
-    bylaw_url: null,
+    bylaw_12800_equiv: 'DC2', applies_to: 'Site-specific direct control parcels',
+    pending_amendment: null, dc_override: true, color: '#8b1a1a',
+    bylaw_url: null, layer2: null,
   },
 }
 
-/**
- * Look up a zone by code. Handles DC zones with any suffix.
- * Returns the config or null if unknown.
- */
 export function getZoneConfig(zoneCode: string): ZoneConfig | null {
   const base = zoneCode.trim().toUpperCase()
   if (ZONES[base]) return ZONES[base]
-  // DC zones can have any suffix — DC1, DC2, DC(999), etc.
   if (base.startsWith('DC')) return ZONES['DC1']
   return null
 }

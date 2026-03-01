@@ -6,6 +6,7 @@ import type { ZoneLayer2 }     from '@/config/zones'
 import FeasibilityPanel        from './FeasibilityPanel'
 import { calculateFeasibility }   from '@/lib/feasibility'
 import { formatAssessedValue }     from '@/lib/propertyAssessment'
+import NeighbourhoodScoreCard      from './NeighbourhoodScoreCard'
 import GateBlur from './GateBlur'
 import BookmarkButton from './BookmarkButton'
 import PermitsPanel from './PermitsPanel'
@@ -274,6 +275,11 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
                 </span>
                 <span className="text-[9px] text-[#4a5568]">· {zone.assessment.distance_m}m away</span>
               </div>
+            )}
+            {zone.neighbourhoodScore && (
+              <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro">
+                <NeighbourhoodScoreCard score={zone.neighbourhoodScore} />
+              </GateBlur>
             )}
           </div>
           {zone.found && zone.lat != null && zone.lng != null && (

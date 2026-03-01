@@ -15,6 +15,7 @@ import { interpretZone }             from '@/lib/zoneInterpreter'
 import { getAmendment }               from '@/lib/amendments'
 import { getPermitsNearby, getNeighbourhoodMomentum } from '@/lib/developmentPermits'
 import { getNearestAssessment }                           from '@/lib/propertyAssessment'
+import { getNeighbourhoodScore }                           from '@/lib/neighbourhoodScore'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
@@ -64,6 +65,7 @@ export async function GET(req: NextRequest) {
   let permitsData: Awaited<ReturnType<typeof getPermitsNearby>> = []
   let momentumData = { recent: 0, prior: 0, trend: 'ACTIVE' as const }
   let assessmentData: Awaited<ReturnType<typeof getNearestAssessment>> = null
+  let neighbourhoodScoreData: Awaited<ReturnType<typeof getNeighbourhoodScore>> = null
 
   try {
     const timeout = new Promise<never>((_, reject) =>
@@ -89,9 +91,16 @@ export async function GET(req: NextRequest) {
     } catch (e) {
       console.warn('[zone] assessment lookup failed:', e)
     }
+
+    // Neighbourhood score: Outscraper + permit count
+    try {
+      neighbourhoodScoreData = await getNeighbourhoodScore(lat, lon, permitsData.length)
+    } catch (e) {
+      console.warn('[zone] neighbourhood score failed:', e)
+    }
   } catch (e) {
     console.warn('[zone] enrichment skipped:', (e as Error).message)
   }
 
-  return NextResponse.json({ ...display, lat, lng: lon, permits: permitsData, momentum: momentumData, assessment: assessmentData })
+  return NextResponse.json({ ...display, lat, lng: lon, permits: permitsData, momentum: momentumData, assessment: assessmentData, neighbourhoodScore: neighbourhoodScoreData })
 }

@@ -56,6 +56,7 @@ export interface ZoneDisplay {
   permits?: import('@/lib/developmentPermits').DevelopmentPermit[]
   momentum?: NeighbourhoodMomentum
   assessment?: import('@/lib/propertyAssessment').PropertyAssessment | null
+  neighbourhoodScore?: import('@/lib/neighbourhoodScore').NeighbourhoodScore | null
 }
 
 export interface NeighbourhoodMomentum {

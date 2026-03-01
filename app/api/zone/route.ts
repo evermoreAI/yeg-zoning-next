@@ -109,8 +109,18 @@ export async function GET(req: NextRequest) {
       console.warn('[zone] rezoning check failed:', e)
     }
 
-
-
+    // Assessment + permit stats — use neighbourhood from first permit
+    const enrichHood = permitsData[0]?.neighbourhood ?? ''
+    try {
+      assessmentData = await getNearestAssessment(lat, lon, enrichHood || undefined)
+    } catch (e) {
+      console.warn('[zone] assessment lookup failed:', e)
+    }
+    try {
+      if (enrichHood) permitStatsData = await getPermitStats(enrichHood)
+    } catch (e) {
+      console.warn('[zone] permit stats failed:', e)
+    }
 
   } catch (e) {
     console.warn('[zone] enrichment skipped:', (e as Error).message)

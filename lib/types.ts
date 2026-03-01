@@ -50,3 +50,46 @@ export interface ZoneDisplay {
   fetched_at: string
   error?: string
 }
+
+/** A single strategic flag shown in feasibility panel */
+export interface FeasibilityFlag {
+  type: 'amber' | 'green'
+  text: string
+}
+
+/** Fully computed feasibility result — shaped for FeasibilityPanel display */
+export interface FeasibilityResult {
+  /** Can we generate a meaningful estimate for this zone? */
+  calculable: boolean
+
+  /** Plain language summary sentence */
+  summary: string
+
+  /** Max units used in calculation */
+  units: number
+
+  /** Construction cost range (CAD) */
+  cost_low:  number
+  cost_high: number
+  cost_label: string
+
+  /** Monthly gross revenue range (CAD) */
+  monthly_low:  number
+  monthly_high: number
+
+  /** Annual gross revenue range (CAD) */
+  annual_low:  number
+  annual_high: number
+  revenue_label: string
+
+  /** Gross yield range as percentage */
+  yield_low:  number   // e.g. 8.6
+  yield_high: number   // e.g. 12.0
+  yield_caveat: string
+
+  /** Strategic flags — amber warnings and green opportunities */
+  flags: FeasibilityFlag[]
+
+  /** Disclaimer text — required on every display */
+  disclaimer: string
+}

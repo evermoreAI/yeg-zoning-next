@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
-import type { ZoneDisplay } from '@/lib/types'
-import type { ZoneLayer2 } from '@/config/zones'
+import { useState }            from 'react'
+import type { ZoneDisplay }    from '@/lib/types'
+import type { ZoneLayer2 }     from '@/config/zones'
+import FeasibilityPanel        from './FeasibilityPanel'
+import { calculateFeasibility } from '@/lib/feasibility'
 
 // ── Sub-components ─────────────────────────────────────────────────────────
 
@@ -298,6 +300,17 @@ export default function ZonePanel({ zone, loading, address }: ZonePanelProps) {
             <Layer2Content l2={zone.layer2!} bylaw12800={zone.bylaw_12800_equiv} />
           )}
         </div>
+
+        {/* Layer 3 — Feasibility (always shown when zone is loaded; gating added later) */}
+        {(() => {
+          const feasibility = calculateFeasibility(zone)
+          if (!feasibility) return null
+          return (
+            <div className="mt-2">
+              <FeasibilityPanel result={feasibility} />
+            </div>
+          )
+        })()}
 
       </div>
       <Disclaimer />

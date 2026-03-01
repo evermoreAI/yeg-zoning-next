@@ -115,13 +115,52 @@ export const ZONES: Record<string, ZoneConfig> = {
   },
 
   RSF: {
-    plain_name: 'Small Scale Residential Suburban',
-    short_desc: 'Suburban equivalent of RS zone. Higher site coverage allowed.',
-    max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
-    max_site_coverage_pct: 55, max_height_storeys: null, max_height_m: null,
-    bylaw_12800_equiv: 'RF1', applies_to: 'Suburban areas outside mature neighbourhoods',
-    pending_amendment: null, dc_override: false, color: '#5a8c69',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rsf', layer2: null,
+    // Bylaw 20001 Section 2.11 — Small Scale Flex Residential
+    // TODO: verify exact section number against zoningbylaw.edmonton.ca
+    plain_name: 'Small Scale Flex Residential',
+    short_desc: 'Flexible small-scale residential. Up to 8 units on lots 600m²+. Applies to suburban and transitional areas.',
+    max_units_midblock: 8,                   // mirrors RS rules — verify with zoningbylaw.edmonton.ca
+    max_units_midblock_min_lot_sqm: 600,     // same 600m² threshold as RS
+    max_site_coverage_pct: 45,              // Bylaw 20001 RSF
+    max_height_storeys: 3,                  // PENDING April 7 2026 hearing — same hearing covers RSF
+    max_height_m: null,
+    bylaw_12800_equiv: 'RF1',
+    applies_to: 'Suburban and transitional areas across Edmonton',
+    pending_amendment: 'Height limit subject to change — public hearing April 7 2026 may affect RSF zone. Verify with City of Edmonton before making development decisions.',
+    dc_override: false,
+    color: '#5a8c69',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rsf',
+    layer2: {
+      permitted_uses: [
+        'Single detached house',
+        'Secondary suite',
+        'Garden suite',
+        'Semi-detached house',
+        'Row housing',
+        'Home-based business',
+        'Child care facility (small)',
+        'Urban agriculture',
+      ],
+      discretionary_uses: [
+        'Neighbourhood café or bistro',
+        'Neighbourhood retail (small scale)',
+        'Medical or dental office',
+        'Personal service shop (e.g. hair salon)',
+        'Bed and breakfast',
+      ],
+      setbacks_m: {
+        front: 4.5,   // Bylaw 20001 RSF — typical suburban front setback
+        rear:  4.0,
+        side:  1.2,
+      },
+      setback_note: 'Setbacks are typical minimums. Contextual rules may apply — verify with City of Edmonton.',
+      corner_lot_note: 'Corner lots may support more than 8 units. Verify current rules with City of Edmonton via 311.',
+      links: {
+        bylaw:                    'https://zoningbylaw.edmonton.ca/bylaw/rsf',
+        assessment:               'https://www.edmonton.ca/business_economy/property-assessment',
+        development_applications: 'https://www.edmonton.ca/business_economy/development-applications',
+      },
+    },
   },
 
   RSL: {
@@ -145,13 +184,50 @@ export const ZONES: Record<string, ZoneConfig> = {
   },
 
   RM: {
-    plain_name: 'Medium Scale Residential',
-    short_desc: '4–8 storeys. Medium density apartments and stacked housing.',
-    max_units_midblock: null, max_units_midblock_min_lot_sqm: null,
-    max_site_coverage_pct: null, max_height_storeys: 8, max_height_m: null,
-    bylaw_12800_equiv: 'RA7 / RA8', applies_to: 'Medium density residential areas',
-    pending_amendment: null, dc_override: false, color: '#5b7fa6',
-    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rm', layer2: null,
+    // Bylaw 20001 Section 2.30 — Row Housing (RM)
+    // TODO: verify exact section number and unit cap against zoningbylaw.edmonton.ca
+    plain_name: 'Row Housing',
+    short_desc: 'Attached row housing. Up to 8 units, maximum 3 storeys, 45% site coverage.',
+    max_units_midblock: 8,
+    max_units_midblock_min_lot_sqm: null,    // no minimum lot threshold specified — check bylaw
+    max_site_coverage_pct: 45,
+    max_height_storeys: 3,
+    max_height_m: null,
+    bylaw_12800_equiv: 'RF4 / RF5',
+    applies_to: 'Medium density residential areas across Edmonton',
+    pending_amendment: null,
+    dc_override: false,
+    color: '#5b7fa6',
+    bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rm',
+    layer2: {
+      permitted_uses: [
+        'Row housing',
+        'Semi-detached house',
+        'Secondary suite',
+        'Garden suite',
+        'Home-based business',
+        'Child care facility (small)',
+        'Urban agriculture',
+      ],
+      discretionary_uses: [
+        'Single detached house',
+        'Stacked row housing',
+        'Live-work unit',
+        'Bed and breakfast',
+      ],
+      setbacks_m: {
+        front: 3.0,
+        rear:  4.0,
+        side:  1.5,
+      },
+      setback_note: 'Setbacks are typical minimums for RM zone — verify with City of Edmonton.',
+      corner_lot_note: 'Corner lots may support additional units or layouts. Verify with City of Edmonton via 311.',
+      links: {
+        bylaw:                    'https://zoningbylaw.edmonton.ca/bylaw/rm',
+        assessment:               'https://www.edmonton.ca/business_economy/property-assessment',
+        development_applications: 'https://www.edmonton.ca/business_economy/development-applications',
+      },
+    },
   },
 
   RH: {

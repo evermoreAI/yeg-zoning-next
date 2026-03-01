@@ -59,7 +59,7 @@ export function calculateFeasibility(zone: ZoneDisplay): FeasibilityResult | nul
   const flags: FeasibilityFlag[] = []
 
   // RS-specific flags
-  if (zone.zone_code === 'RS') {
+  if (zone.zone_code === 'RS' || zone.zone_code === 'RSF') {
     // Height amendment warning — always flag for RS
     flags.push({
       type: 'amber',

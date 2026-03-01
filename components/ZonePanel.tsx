@@ -10,7 +10,8 @@ import NeighbourhoodScoreCard      from './NeighbourhoodScoreCard'
 import GateBlur      from './GateBlur'
 import CombinedGate from './CombinedGate'
 import BookmarkButton from './BookmarkButton'
-import PermitsPanel from './PermitsPanel'
+import PermitsPanel           from './PermitsPanel'
+import ApprovalIntelligence   from './ApprovalIntelligence'
 import { tierAtLeast, type Tier } from '@/lib/tierContext'
 
 // ── Sub-components ─────────────────────────────────────────────────────────
@@ -483,6 +484,14 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
                 </GateBlur>
               )}
             </div>
+
+            {/* Approval Intelligence */}
+            {zone.permit_stats && (
+              <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro"
+                        headline="Unlock Approval Intelligence">
+                <ApprovalIntelligence stats={zone.permit_stats} />
+              </GateBlur>
+            )}
 
             {/* Nearby permits */}
             <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro">

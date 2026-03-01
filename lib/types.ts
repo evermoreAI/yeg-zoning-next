@@ -58,6 +58,7 @@ export interface ZoneDisplay {
   assessment?: import('@/lib/propertyAssessment').PropertyAssessment | null
   neighbourhoodScore?: import('@/lib/neighbourhoodScore').NeighbourhoodScore | null
   rezoning_alert?: import('@/lib/rezonings').RezoningApplication | null
+  permit_stats?: import('@/lib/permitStats').PermitStats | null
 }
 
 export interface NeighbourhoodMomentum {

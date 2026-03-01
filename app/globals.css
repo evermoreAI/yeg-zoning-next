@@ -72,3 +72,9 @@ body::after {
 .mapboxgl-ctrl-attrib a {
   color: #4a5568 !important;
 }
+
+/* ── SearchBar dropdown animation ────────────────────── */
+@keyframes fadeSlideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

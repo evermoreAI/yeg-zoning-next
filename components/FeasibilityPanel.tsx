@@ -64,12 +64,6 @@ function Flag({ type, text }: { type: 'amber' | 'green'; text: string }) {
 
 function RentalMarketSection({ rents }: { rents: NeighbourhoodRents }) {
   const rf = rents.rf_stats
-  
-  // DOM signal only if Rentfaster data exists
-  const domSignal = !rf || rf.median_dom === null ? null
-    : rf.median_dom <= 7  ? { label: 'FAST',     color: '#6ab86a', bg: 'rgba(106,184,106,0.12)' }
-    : rf.median_dom <= 21 ? { label: 'MODERATE', color: '#c8a951', bg: 'rgba(200,169,81,0.12)'  }
-    :                        { label: 'SLOW',      color: '#cf6679', bg: 'rgba(207,102,121,0.12)' }
 
   return (
     <Section heading="RENTAL MARKET">
@@ -89,44 +83,22 @@ function RentalMarketSection({ rents }: { rents: NeighbourhoodRents }) {
         ))}
       </div>
 
-      {/* DOM signal and listing count — only if Rentfaster */}
+      {/* Active listing count — only if Rentfaster */}
       {rf && (
-        <div className="grid grid-cols-2 gap-2 mb-3">
-          {/* Days on market */}
-          <div className="p-2 rounded-lg" style={{ 
-            background: domSignal?.bg ?? '#141820', 
-            border: `1px solid ${domSignal ? 'rgba(200,169,81,0.3)' : '#2a2e38'}` 
-          }}>
-            <div className="text-[8px] text-[#4a5568] uppercase tracking-wider mb-0.5">
-              Days on Market
-            </div>
-            <div className="flex items-baseline gap-1">
-              <span className="text-sm font-semibold" style={{ color: domSignal?.color ?? '#e8e0d0', fontFamily: 'var(--font-mono)' }}>
-                {rf.median_dom ?? '—'}d
-              </span>
-              {domSignal && (
-                <span className="text-[7px] font-bold uppercase" style={{ color: domSignal.color }}>
-                  {domSignal.label}
-                </span>
-              )}
-            </div>
+        <div className="p-2 rounded-lg mb-3" style={{ background: '#141820', border: '1px solid #2a2e38' }}>
+          <div className="text-[8px] text-[#4a5568] uppercase tracking-wider mb-0.5">
+            Active Listings
           </div>
-
-          {/* Active listings */}
-          <div className="p-2 rounded-lg" style={{ background: '#141820', border: '1px solid #2a2e38' }}>
-            <div className="text-[8px] text-[#4a5568] uppercase tracking-wider mb-0.5">
-              Active Listings
-            </div>
-            <div className="text-sm font-semibold text-[#e8e0d0]" style={{ fontFamily: 'var(--font-mono)' }}>
-              {rf.listing_count}
-            </div>
+          <div className="text-sm font-semibold text-[#e8e0d0]" style={{ fontFamily: 'var(--font-mono)' }}>
+            {rf.listing_count}
           </div>
         </div>
       )}
 
-      {/* Source label in small text */}
-      <div className="text-[8px] text-[#2a3040]">
-        {rents.source_label}
+      {/* Source label + disclaimer in small text */}
+      <div className="text-[8px] text-[#2a3040] space-y-0.5">
+        <div>{rents.source_label}</div>
+        {rf && <div className="text-[7px] italic text-[#1a2030]">Based on featured listings — may not reflect full market</div>}
       </div>
     </Section>
   )

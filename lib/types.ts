@@ -59,6 +59,7 @@ export interface ZoneDisplay {
   neighbourhoodScore?: import('@/lib/neighbourhoodScore').NeighbourhoodScore | null
   rezoning_alert?: import('@/lib/rezonings').RezoningApplication | null
   permit_stats?: import('@/lib/permitStats').PermitStats | null
+  rental_data?: import('@/lib/rentalData').NeighbourhoodRents | null
 }
 
 export interface NeighbourhoodMomentum {
@@ -108,4 +109,7 @@ export interface FeasibilityResult {
 
   /** Disclaimer text — required on every display */
   disclaimer: string
+
+  /** Rent source label — neighbourhood-specific or city-wide fallback */
+  rent_source_label: string
 }

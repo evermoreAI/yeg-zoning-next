@@ -18,6 +18,7 @@ import { getNearestAssessment }                           from '@/lib/propertyAs
 import { getNeighbourhoodScore }                           from '@/lib/neighbourhoodScore'
 import { checkRezoningNearby }                             from '@/lib/rezonings'
 import { getPermitStats }                                  from '@/lib/permitStats'
+import { getNeighbourhoodRents }                           from '@/lib/rentalData'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
@@ -83,6 +84,7 @@ export async function GET(req: NextRequest) {
   let neighbourhoodScoreData: Awaited<ReturnType<typeof getNeighbourhoodScore>> = null
   let rezoningAlert: Awaited<ReturnType<typeof checkRezoningNearby>> = null
   let permitStatsData: Awaited<ReturnType<typeof getPermitStats>> = null
+  let rentalData: Awaited<ReturnType<typeof getNeighbourhoodRents>> | null = null
 
   try {
     const timeout = new Promise<never>((_, reject) =>
@@ -121,6 +123,11 @@ export async function GET(req: NextRequest) {
     } catch (e) {
       console.warn('[zone] permit stats failed:', e)
     }
+    try {
+      rentalData = await getNeighbourhoodRents(lat, lon, enrichHood)
+    } catch (e) {
+      console.warn('[zone] rental data failed:', e)
+    }
 
   } catch (e) {
     console.warn('[zone] enrichment skipped:', (e as Error).message)
@@ -147,5 +154,5 @@ export async function GET(req: NextRequest) {
     console.warn('[zone] score await failed:', e)
   }
 
-  return NextResponse.json({ ...display, lat, lng: lon, permits: permitsData, momentum: momentumData, assessment: assessmentData, neighbourhoodScore: neighbourhoodScoreData, rezoning_alert: rezoningAlert, permit_stats: permitStatsData })
+  return NextResponse.json({ ...display, lat, lng: lon, permits: permitsData, momentum: momentumData, assessment: assessmentData, neighbourhoodScore: neighbourhoodScoreData, rezoning_alert: rezoningAlert, permit_stats: permitStatsData, rental_data: rentalData })
 }

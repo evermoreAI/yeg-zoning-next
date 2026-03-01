@@ -108,7 +108,7 @@ export default function FeasibilityPanel({ result }: FeasibilityPanelProps) {
           label="Annual"
           low={formatCAD(result.annual_low)}
           high={formatCAD(result.annual_high)}
-          sub={result.revenue_label}
+          sub={result.rent_source_label}
         />
       </Section>
 

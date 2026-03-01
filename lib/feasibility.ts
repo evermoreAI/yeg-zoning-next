@@ -11,6 +11,7 @@
 
 import type { ZoneDisplay }    from './types'
 import type { FeasibilityResult, FeasibilityFlag } from './types'
+import type { NeighbourhoodRents } from './rentalData'
 import { MARKET_DATA }         from './marketData'
 import { getZoneConfig }       from '@/config/zones'
 
@@ -22,7 +23,10 @@ import { getZoneConfig }       from '@/config/zones'
  *
  * Example: RS zone with 8 units → cost $1.44M–$2.0M, revenue $14,400/mo
  */
-export function calculateFeasibility(zone: ZoneDisplay): FeasibilityResult | null {
+export function calculateFeasibility(
+  zone: ZoneDisplay,
+  rents?: NeighbourhoodRents | null,
+): FeasibilityResult | null {
   // Cannot analyze: not found, DC override, or no unit data
   if (!zone.found || zone.dc_warning) return null
 
@@ -37,9 +41,12 @@ export function calculateFeasibility(zone: ZoneDisplay): FeasibilityResult | nul
   const costLow  = units * md.construction_cost_low_per_unit
   const costHigh = units * md.construction_cost_high_per_unit
 
-  // ── Revenue (2BR as baseline — most common multi-family unit mix) ──────
-  const monthlyLow  = units * md.rent_2br_low
-  const monthlyHigh = units * md.rent_2br_high
+  // ── Revenue (use neighbourhood rents if available, else city average) ──
+  const rent2brLow  = rents?.rent_2br_low  ?? md.rent_2br_low
+  const rent2brHigh = rents?.rent_2br_high ?? md.rent_2br_high
+  const rentLabel   = rents?.source_label  ?? md.rent_label
+  const monthlyLow  = units * rent2brLow
+  const monthlyHigh = units * rent2brHigh
   const annualLow   = monthlyLow  * 12
   const annualHigh  = monthlyHigh * 12
 
@@ -100,12 +107,13 @@ export function calculateFeasibility(zone: ZoneDisplay): FeasibilityResult | nul
     monthly_high:  monthlyHigh,
     annual_low:    annualLow,
     annual_high:   annualHigh,
-    revenue_label: md.rent_label,
+    revenue_label: rentLabel,
     yield_low:     yieldLow,
     yield_high:    yieldHigh,
     yield_caveat:  md.yield_caveat,
     flags,
     disclaimer:    md.feasibility_disclaimer,
+    rent_source_label: rentLabel,
   }
 }
 

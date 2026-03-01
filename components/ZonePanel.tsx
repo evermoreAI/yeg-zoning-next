@@ -477,7 +477,7 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
               ) : (
                 <GateBlur locked={!tierAtLeast(tier, 'investor')} tier="investor">
                   {(() => {
-                    const feasibility = calculateFeasibility(zone)
+                    const feasibility = calculateFeasibility(zone, zone.rental_data)
                     if (!feasibility) return null
                     return <FeasibilityPanel result={feasibility} />
                   })()}

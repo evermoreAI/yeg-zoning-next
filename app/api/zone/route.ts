@@ -59,6 +59,19 @@ export async function GET(req: NextRequest) {
     display.amendment_text    = amendment.description
   }
 
+  // Neighbourhood score: fires in parallel with enrichment, has its own 20s ceiling
+  const scorePromise = (async () => {
+    try {
+      return await Promise.race([
+        getNeighbourhoodScore(lat, lon, 0),  // permit count updated after enrichment resolves
+        new Promise<null>(r => setTimeout(() => r(null), 20_000)),
+      ])
+    } catch (e) {
+      console.warn('[zone] neighbourhood score failed:', e)
+      return null
+    }
+  })()
+
   // Fetch permits + momentum in parallel with a hard 6s ceiling.
   // These are optional enrichments — if they fail or timeout, zone data still returns.
   const ENRICHMENT_TIMEOUT = 6_000
@@ -92,14 +105,30 @@ export async function GET(req: NextRequest) {
       console.warn('[zone] assessment lookup failed:', e)
     }
 
-    // Neighbourhood score: Outscraper + permit count
-    try {
-      neighbourhoodScoreData = await getNeighbourhoodScore(lat, lon, permitsData.length)
-    } catch (e) {
-      console.warn('[zone] neighbourhood score failed:', e)
-    }
+
   } catch (e) {
     console.warn('[zone] enrichment skipped:', (e as Error).message)
+  }
+
+  // Await score (may already be done, or wait up to remaining time)
+  try {
+    const raw = await scorePromise
+    if (raw) {
+      // Patch in the actual permit count now that we have it
+      neighbourhoodScoreData = {
+        ...raw,
+        development: {
+          ...raw.development,
+          count: permitsData.length,
+          score: permitsData.length >= 10 ? 100
+               : permitsData.length >= 6  ? 75
+               : permitsData.length >= 3  ? 55
+               : permitsData.length >= 1  ? 35 : 10,
+        },
+      }
+    }
+  } catch (e) {
+    console.warn('[zone] score await failed:', e)
   }
 
   return NextResponse.json({ ...display, lat, lng: lon, permits: permitsData, momentum: momentumData, assessment: assessmentData, neighbourhoodScore: neighbourhoodScoreData })

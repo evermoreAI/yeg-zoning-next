@@ -84,7 +84,7 @@ const NEIGHBOURHOODS: Record<string, NeighbourhoodData> = {
     faqs: [
       { q: 'How many units can I build on a McKernan lot?', a: 'Up to 8 units on a lot of 600 m² or larger zoned RS. Check your specific address — lot size and configuration affect maximum units.' },
       { q: 'What is the minimum lot size for 8 units in McKernan?', a: '600 square metres for a mid-block lot under Bylaw 20001. Corner lots may qualify for additional density.' },
-      { q: 'Is McKernan a good investment in 2026?', a: "McKernan has the highest infill activity in Edmonton, 4–4.5% vacancy, and University of Alberta anchor demand. Land values are rising. Whether it is right for your specific project depends on lot size, purchase price, and financing — check the feasibility numbers for your specific address." },
+      { q: 'Is McKernan a good investment in 2026?', a: 'McKernan has the highest infill activity in Edmonton, 4–4.5% vacancy, and University of Alberta anchor demand. Land values are rising. Whether it is right for your specific project depends on lot size, purchase price, and financing — check the feasibility numbers for your specific address.' },
       { q: 'What is the April 7 2026 RS zone hearing about?', a: 'The City of Edmonton has scheduled a public hearing that may affect RS zone height limits and building length restrictions. If you are planning a McKernan project, verify current rules with the City before finalizing designs.' },
       { q: 'What is the transit premium in McKernan?', a: 'Lots within a 2-minute walk of McKernan/Belgravia LRT typically command 10–15% higher values than comparable lots further from transit.' },
       { q: 'How fast do McKernan lots sell?', a: 'Average 18–20 days on market as of early 2026. The market moves fast — preparation is key.' },
@@ -129,11 +129,12 @@ const NEIGHBOURHOODS: Record<string, NeighbourhoodData> = {
       'Tenant profile is executive, medical, and professional — premium finishes and quality construction are required and rewarded with low vacancy and high rents.',
     ],
     faqs: [
-      { q: 'Is Glenora Edmonton zoned RS?', a: "The majority of Glenora's residential lots are RS (Small Scale Residential) following the 2024 blanket rezoning. Some properties retain heritage or special zone designations — verify your specific address." },
-      { q: 'What are land values in Glenora Edmonton in 2026?', a: 'Glenora RS lots trade in the $600,000 to $1,200,000+ range, significantly above the Edmonton RS average, driven by lot size, river valley access, and prestige location.' },
-      { q: 'Is Glenora good for RS zone infill development?', a: 'Glenora suits experienced developers targeting the luxury segment. Land costs are high, but achievable rents and sale prices at the top of the Edmonton market support strong returns on premium builds.' },
-      { q: 'Can I build 8 units in Glenora?', a: 'Many Glenora lots exceed 600 m² and qualify for 8-unit RS development. Larger lots may allow even more flexibility depending on configuration. Verify your address using the tool above.' },
-      { q: 'Does the April 7 2026 amendment affect Glenora development?', a: 'Yes — any change to RS zone height or building length from the April 7 2026 public hearing applies to Glenora RS lots. Always verify current rules before starting design.' },
+      { q: 'How many units can I build on a Glenora lot?', a: 'Up to 8 units on a lot of 600 m² or larger zoned RS. Many Glenora lots exceed this threshold — check your specific address for exact development potential.' },
+      { q: 'What is the minimum lot size for 8 units in Glenora?', a: '600 square metres for a mid-block lot under Bylaw 20001. Corner lots may qualify for additional density.' },
+      { q: 'Is Glenora a good investment in 2026?', a: 'Glenora offers the highest land values in the Edmonton mature RS market, driven by river valley access, large historic lots, and prestige location. It suits developers targeting the luxury segment — returns depend on purchase price, construction quality, and target tenant profile.' },
+      { q: 'What is the April 7 2026 RS zone hearing about?', a: 'The City of Edmonton has scheduled a public hearing that may affect RS zone height limits and building length restrictions. If you are planning a Glenora project, verify current rules with the City before finalizing designs.' },
+      { q: 'What drives land value premiums in Glenora?', a: 'River valley proximity, mature elm canopy, large lot sizes, and prestige address are the primary drivers. Lots close to the river valley or with oversized frontage trade significantly above average.' },
+      { q: 'How fast do Glenora lots sell?', a: 'Glenora averages 20–30 days on market — slightly slower than McKernan given higher price points, but quality lots at the right price move quickly.' },
     ],
   },
 
@@ -175,11 +176,12 @@ const NEIGHBOURHOODS: Record<string, NeighbourhoodData> = {
       'Some Strathcona lots front commercial strips or arterials with MU or DC zoning — check your specific address before assuming RS rules apply.',
     ],
     faqs: [
-      { q: 'Is Strathcona Edmonton zoned RS?', a: "Residential lots in Strathcona are predominantly RS (Small Scale Residential) following the 2024 blanket rezoning. Some lots fronting Whyte Ave or major streets may have commercial or mixed-use zoning — verify your specific address." },
-      { q: 'What are land values in Strathcona Edmonton in 2026?', a: 'Strathcona RS lots are trading in the $450,000 to $750,000 range, with premiums for lots with rear lane access, corner positions, or proximity to Whyte Ave.' },
-      { q: 'How many units can I build in Strathcona?', a: 'Up to 8 units on a qualifying 600 m² RS lot. Strathcona lot sizes vary — use the zone lookup above to check your specific address.' },
-      { q: "Is Strathcona a good neighbourhood for infill investment?", a: "One of Edmonton's most desirable infill neighbourhoods. Strong walkability, consistent rental demand, and a vibrant commercial strip support both rental income and long-term capital growth." },
-      { q: 'Does the April 7 2026 public hearing affect Strathcona?', a: 'Any RS zone rule change from the April 7 2026 hearing applies to Strathcona lots. Verify current rules with the City before finalizing development plans.' },
+      { q: 'How many units can I build on a Strathcona lot?', a: 'Up to 8 units on a lot of 600 m² or larger zoned RS. Some Strathcona lots fronting Whyte Ave carry MU or commercial zoning — check your specific address.' },
+      { q: 'What is the minimum lot size for 8 units in Strathcona?', a: '600 square metres for a mid-block lot under Bylaw 20001. Corner lots may qualify for additional density.' },
+      { q: 'Is Strathcona a good investment in 2026?', a: 'Strathcona has strong walkability, consistent rental demand from young professionals and UofA students, and ~194 new infill units added in 2025. Land values are solid. The right project depends on lot size, purchase price, and target market — check the feasibility numbers for your specific address.' },
+      { q: 'What is the April 7 2026 RS zone hearing about?', a: 'The City of Edmonton has scheduled a public hearing that may affect RS zone height limits and building length restrictions. If you are planning a Strathcona project, verify current rules with the City before finalizing designs.' },
+      { q: 'What drives the Strathcona rental premium?', a: 'Whyte Ave walkability, proximity to the University of Alberta, and a dense concentration of amenities drive 8–12% rental premiums over the Edmonton inner-city average. Vacancy is consistently low.' },
+      { q: 'How fast do Strathcona lots sell?', a: 'Strathcona averages 15–22 days on market. Quality RS lots close to Whyte Ave or with lane access move the fastest — preparation and pre-arranged financing are key.' },
     ],
   },
 
@@ -221,11 +223,12 @@ const NEIGHBOURHOODS: Record<string, NeighbourhoodData> = {
       'Most Windsor Park lots are standard 42–44 ft frontage. Rear lane access significantly improves development flexibility and commands a price premium.',
     ],
     faqs: [
-      { q: 'Is Windsor Park Edmonton zoned RS?', a: "Windsor Park residential lots are predominantly RS (Small Scale Residential) under the 2024 blanket rezoning. Always verify your specific address — some lots may retain different zoning." },
-      { q: 'What are land values in Windsor Park Edmonton in 2026?', a: 'Windsor Park RS lots are trading in the $450,000 to $700,000 range, with premiums for rear lane access, larger lots, and University Avenue proximity.' },
-      { q: 'How fast does the Windsor Park infill market move?', a: "Windsor Park averages 18–20 days to sale for qualifying RS lots. High buyer competition reflects strong investor confidence — financing must be in place before approaching the market." },
-      { q: 'How many units can I build in Windsor Park?', a: 'Up to 8 units on a qualifying RS lot of 600 m² or more. Lot sizes vary — use the zone lookup above for your exact address.' },
-      { q: 'Does the April 7 2026 amendment affect Windsor Park?', a: 'Yes. Any change to RS zone rules from the April 7 2026 public hearing applies to Windsor Park lots. Verify current rules before finalizing design or permits.' },
+      { q: 'How many units can I build on a Windsor Park lot?', a: 'Up to 8 units on a lot of 600 m² or larger zoned RS. Check your specific address — lot size and configuration affect maximum units.' },
+      { q: 'What is the minimum lot size for 8 units in Windsor Park?', a: '600 square metres for a mid-block lot under Bylaw 20001. Corner lots may qualify for additional density.' },
+      { q: 'Is Windsor Park a good investment in 2026?', a: 'Windsor Park is one of Edmonton\'s fastest-moving infill markets with ~242 new units added in 2025 and direct University of Alberta adjacency. Whether it is right for your project depends on lot size, purchase price, and financing — check the feasibility numbers for your specific address.' },
+      { q: 'What is the April 7 2026 RS zone hearing about?', a: 'The City of Edmonton has scheduled a public hearing that may affect RS zone height limits and building length restrictions. If you are planning a Windsor Park project, verify current rules with the City before finalizing designs.' },
+      { q: 'What drives Windsor Park rental demand?', a: 'Direct University of Alberta adjacency creates two demand pools: undergraduate students and graduate students plus university professionals. This drives vacancy below 4.5% consistently and supports a 6–10% rental premium over the Edmonton inner-city average.' },
+      { q: 'How fast do Windsor Park lots sell?', a: 'Average 18–20 days on market as of early 2026. One of Edmonton\'s fastest RS zone markets — have financing in place before approaching sellers.' },
     ],
   },
 
@@ -267,11 +270,12 @@ const NEIGHBOURHOODS: Record<string, NeighbourhoodData> = {
       'Inner-city location supports solid rental demand from professionals and families — less acute than UofA-adjacent neighbourhoods but more stable and less seasonal.',
     ],
     faqs: [
-      { q: 'Is Jasper Park Edmonton zoned RS?', a: "Jasper Park residential lots are predominantly RS (Small Scale Residential) following the 2024 blanket rezoning. Verify your specific address — some lots may retain older zoning designations." },
-      { q: 'What are land values in Jasper Park Edmonton in 2026?', a: 'Jasper Park RS lots are currently in the $400,000 to $650,000 range — more accessible than McKernan or Strathcona while still offering solid inner-city fundamentals.' },
-      { q: 'Is Jasper Park a good neighbourhood for Edmonton infill investment?', a: 'Jasper Park offers inner-city location, consistent permit activity, and lower land costs than its more prestigious neighbours. It suits value-focused investors who want inner-city exposure at a more accessible price point.' },
-      { q: 'How many units can I build in Jasper Park?', a: 'Up to 8 units on a qualifying RS lot of 600 m². Lot sizes vary — use the zone lookup above to check your specific address.' },
-      { q: 'Does the April 7 2026 amendment affect Jasper Park?', a: 'Yes. Any RS zone changes from the April 7 2026 public hearing apply to all RS-zoned lots including Jasper Park. Always verify rules with the City before making development decisions.' },
+      { q: 'How many units can I build on a Jasper Park lot?', a: 'Up to 8 units on a lot of 600 m² or larger zoned RS. Check your specific address — lot size and configuration affect maximum units.' },
+      { q: 'What is the minimum lot size for 8 units in Jasper Park?', a: '600 square metres for a mid-block lot under Bylaw 20001. Corner lots may qualify for additional density.' },
+      { q: 'Is Jasper Park a good investment in 2026?', a: 'Jasper Park offers inner-city RS exposure at more accessible land values than McKernan, Strathcona, or Windsor Park. With ~197 new units added in 2025 and consistent permit activity, it is a solid value play for cost-conscious developers. Returns depend on purchase price, construction cost, and target market.' },
+      { q: 'What is the April 7 2026 RS zone hearing about?', a: 'The City of Edmonton has scheduled a public hearing that may affect RS zone height limits and building length restrictions. If you are planning a Jasper Park project, verify current rules with the City before finalizing designs.' },
+      { q: 'Why are Jasper Park land values lower than McKernan?', a: 'Jasper Park has comparable inner-city fundamentals but lacks the University of Alberta adjacency and Whyte Ave walkability of its neighbours. This creates an accessible entry point for RS zone investors seeking inner-city exposure without premium land costs.' },
+      { q: 'How fast do Jasper Park lots sell?', a: 'Jasper Park averages 20–28 days on market — slightly slower than McKernan or Windsor Park, giving buyers a small window for due diligence without the extreme time pressure of the most competitive markets.' },
     ],
   },
 }
@@ -370,10 +374,13 @@ export default async function NeighbourhoodPage(
         <header className="mb-14">
           <div className="text-[10px] text-[#c8a951] tracking-[3px] uppercase mb-3"
                style={{ fontFamily: 'var(--font-rajdhani)' }}>Edmonton Neighbourhood Guide · 2026</div>
-          <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-4 text-[#e8e0d0]"
+          <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-3 text-[#e8e0d0]"
               style={{ fontFamily: 'var(--font-rajdhani)' }}>
-            <span className="text-[#c8a951]">{heroTitle}</span>
+            {name} Infill Intelligence —{' '}
+            <span className="text-[#c8a951]">Zoning, Land Values, and Feasibility 2026</span>
           </h1>
+          <p className="text-[#c8a951] text-sm font-semibold mb-2 tracking-wide"
+             style={{ fontFamily: 'var(--font-rajdhani)' }}>{heroTitle}</p>
           <p className="text-[#a09080] text-base leading-relaxed mb-8 max-w-2xl">{heroBody}</p>
           <div className="p-4 rounded-lg" style={{ background: '#141820', border: '1px solid #2a2e38' }}>
             <p className="text-[11px] text-[#8a8070] mb-2 uppercase tracking-wider"

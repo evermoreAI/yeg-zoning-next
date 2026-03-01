@@ -3,7 +3,6 @@
 import type { FeasibilityResult } from '@/lib/types'
 import type { NeighbourhoodRents } from '@/lib/rentalData'
 import { formatCAD, formatCADMonthly } from '@/lib/feasibility'
-import RentalMarketCard from './RentalMarketCard'
 
 interface FeasibilityPanelProps {
   result: FeasibilityResult
@@ -61,6 +60,78 @@ function Flag({ type, text }: { type: 'amber' | 'green'; text: string }) {
   )
 }
 
+// ── Rental Market Section ──────────────────────────────────────────────────
+
+function RentalMarketSection({ rents }: { rents: NeighbourhoodRents }) {
+  const rf = rents.rf_stats
+  
+  // DOM signal only if Rentfaster data exists
+  const domSignal = !rf || rf.median_dom === null ? null
+    : rf.median_dom <= 7  ? { label: 'FAST',     color: '#6ab86a', bg: 'rgba(106,184,106,0.12)' }
+    : rf.median_dom <= 21 ? { label: 'MODERATE', color: '#c8a951', bg: 'rgba(200,169,81,0.12)'  }
+    :                        { label: 'SLOW',      color: '#cf6679', bg: 'rgba(207,102,121,0.12)' }
+
+  return (
+    <Section heading="RENTAL MARKET">
+      {/* Rents grid — 1BR/2BR/3BR in gold mono */}
+      <div className="grid grid-cols-3 gap-2 mb-3">
+        {[
+          { label: '1BR', low: rents.rent_1br_low, high: rents.rent_1br_high },
+          { label: '2BR', low: rents.rent_2br_low, high: rents.rent_2br_high },
+          { label: '3BR', low: rents.rent_3br_low, high: rents.rent_3br_high },
+        ].map((br) => (
+          <div key={br.label} className="p-2 rounded" style={{ background: '#141820', border: '1px solid #2a2e38' }}>
+            <div className="text-[8px] text-[#4a5568] uppercase tracking-wider mb-0.5">{br.label}</div>
+            <div className="text-[10px] font-semibold text-[#c8a951]" style={{ fontFamily: 'var(--font-mono)' }}>
+              ${br.low.toLocaleString()}–${br.high.toLocaleString()}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* DOM signal and listing count — only if Rentfaster */}
+      {rf && (
+        <div className="grid grid-cols-2 gap-2 mb-3">
+          {/* Days on market */}
+          <div className="p-2 rounded-lg" style={{ 
+            background: domSignal?.bg ?? '#141820', 
+            border: `1px solid ${domSignal ? 'rgba(200,169,81,0.3)' : '#2a2e38'}` 
+          }}>
+            <div className="text-[8px] text-[#4a5568] uppercase tracking-wider mb-0.5">
+              Days on Market
+            </div>
+            <div className="flex items-baseline gap-1">
+              <span className="text-sm font-semibold" style={{ color: domSignal?.color ?? '#e8e0d0', fontFamily: 'var(--font-mono)' }}>
+                {rf.median_dom ?? '—'}d
+              </span>
+              {domSignal && (
+                <span className="text-[7px] font-bold uppercase" style={{ color: domSignal.color }}>
+                  {domSignal.label}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Active listings */}
+          <div className="p-2 rounded-lg" style={{ background: '#141820', border: '1px solid #2a2e38' }}>
+            <div className="text-[8px] text-[#4a5568] uppercase tracking-wider mb-0.5">
+              Active Listings
+            </div>
+            <div className="text-sm font-semibold text-[#e8e0d0]" style={{ fontFamily: 'var(--font-mono)' }}>
+              {rf.listing_count}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Source label in small text */}
+      <div className="text-[8px] text-[#2a3040]">
+        {rents.source_label}
+      </div>
+    </Section>
+  )
+}
+
 // ── Main component ─────────────────────────────────────────────────────────
 
 export default function FeasibilityPanel({ result, rents }: FeasibilityPanelProps) {
@@ -100,10 +171,10 @@ export default function FeasibilityPanel({ result, rents }: FeasibilityPanelProp
         />
       </Section>
 
-      {/* Revenue */}
-      {/* Rental Market Card — live Rentfaster data */}
-      {rents && <RentalMarketCard rents={rents} />}
+      {/* Rental Market — all tiers, all data sources */}
+      {rents && <RentalMarketSection rents={rents} />}
 
+      {/* Revenue */}
       <Section heading="ESTIMATED GROSS REVENUE">
         <FinancialRow
           label="Monthly (all units)"

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useTier, type Tier } from '@/lib/tierContext'
 import mapboxgl from 'mapbox-gl'
 import MapView   from './MapView'
@@ -12,7 +12,11 @@ import type { FlyToTarget, SearchResult, ZoneDisplay } from '@/lib/types'
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || ''
 
-export default function MapTerminal() {
+interface MapTerminalProps {
+  initialLoad?: { lat: number; lon: number; address: string } | null
+}
+
+export default function MapTerminal({ initialLoad }: MapTerminalProps = {}) {
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const [flyTo,        setFlyTo]        = useState<FlyToTarget | null>(null)
   const [zoneData,     setZoneData]     = useState<ZoneDisplay | null>(null)
@@ -46,6 +50,15 @@ export default function MapTerminal() {
   const { tier, setTier } = useTier()
   const [bookmarksOpen,  setBookmarksOpen]  = useState(false)
   const [bookmarkRefresh, setBookmarkRefresh] = useState(0)
+
+  // Auto-load zone from URL params (deep-link from /zones/* SEO pages)
+  useEffect(() => {
+    if (!initialLoad) return
+    setLastAddress(initialLoad.address)
+    setFlyTo({ lat: initialLoad.lat, lng: initialLoad.lon, zoom: 17 })
+    fetchZone(initialLoad.lat, initialLoad.lon)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialLoad?.lat, initialLoad?.lon])
 
   function handleSelect(result: SearchResult) {
     setLastAddress(result.address)

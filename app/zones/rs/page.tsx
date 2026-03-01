@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import SearchRedirect from '@/components/SearchRedirect'
+import SearchBarRedirect from '@/components/SearchBarRedirect'
 
 export const metadata: Metadata = {
   title: 'Edmonton RS Zone Guide 2026 — What Can You Build?',
@@ -122,7 +122,7 @@ export default function RSZonePage() {
           <div className="p-4 rounded-lg" style={{ background: '#141820', border: '1px solid #2a2e38' }}>
             <p className="text-[11px] text-[#8a8070] mb-2 uppercase tracking-wider"
                style={{ fontFamily: 'var(--font-rajdhani)' }}>Check your property instantly</p>
-            <SearchRedirect placeholder="Enter your Edmonton address…" />
+            <SearchBarRedirect />
           </div>
         </header>
 
@@ -304,7 +304,7 @@ export default function RSZonePage() {
             Search any Edmonton address to see its zone, development rules, feasibility numbers, and
             amendment warnings — live from City of Edmonton GIS data. Free, no account required.
           </p>
-          <SearchRedirect placeholder="Enter your Edmonton address…" />
+          <SearchBarRedirect />
         </section>
 
         {/* Disclaimer + footer */}

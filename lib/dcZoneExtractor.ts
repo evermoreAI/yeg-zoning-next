@@ -135,11 +135,17 @@ async function fetchAndParse(url: string, zoneCode: string): Promise<DCZoneRules
   if (discStart > 0) {
     const discBlock = content.slice(discStart, discStart + 1000)
     const items = [...discBlock.matchAll(/[a-z]\.\s+([A-Z][a-zA-Z ,\/()-]{4,80}?)(?=\s+[a-z]\s*\.|$)/g)]
-    discretionary_uses = items.map(m => m[1].trim())
+    discretionary_uses = items
+      .map(m => m[1].trim())
+      .filter(u => !conditionWords.test(u))
     // Remove from permitted if overlap
     allUses = allUses.filter(u => !discretionary_uses.includes(u))
   }
-  const permitted_uses = allUses.slice(0, 15)
+  // Filter out conditions masquerading as uses
+  const conditionWords = /\b(shall|provided|following|as follows|minimum|maximum|must|required|hereby)\b/i
+  const permitted_uses = allUses
+    .filter(u => !conditionWords.test(u))
+    .slice(0, 15)
 
   // ── Height ───────────────────────────────────────────────────────────────
   const heightPatterns = [

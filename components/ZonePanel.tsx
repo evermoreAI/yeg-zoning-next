@@ -313,11 +313,11 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
                 </div>
               )
             ) : null}
-            {/* Neighbourhood score — show card, "Updating..." if sub-scores seem stale, or gate */}
-            {(zone.neighbourhoodScore || zone.found) && (
-              <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro">
+            {/* Neighbourhood score — always shown; blurred gate for Free tier */}
+            {zone.found && (
+              <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro"
+                        headline="Unlock Neighbourhood Score">
                 {zone.neighbourhoodScore ? (
-                  // Flag suspiciously low scores as potentially still loading
                   zone.neighbourhoodScore.overall_score <= 5 ? (
                     <div className="mt-3 px-3 py-2 rounded-lg flex items-center gap-2"
                          style={{ background: '#141820', border: '1px solid #2a2e38' }}>
@@ -327,7 +327,24 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
                   ) : (
                     <NeighbourhoodScoreCard score={zone.neighbourhoodScore} />
                   )
-                ) : null}
+                ) : (
+                  /* Placeholder so gate always has content to tease */
+                  <div className="mt-3 p-3 rounded-lg" style={{ background: '#141820', border: '1px solid #2a2e38' }}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[11px] font-bold tracking-widest uppercase text-[#2a3545]"
+                            style={{ fontFamily: 'var(--font-rajdhani)' }}>★ PREMIUM NEIGHBOURHOOD</span>
+                      <span className="text-sm font-semibold text-[#2a3545]" style={{ fontFamily: 'var(--font-mono)' }}>—</span>
+                    </div>
+                    <div className="space-y-1.5">
+                      {['Transit','Amenities','Commercial','Development'].map(l => (
+                        <div key={l} className="flex items-center gap-2">
+                          <span className="text-[9px] text-[#1e2530] w-20">{l}</span>
+                          <div className="flex-1 h-1 rounded-full bg-[#141820]" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </GateBlur>
             )}
           </div>

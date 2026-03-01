@@ -14,9 +14,10 @@
  */
 
 interface GateBlurProps {
-  locked:   boolean
-  tier:     'pro' | 'investor'
-  children: React.ReactNode
+  locked:    boolean
+  tier:      'pro' | 'investor'
+  children:  React.ReactNode
+  headline?: string   // override default headline
 }
 
 const COPY: Record<'pro' | 'investor', { headline: string; price: string; sub: string; accent: string }> = {
@@ -34,7 +35,7 @@ const COPY: Record<'pro' | 'investor', { headline: string; price: string; sub: s
   },
 }
 
-export default function GateBlur({ locked, tier, children }: GateBlurProps) {
+export default function GateBlur({ locked, tier, children, headline }: GateBlurProps) {
   if (!locked) return <>{children}</>
 
   const copy = COPY[tier]
@@ -73,7 +74,7 @@ export default function GateBlur({ locked, tier, children }: GateBlurProps) {
             <span className="text-sm leading-none" style={{ color: copy.accent }}>🔒</span>
             <span className="text-[#e8e0d0] text-[11px] font-bold tracking-wide"
                   style={{ fontFamily: 'var(--font-rajdhani)' }}>
-              {copy.headline}
+              {headline ?? copy.headline}
             </span>
           </div>
           <p className="text-[10px] font-semibold" style={{ color: copy.accent, fontFamily: 'var(--font-mono)' }}>

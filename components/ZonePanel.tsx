@@ -4,7 +4,8 @@ import { useState, useRef, useEffect } from 'react'
 import type { ZoneDisplay }    from '@/lib/types'
 import type { ZoneLayer2 }     from '@/config/zones'
 import FeasibilityPanel        from './FeasibilityPanel'
-import { calculateFeasibility } from '@/lib/feasibility'
+import { calculateFeasibility }   from '@/lib/feasibility'
+import { formatAssessedValue }     from '@/lib/propertyAssessment'
 import GateBlur from './GateBlur'
 import BookmarkButton from './BookmarkButton'
 import PermitsPanel from './PermitsPanel'
@@ -265,6 +266,15 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
               )}
             </div>
             {address && <div className="text-[#4a5568] text-[10px] mt-1 truncate">{address}</div>}
+            {zone.assessment && (
+              <div className="flex items-center gap-1.5 mt-1.5">
+                <span className="text-[9px] text-[#8a8070]">ASSESSED</span>
+                <span className="text-[10px] font-semibold text-[#c8a951]" style={{ fontFamily: 'var(--font-mono)' }}>
+                  {formatAssessedValue(zone.assessment.assessed_value)}
+                </span>
+                <span className="text-[9px] text-[#4a5568]">· {zone.assessment.distance_m}m away</span>
+              </div>
+            )}
           </div>
           {zone.found && zone.lat != null && zone.lng != null && (
             <BookmarkButton

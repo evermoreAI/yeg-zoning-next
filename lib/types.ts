@@ -55,6 +55,7 @@ export interface ZoneDisplay {
   // Nearby permits & momentum (populated by /api/zone)
   permits?: import('@/lib/developmentPermits').DevelopmentPermit[]
   momentum?: NeighbourhoodMomentum
+  assessment?: import('@/lib/propertyAssessment').PropertyAssessment | null
 }
 
 export interface NeighbourhoodMomentum {

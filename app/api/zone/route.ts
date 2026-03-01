@@ -14,6 +14,7 @@ import { getZoneForLocation }        from '@/lib/edmontonGis'
 import { interpretZone }             from '@/lib/zoneInterpreter'
 import { getAmendment }               from '@/lib/amendments'
 import { getPermitsNearby, getNeighbourhoodMomentum } from '@/lib/developmentPermits'
+import { getNearestAssessment }                           from '@/lib/propertyAssessment'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
@@ -62,6 +63,7 @@ export async function GET(req: NextRequest) {
   const ENRICHMENT_TIMEOUT = 6_000
   let permitsData: Awaited<ReturnType<typeof getPermitsNearby>> = []
   let momentumData = { recent: 0, prior: 0, trend: 'ACTIVE' as const }
+  let assessmentData: Awaited<ReturnType<typeof getNearestAssessment>> = null
 
   try {
     const timeout = new Promise<never>((_, reject) =>
@@ -79,9 +81,19 @@ export async function GET(req: NextRequest) {
       permitsData  = (permits  as PromiseFulfilledResult<typeof permitsData>).value
     if (momentum && (momentum as PromiseSettledResult<typeof momentumData>).status === 'fulfilled')
       momentumData = (momentum as PromiseFulfilledResult<typeof momentumData>).value
+
+    // Assessment: use neighbourhood from nearest permit (already fetched above)
+    const neighbourhood = permitsData[0]?.neighbourhood ?? ''
+    if (neighbourhood) {
+      try {
+        assessmentData = await getNearestAssessment(lat, lon, neighbourhood)
+      } catch (e) {
+        console.warn('[zone] assessment lookup failed:', e)
+      }
+    }
   } catch (e) {
     console.warn('[zone] enrichment skipped:', (e as Error).message)
   }
 
-  return NextResponse.json({ ...display, lat, lng: lon, permits: permitsData, momentum: momentumData })
+  return NextResponse.json({ ...display, lat, lng: lon, permits: permitsData, momentum: momentumData, assessment: assessmentData })
 }

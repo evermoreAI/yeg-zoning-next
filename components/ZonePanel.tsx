@@ -1,6 +1,6 @@
 'use client'
 
-import { useState }            from 'react'
+import { useState, useRef, useEffect } from 'react'
 import type { ZoneDisplay }    from '@/lib/types'
 import type { ZoneLayer2 }     from '@/config/zones'
 import FeasibilityPanel        from './FeasibilityPanel'
@@ -166,6 +166,12 @@ interface ZonePanelProps {
 
 export default function ZonePanel({ zone, loading, address, tier, onBookmarkChanged }: ZonePanelProps) {
   const [expanded, setExpanded] = useState(false)
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  // Reset scroll to top on every new zone result
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = 0
+  }, [zone])
 
   // ── Empty ────────────────────────────────────────────────────────────────
   if (!loading && !zone) {
@@ -188,7 +194,7 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
   if (loading) {
     return (
       <div className="flex flex-col h-full">
-        <div className="flex-1 overflow-y-auto px-4 pt-4 pb-2">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 pt-4 pb-6">
           <div className="mb-4 animate-pulse">
             <div className="h-4 w-32 bg-[#2a2e38] rounded mb-2" />
             <div className="h-3 w-24 bg-[#1e2530] rounded" />
@@ -227,7 +233,7 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
   // ── Loaded — Layer 1 + expandable Layer 2 ───────────────────────────────
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto px-4 pt-4 pb-2">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 pt-4 pb-6">
 
         {/* DC warning */}
         {zone.dc_warning && (
@@ -359,20 +365,21 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
           </GateBlur>
         )}
 
-      </div>
-      <Disclaimer />
 
-      {/* Nearby development permits — Pro+ tier */}
-      <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro">
-        <PermitsPanel
-          permits={zone.permits ?? []}
-          loading={false}
-        />
-      </GateBlur>
+        {/* Nearby development permits — Pro+ tier */}
+        <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro">
+          <PermitsPanel
+            permits={zone.permits ?? []}
+            loading={false}
+          />
+        </GateBlur>
 
-      {/* Email capture — always last, gold top separator */}
-      <div className="mt-4 pt-3" style={{ borderTop: '1px solid #c8a951' }}>
-        <EmailCapture />
+        {/* Email capture — always last, gold top separator */}
+        <div className="mt-4 pt-3 pb-2" style={{ borderTop: '1px solid #c8a951' }}>
+          <EmailCapture />
+        </div>
+
+        <Disclaimer />
       </div>
 
     </div>

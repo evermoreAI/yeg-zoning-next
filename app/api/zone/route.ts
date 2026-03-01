@@ -57,14 +57,31 @@ export async function GET(req: NextRequest) {
     display.amendment_text    = amendment.description
   }
 
-  // Fetch permits + momentum in parallel — non-blocking (failures return empty)
-  const [permits, momentum] = await Promise.allSettled([
-    getPermitsNearby(lat, lon),
-    getNeighbourhoodMomentum(display.zone_code ?? ''),
-  ])
+  // Fetch permits + momentum in parallel with a hard 6s ceiling.
+  // These are optional enrichments — if they fail or timeout, zone data still returns.
+  const ENRICHMENT_TIMEOUT = 6_000
+  let permitsData: Awaited<ReturnType<typeof getPermitsNearby>> = []
+  let momentumData = { recent: 0, prior: 0, trend: 'ACTIVE' as const }
 
-  const permitsData  = permits.status  === 'fulfilled' ? permits.value  : []
-  const momentumData = momentum.status === 'fulfilled' ? momentum.value : { recent: 0, prior: 0, trend: 'ACTIVE' as const }
+  try {
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('enrichment timeout')), ENRICHMENT_TIMEOUT)
+    )
+    const [permits, momentum] = await Promise.race([
+      Promise.allSettled([
+        getPermitsNearby(lat, lon),
+        getNeighbourhoodMomentum(display.zone_code ?? ''),
+      ]),
+      timeout,
+    ]) as PromiseSettledResult<unknown>[]
+
+    if (permits  && (permits  as PromiseSettledResult<typeof permitsData>).status  === 'fulfilled')
+      permitsData  = (permits  as PromiseFulfilledResult<typeof permitsData>).value
+    if (momentum && (momentum as PromiseSettledResult<typeof momentumData>).status === 'fulfilled')
+      momentumData = (momentum as PromiseFulfilledResult<typeof momentumData>).value
+  } catch (e) {
+    console.warn('[zone] enrichment skipped:', (e as Error).message)
+  }
 
   return NextResponse.json({ ...display, lat, lng: lon, permits: permitsData, momentum: momentumData })
 }

@@ -361,7 +361,6 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
 
       </div>
       <Disclaimer />
-      <EmailCapture />
 
       {/* Nearby development permits — Pro+ tier */}
       <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro">
@@ -370,6 +369,11 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
           loading={false}
         />
       </GateBlur>
+
+      {/* Email capture — always last, gold top separator */}
+      <div className="mt-4 pt-3" style={{ borderTop: '1px solid #c8a951' }}>
+        <EmailCapture />
+      </div>
 
     </div>
   )

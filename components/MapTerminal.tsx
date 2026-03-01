@@ -160,7 +160,7 @@ export default function MapTerminal({ initialLoad }: MapTerminalProps = {}) {
         </div>
 
         {/* Zone panel — 40% */}
-        <div className="flex-[0_0_40%] bg-[#0a0c10] flex flex-col overflow-hidden border-l border-[#1a2535]">
+        <div className="flex-[0_0_40%] bg-[#0a0c10] flex flex-col min-h-0 border-l border-[#1a2535]">
           <div className="h-[2px] bg-gradient-to-r from-[#c8a951] via-[#c8a951] to-transparent flex-shrink-0" />
           <ZonePanel zone={zoneData} loading={loadingZone} address={lastAddress} tier={tier} onBookmarkChanged={handleBookmarkChange} />
           <BookmarksPanel

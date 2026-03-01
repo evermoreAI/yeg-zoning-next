@@ -7,6 +7,7 @@ import FeasibilityPanel        from './FeasibilityPanel'
 import { calculateFeasibility } from '@/lib/feasibility'
 import GateBlur from './GateBlur'
 import BookmarkButton from './BookmarkButton'
+import PermitsPanel from './PermitsPanel'
 import EmailCapture from './EmailCapture'
 import { tierAtLeast, type Tier } from '@/lib/tierContext'
 
@@ -279,12 +280,26 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
           <MetricCard label="LOT THRESHOLD" value={zone.lot_threshold} note={zone.lot_threshold_note}     />
         </div>
 
-        {/* Freshness */}
-        <div className="flex items-center gap-1.5 mb-4">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#2d6a2d] flex-shrink-0" />
-          <span className="text-[#4a5568] text-[10px]">
-            Live from City of Edmonton GIS · {formatFreshness(zone.fetched_at)}
-          </span>
+        {/* Freshness + momentum */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#2d6a2d] flex-shrink-0" />
+            <span className="text-[#4a5568] text-[10px]">
+              Live from City of Edmonton GIS · {formatFreshness(zone.fetched_at)}
+            </span>
+          </div>
+          {zone.momentum && zone.momentum.recent > 0 && (
+            <span className="text-[9px] font-semibold tracking-wider uppercase flex-shrink-0"
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    color: zone.momentum.trend === 'ACCELERATING' ? '#c8a951'
+                         : zone.momentum.trend === 'COOLING'      ? '#8a8070'
+                         : '#6ab86a',
+                  }}>
+              {zone.momentum.trend === 'ACCELERATING' ? '↑' : zone.momentum.trend === 'COOLING' ? '↓' : '→'}{' '}
+              {zone.momentum.trend}
+            </span>
+          )}
         </div>
 
         {/* MORE / LESS DETAIL toggle */}
@@ -347,6 +362,15 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
       </div>
       <Disclaimer />
       <EmailCapture />
+
+      {/* Nearby development permits — Pro+ tier */}
+      <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro">
+        <PermitsPanel
+          permits={zone.permits ?? []}
+          loading={false}
+        />
+      </GateBlur>
+
     </div>
   )
 }

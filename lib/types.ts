@@ -52,6 +52,15 @@ export interface ZoneDisplay {
   bylaw_url: string | null
   fetched_at: string
   error?: string
+  // Nearby permits & momentum (populated by /api/zone)
+  permits?: import('@/lib/developmentPermits').DevelopmentPermit[]
+  momentum?: NeighbourhoodMomentum
+}
+
+export interface NeighbourhoodMomentum {
+  recent: number
+  prior:  number
+  trend:  'ACCELERATING' | 'ACTIVE' | 'COOLING'
 }
 
 /** A single strategic flag shown in feasibility panel */

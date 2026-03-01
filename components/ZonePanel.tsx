@@ -257,6 +257,34 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
         {/* Zone name header */}
         <div className="mb-4 flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
+            {zone.rezoning_alert && (
+              <div className="mb-3 px-3 py-2.5 rounded-lg flex items-start gap-2"
+                   style={{ background: 'rgba(184,134,11,0.12)', border: '1px solid #b8860b', borderLeft: '3px solid #c8a951' }}>
+                <span className="text-[#c8a951] flex-shrink-0 mt-0.5 text-sm">⚠️</span>
+                <div className="min-w-0">
+                  <p className="text-[#c8a951] text-[11px] font-semibold leading-snug mb-0.5">
+                    Active rezoning nearby
+                    {zone.rezoning_alert.from_zone && zone.rezoning_alert.to_zone && (
+                      <span className="font-normal text-[#a09080]">
+                        {' '}— proposed change from{' '}
+                        <span className="font-semibold text-[#e8e0d0]">{zone.rezoning_alert.from_zone}</span>
+                        {' '}to{' '}
+                        <span className="font-semibold text-[#e8e0d0]">{zone.rezoning_alert.to_zone}</span>
+                      </span>
+                    )}
+                    <span className="text-[#8a8070] font-normal"> · {zone.rezoning_alert.distance_m}m away</span>
+                  </p>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {zone.rezoning_alert.file_number && (
+                      <span className="text-[9px] text-[#8a8070] font-mono">{zone.rezoning_alert.file_number}</span>
+                    )}
+                    {zone.rezoning_alert.hearing_date && (
+                      <span className="text-[9px] text-[#b8860b]">Hearing: {zone.rezoning_alert.hearing_date}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
             <h2 className="text-[#c8a951] text-xl font-bold leading-tight" style={{ fontFamily: 'var(--font-rajdhani)' }}>
               {zone.zone_name}
             </h2>

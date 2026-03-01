@@ -16,6 +16,7 @@ import { getAmendment }               from '@/lib/amendments'
 import { getPermitsNearby, getNeighbourhoodMomentum } from '@/lib/developmentPermits'
 import { getNearestAssessment }                           from '@/lib/propertyAssessment'
 import { getNeighbourhoodScore }                           from '@/lib/neighbourhoodScore'
+import { checkRezoningNearby }                             from '@/lib/rezonings'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
@@ -79,6 +80,7 @@ export async function GET(req: NextRequest) {
   let momentumData = { recent: 0, prior: 0, trend: 'ACTIVE' as const }
   let assessmentData: Awaited<ReturnType<typeof getNearestAssessment>> = null
   let neighbourhoodScoreData: Awaited<ReturnType<typeof getNeighbourhoodScore>> = null
+  let rezoningAlert: Awaited<ReturnType<typeof checkRezoningNearby>> = null
 
   try {
     const timeout = new Promise<never>((_, reject) =>
@@ -96,6 +98,14 @@ export async function GET(req: NextRequest) {
       permitsData  = (permits  as PromiseFulfilledResult<typeof permitsData>).value
     if (momentum && (momentum as PromiseSettledResult<typeof momentumData>).status === 'fulfilled')
       momentumData = (momentum as PromiseFulfilledResult<typeof momentumData>).value
+
+    // Rezoning alert: cached 1h, fast
+    try {
+      rezoningAlert = await checkRezoningNearby(lat, lon)
+      if (rezoningAlert) console.log(`[zone] rezoning alert: ${rezoningAlert.file_number} ${rezoningAlert.distance_m}m`)
+    } catch (e) {
+      console.warn('[zone] rezoning check failed:', e)
+    }
 
     // Assessment: pass neighbourhood from permits if available, else self-resolve
     try {
@@ -131,5 +141,5 @@ export async function GET(req: NextRequest) {
     console.warn('[zone] score await failed:', e)
   }
 
-  return NextResponse.json({ ...display, lat, lng: lon, permits: permitsData, momentum: momentumData, assessment: assessmentData, neighbourhoodScore: neighbourhoodScoreData })
+  return NextResponse.json({ ...display, lat, lng: lon, permits: permitsData, momentum: momentumData, assessment: assessmentData, neighbourhoodScore: neighbourhoodScoreData, rezoning_alert: rezoningAlert })
 }

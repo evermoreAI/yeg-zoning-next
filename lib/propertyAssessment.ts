@@ -15,7 +15,7 @@ const ASSESSMENT_URL = 'https://data.edmonton.ca/resource/q7d6-ambg.json'
 const PERMITS_URL    = 'https://data.edmonton.ca/resource/q4gd-6q9r.json'
 const MAX_RETRIES    = 2
 const TIMEOUT_MS     = 7_000
-const MAX_RADIUS_M   = 200
+const MAX_RADIUS_M   = 500
 
 export interface PropertyAssessment {
   account_number: string
@@ -89,16 +89,29 @@ export async function getNearestAssessment(
  * Permits have reliable neighbourhood names and text-comparable lat/lon.
  */
 async function resolveNeighbourhood(lat: number, lon: number): Promise<string> {
-  // 0.009 deg lat ≈ 1km; 0.013 deg lon ≈ 1km at Edmonton latitude
+  // Fetch 10 recent permits within ~1km, pick the one geographically closest to our point.
+  // This gives the correct neighbourhood even when the nearest permit is not the most recent.
   const url = `${PERMITS_URL}?$where=${encodeURIComponent(
     `latitude>'${(lat - 0.009).toFixed(5)}' AND latitude<'${(lat + 0.009).toFixed(5)}' AND longitude>'${(lon - 0.013).toFixed(5)}' AND longitude<'${(lon + 0.013).toFixed(5)}'`
-  )}&$select=neighbourhood&$limit=1&$order=permit_date DESC`
+  )}&$select=neighbourhood,latitude,longitude&$limit=20&$order=permit_date DESC`
 
   try {
     const res  = await fetch(url, { signal: AbortSignal.timeout(5_000) })
     if (!res.ok) return ''
-    const rows = await res.json() as { neighbourhood?: string }[]
-    return rows[0]?.neighbourhood ?? ''
+    const rows = await res.json() as { neighbourhood?: string; latitude?: string; longitude?: string }[]
+    if (!rows.length) return ''
+
+    // Pick the permit record closest to our exact coordinates
+    let best = rows[0].neighbourhood ?? ''
+    let bestDist = Infinity
+    for (const row of rows) {
+      const rLat = parseFloat(row.latitude  ?? '')
+      const rLon = parseFloat(row.longitude ?? '')
+      if (isNaN(rLat) || isNaN(rLon) || !row.neighbourhood) continue
+      const d = haversineM(lat, lon, rLat, rLon)
+      if (d < bestDist) { bestDist = d; best = row.neighbourhood }
+    }
+    return best
   } catch {
     return ''
   }

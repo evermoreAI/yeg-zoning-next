@@ -5,6 +5,8 @@ import type { ZoneDisplay }    from '@/lib/types'
 import type { ZoneLayer2 }     from '@/config/zones'
 import FeasibilityPanel        from './FeasibilityPanel'
 import { calculateFeasibility } from '@/lib/feasibility'
+import GateBlur from './GateBlur'
+import { tierAtLeast, type Tier } from '@/lib/tierContext'
 
 // ── Sub-components ─────────────────────────────────────────────────────────
 
@@ -155,9 +157,10 @@ interface ZonePanelProps {
   zone:    ZoneDisplay | null
   loading: boolean
   address: string
+  tier:    Tier
 }
 
-export default function ZonePanel({ zone, loading, address }: ZonePanelProps) {
+export default function ZonePanel({ zone, loading, address, tier }: ZonePanelProps) {
   const [expanded, setExpanded] = useState(false)
 
   // ── Empty ────────────────────────────────────────────────────────────────
@@ -288,6 +291,7 @@ export default function ZonePanel({ zone, loading, address }: ZonePanelProps) {
         </button>
 
         {/* Layer 2 — smooth expand/collapse via max-height */}
+        <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro">
         <div
           style={{
             maxHeight:  expanded ? '1200px' : '0px',
@@ -301,16 +305,20 @@ export default function ZonePanel({ zone, loading, address }: ZonePanelProps) {
           )}
         </div>
 
-        {/* Layer 3 — Feasibility (always shown when zone is loaded; gating added later) */}
-        {(() => {
-          const feasibility = calculateFeasibility(zone)
-          if (!feasibility) return null
-          return (
-            <div className="mt-2">
-              <FeasibilityPanel result={feasibility} />
-            </div>
-          )
-        })()}
+        </GateBlur>
+
+        {/* Layer 3 — Feasibility — Investor tier */}
+        <GateBlur locked={!tierAtLeast(tier, 'investor')} tier="investor">
+          {(() => {
+            const feasibility = calculateFeasibility(zone)
+            if (!feasibility) return null
+            return (
+              <div className="mt-2">
+                <FeasibilityPanel result={feasibility} />
+              </div>
+            )
+          })()}
+        </GateBlur>
 
       </div>
       <Disclaimer />

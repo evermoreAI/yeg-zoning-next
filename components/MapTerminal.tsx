@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { useTier, type Tier } from '@/lib/tierContext'
 import mapboxgl from 'mapbox-gl'
 import MapView   from './MapView'
 import SearchBar from './SearchBar'
@@ -39,6 +40,8 @@ export default function MapTerminal() {
     }
   }
 
+  const { tier, setTier } = useTier()
+
   function handleSelect(result: SearchResult) {
     setLastAddress(result.address)
     setFlyTo({ lat: result.lat, lng: result.lng, zoom: 17 })
@@ -75,6 +78,25 @@ export default function MapTerminal() {
 
         <SearchBar token={MAPBOX_TOKEN} onSelect={handleSelect} />
 
+        {/* Demo tier switcher — replace with Clerk auth later */}
+        <div className="flex-shrink-0 flex items-center gap-1.5">
+          {(['free', 'pro', 'investor'] as Tier[]).map(t => (
+            <button
+              key={t}
+              onClick={() => setTier(t)}
+              className="h-7 px-2.5 rounded text-[10px] font-bold uppercase tracking-wider transition-all duration-150"
+              style={{
+                fontFamily: 'var(--font-rajdhani)',
+                background: tier === t ? '#c8a951' : 'transparent',
+                color:      tier === t ? '#0a0c10'  : '#8a8070',
+                border:     tier === t ? '1px solid #c8a951' : '1px solid #2a2e38',
+              }}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+
         {/* GPS button */}
         <button
           type="button" aria-label="Use my location" onClick={handleGpsClick}
@@ -100,7 +122,7 @@ export default function MapTerminal() {
         {/* Zone panel — 40% */}
         <div className="flex-[0_0_40%] bg-[#0a0c10] flex flex-col overflow-hidden border-l border-[#1a2535]">
           <div className="h-[2px] bg-gradient-to-r from-[#c8a951] via-[#c8a951] to-transparent flex-shrink-0" />
-          <ZonePanel zone={zoneData} loading={loadingZone} address={lastAddress} />
+          <ZonePanel zone={zoneData} loading={loadingZone} address={lastAddress} tier={tier} />
         </div>
       </div>
     </div>

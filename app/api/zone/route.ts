@@ -12,6 +12,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getZoneForLocation }        from '@/lib/edmontonGis'
 import { interpretZone }             from '@/lib/zoneInterpreter'
+import { getAmendment }               from '@/lib/amendments'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
@@ -45,8 +46,15 @@ export async function GET(req: NextRequest) {
   }
 
   // ── Fetch + interpret ──────────────────────────────────────────────────
-  const raw     = await getZoneForLocation(lat, lon)
-  const display = interpretZone(raw)
+  const raw       = await getZoneForLocation(lat, lon)
+  const display   = interpretZone(raw)
+
+  // Merge live amendment from amendments.json (overrides config hardcoded values)
+  const amendment = getAmendment(display.zone_code)
+  if (amendment?.warning) {
+    display.amendment_warning = true
+    display.amendment_text    = amendment.description
+  }
 
   // Attach coordinates so the client can bookmark without re-geocoding
   return NextResponse.json({ ...display, lat, lng: lon })

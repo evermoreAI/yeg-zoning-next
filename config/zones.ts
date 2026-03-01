@@ -72,7 +72,7 @@ export const ZONES: Record<string, ZoneConfig> = {
     max_height_m: null,                     // under review — do not display a fixed number
     bylaw_12800_equiv: 'RF1 / RF3',
     applies_to: 'Mature neighbourhoods inside Anthony Henday Drive',
-    pending_amendment: 'Height limit subject to change — public hearing April 7 2026. Verify with City of Edmonton before making development decisions.',
+    pending_amendment: null,  // sourced from scraper/amendments.json
     dc_override: false,
     color: '#4a7c59',
     bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rs',
@@ -126,7 +126,7 @@ export const ZONES: Record<string, ZoneConfig> = {
     max_height_m: null,
     bylaw_12800_equiv: 'RF1',
     applies_to: 'Suburban and transitional areas across Edmonton',
-    pending_amendment: 'Height limit subject to change — public hearing April 7 2026 may affect RSF zone. Verify with City of Edmonton before making development decisions.',
+    pending_amendment: null,  // sourced from scraper/amendments.json
     dc_override: false,
     color: '#5a8c69',
     bylaw_url: 'https://zoningbylaw.edmonton.ca/bylaw/rsf',

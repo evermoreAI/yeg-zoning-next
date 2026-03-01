@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/update-amendments",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "RS": {
+    "warning": true,
+    "hearing_date": "April 7 2026",
+    "description": "Height limit under review \u2014 public hearing April 7 2026. Verify with City of Edmonton.",
+    "source_url": "https://www.edmonton.ca",
+    "scraped_at": "2026-02-28T00:00:00Z"
+  },
+  "RSF": {
+    "warning": true,
+    "hearing_date": "April 7 2026",
+    "description": "Height limit under review \u2014 public hearing April 7 2026 may affect RSF zone.",
+    "source_url": "https://www.edmonton.ca",
+    "scraped_at": "2026-02-28T00:00:00Z"
+  },
+  "_meta": {
+    "last_run": "2026-03-01T18:34:21.435041Z",
+    "zones_found": []
+  }
+}

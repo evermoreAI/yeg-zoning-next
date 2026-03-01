@@ -6,6 +6,8 @@ import mapboxgl from 'mapbox-gl'
 import MapView   from './MapView'
 import SearchBar from './SearchBar'
 import ZonePanel from './ZonePanel'
+import BookmarksPanel from './BookmarksPanel'
+import type { Bookmark } from '@/lib/bookmarks'
 import type { FlyToTarget, SearchResult, ZoneDisplay } from '@/lib/types'
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || ''
@@ -41,6 +43,8 @@ export default function MapTerminal() {
   }
 
   const { tier, setTier } = useTier()
+  const [bookmarksOpen,  setBookmarksOpen]  = useState(false)
+  const [bookmarkRefresh, setBookmarkRefresh] = useState(0)
 
   function handleSelect(result: SearchResult) {
     setLastAddress(result.address)
@@ -50,6 +54,16 @@ export default function MapTerminal() {
 
   function handleGpsClick() {
     window.dispatchEvent(new Event('yeg:gps'))
+  }
+
+  function handleBookmarkChange() {
+    setBookmarkRefresh(n => n + 1)
+  }
+
+  function handleViewBookmark(b: Bookmark) {
+    setLastAddress(b.address)
+    setFlyTo({ lat: b.lat, lng: b.lng, zoom: 17 })
+    fetchZone(b.lat, b.lng)
   }
 
   function handleLocate(coords: [number, number]) {
@@ -77,6 +91,18 @@ export default function MapTerminal() {
         </div>
 
         <SearchBar token={MAPBOX_TOKEN} onSelect={handleSelect} />
+
+        {/* Bookmarks button */}
+        <button
+          onClick={() => setBookmarksOpen(o => !o)}
+          aria-label="Saved parcels"
+          className="flex-shrink-0 relative w-11 h-11 flex items-center justify-center bg-[#141820] border border-[#2a2e38] rounded-lg hover:border-[#c8a951] hover:bg-[#1e2630] transition-all duration-200"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+               stroke="#8a8070" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+          </svg>
+        </button>
 
         {/* Demo tier switcher — replace with Clerk auth later */}
         <div className="flex-shrink-0 flex items-center gap-1.5">
@@ -122,7 +148,13 @@ export default function MapTerminal() {
         {/* Zone panel — 40% */}
         <div className="flex-[0_0_40%] bg-[#0a0c10] flex flex-col overflow-hidden border-l border-[#1a2535]">
           <div className="h-[2px] bg-gradient-to-r from-[#c8a951] via-[#c8a951] to-transparent flex-shrink-0" />
-          <ZonePanel zone={zoneData} loading={loadingZone} address={lastAddress} tier={tier} />
+          <ZonePanel zone={zoneData} loading={loadingZone} address={lastAddress} tier={tier} onBookmarkChanged={handleBookmarkChange} />
+          <BookmarksPanel
+            open={bookmarksOpen}
+            onClose={() => setBookmarksOpen(false)}
+            onView={handleViewBookmark}
+            refreshKey={bookmarkRefresh}
+          />
         </div>
       </div>
     </div>

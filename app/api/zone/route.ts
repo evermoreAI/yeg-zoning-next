@@ -48,5 +48,6 @@ export async function GET(req: NextRequest) {
   const raw     = await getZoneForLocation(lat, lon)
   const display = interpretZone(raw)
 
-  return NextResponse.json(display)
+  // Attach coordinates so the client can bookmark without re-geocoding
+  return NextResponse.json({ ...display, lat, lng: lon })
 }

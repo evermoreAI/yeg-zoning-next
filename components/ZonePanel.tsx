@@ -6,6 +6,7 @@ import type { ZoneLayer2 }     from '@/config/zones'
 import FeasibilityPanel        from './FeasibilityPanel'
 import { calculateFeasibility } from '@/lib/feasibility'
 import GateBlur from './GateBlur'
+import BookmarkButton from './BookmarkButton'
 import { tierAtLeast, type Tier } from '@/lib/tierContext'
 
 // ── Sub-components ─────────────────────────────────────────────────────────
@@ -158,9 +159,10 @@ interface ZonePanelProps {
   loading: boolean
   address: string
   tier:    Tier
+  onBookmarkChanged?: () => void
 }
 
-export default function ZonePanel({ zone, loading, address, tier }: ZonePanelProps) {
+export default function ZonePanel({ zone, loading, address, tier, onBookmarkChanged }: ZonePanelProps) {
   const [expanded, setExpanded] = useState(false)
 
   // ── Empty ────────────────────────────────────────────────────────────────
@@ -244,17 +246,29 @@ export default function ZonePanel({ zone, loading, address, tier }: ZonePanelPro
         )}
 
         {/* Zone name header */}
-        <div className="mb-4">
-          <h2 className="text-[#c8a951] text-xl font-bold leading-tight" style={{ fontFamily: 'var(--font-rajdhani)' }}>
-            {zone.zone_name}
-          </h2>
-          <div className="flex items-center gap-2 mt-0.5">
-            <span className="text-[#8a8070] text-xs tracking-widest uppercase">{zone.zone_code} Zone</span>
-            {zone.zone_string !== zone.zone_code && (
-              <span className="text-[#4a5568] text-[10px]">· {zone.zone_string}</span>
-            )}
+        <div className="mb-4 flex items-start justify-between gap-2">
+          <div className="flex-1 min-w-0">
+            <h2 className="text-[#c8a951] text-xl font-bold leading-tight" style={{ fontFamily: 'var(--font-rajdhani)' }}>
+              {zone.zone_name}
+            </h2>
+            <div className="flex items-center gap-2 mt-0.5">
+              <span className="text-[#8a8070] text-xs tracking-widest uppercase">{zone.zone_code} Zone</span>
+              {zone.zone_string !== zone.zone_code && (
+                <span className="text-[#4a5568] text-[10px]">· {zone.zone_string}</span>
+              )}
+            </div>
+            {address && <div className="text-[#4a5568] text-[10px] mt-1 truncate">{address}</div>}
           </div>
-          {address && <div className="text-[#4a5568] text-[10px] mt-1 truncate">{address}</div>}
+          {zone.found && zone.lat != null && zone.lng != null && (
+            <BookmarkButton
+              lat={zone.lat!}
+              lng={zone.lng!}
+              address={address}
+              zone_code={zone.zone_code}
+              zone_name={zone.zone_name}
+              onChanged={onBookmarkChanged}
+            />
+          )}
         </div>
 
         {/* 2×2 metric grid */}

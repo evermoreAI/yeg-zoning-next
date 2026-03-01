@@ -24,6 +24,9 @@ export interface RawGisZone {
 
 export interface ZoneDisplay {
   found: boolean
+  // Parcel coordinates — needed for bookmarking
+  lat?: number
+  lng?: number
   // Core identity
   zone_code: string
   zone_string: string

@@ -14,12 +14,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: 'Valid email required.' }, { status: 400 })
 
   const key = process.env.RESEND_API_KEY
+  console.log('[subscribe] Resend key present:', !!key)
   if (key) {
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'YEG Zoning <noreply@yegzoning.ca>',
+        from: 'YEG Zoning <onboarding@resend.dev>',
         to: [email],
         subject: "You're on the list — YEG Zoning Pro",
         html: '<p>Thanks for signing up — we\'ll notify you when Pro launches.</p><p>— YEG Zoning Command Center</p>',

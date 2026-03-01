@@ -7,7 +7,8 @@ import FeasibilityPanel        from './FeasibilityPanel'
 import { calculateFeasibility }   from '@/lib/feasibility'
 import { formatAssessedValue }     from '@/lib/propertyAssessment'
 import NeighbourhoodScoreCard      from './NeighbourhoodScoreCard'
-import GateBlur from './GateBlur'
+import GateBlur      from './GateBlur'
+import CombinedGate from './CombinedGate'
 import BookmarkButton from './BookmarkButton'
 import PermitsPanel from './PermitsPanel'
 import EmailCapture from './EmailCapture'
@@ -313,39 +314,19 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
                 </div>
               )
             ) : null}
-            {/* Neighbourhood score — always shown; blurred gate for Free tier */}
-            {zone.found && (
-              <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro"
-                        headline="Unlock Neighbourhood Score">
-                {zone.neighbourhoodScore ? (
-                  zone.neighbourhoodScore.overall_score <= 5 ? (
-                    <div className="mt-3 px-3 py-2 rounded-lg flex items-center gap-2"
-                         style={{ background: '#141820', border: '1px solid #2a2e38' }}>
-                      <span className="inline-block w-3 h-3 border-2 border-[#2a2e38] border-t-[#c8a951] rounded-full animate-spin flex-shrink-0" />
-                      <span className="text-[#4a5568] text-[10px] uppercase tracking-widest">Neighbourhood score updating…</span>
-                    </div>
-                  ) : (
-                    <NeighbourhoodScoreCard score={zone.neighbourhoodScore} />
-                  )
-                ) : (
-                  /* Placeholder so gate always has content to tease */
-                  <div className="mt-3 p-3 rounded-lg" style={{ background: '#141820', border: '1px solid #2a2e38' }}>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[11px] font-bold tracking-widest uppercase text-[#2a3545]"
-                            style={{ fontFamily: 'var(--font-rajdhani)' }}>★ PREMIUM NEIGHBOURHOOD</span>
-                      <span className="text-sm font-semibold text-[#2a3545]" style={{ fontFamily: 'var(--font-mono)' }}>—</span>
-                    </div>
-                    <div className="space-y-1.5">
-                      {['Transit','Amenities','Commercial','Development'].map(l => (
-                        <div key={l} className="flex items-center gap-2">
-                          <span className="text-[9px] text-[#1e2530] w-20">{l}</span>
-                          <div className="flex-1 h-1 rounded-full bg-[#141820]" />
-                        </div>
-                      ))}
-                    </div>
+            {/* Neighbourhood score — Pro+ only; placeholder shown for teaser */}
+            {zone.found && tierAtLeast(tier, 'pro') && (
+              zone.neighbourhoodScore ? (
+                zone.neighbourhoodScore.overall_score <= 5 ? (
+                  <div className="mt-3 px-3 py-2 rounded-lg flex items-center gap-2"
+                       style={{ background: '#141820', border: '1px solid #2a2e38' }}>
+                    <span className="inline-block w-3 h-3 border-2 border-[#2a2e38] border-t-[#c8a951] rounded-full animate-spin flex-shrink-0" />
+                    <span className="text-[#4a5568] text-[10px] uppercase tracking-widest">Neighbourhood score updating…</span>
                   </div>
-                )}
-              </GateBlur>
+                ) : (
+                  <NeighbourhoodScoreCard score={zone.neighbourhoodScore} />
+                )
+              ) : null
             )}
           </div>
           {zone.found && zone.lat != null && zone.lng != null && (
@@ -390,72 +371,108 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
           )}
         </div>
 
-        {/* MORE / LESS DETAIL toggle */}
-        <button
-          type="button"
-          onClick={() => setExpanded(e => !e)}
-          className="w-full flex items-center justify-center gap-1.5 py-2 mb-4 text-[#4a5568] hover:text-[#8a8070] text-[11px] tracking-widest uppercase transition-colors duration-200 rounded border border-[#1a2535] hover:border-[#2a2e38]"
-          style={{ fontFamily: 'var(--font-rajdhani)' }}
-          disabled={!hasLayer2}
-        >
-          {expanded ? 'LESS DETAIL' : 'MORE DETAIL'}
-          <svg
-            viewBox="0 0 16 16" width="12" height="12" fill="currentColor"
-            style={{ transition: 'transform 300ms ease', transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
-          >
-            <path d="M8 10.94L2.47 5.41l.94-.94L8 9.06l4.59-4.59.94.94z"/>
-          </svg>
-        </button>
+        {/* ── Tier-gated content ─────────────────────────────────────────── */}
 
-        {/* Layer 2 — expand/collapse (unlocked) or teaser+gate (locked) */}
-        <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro">
-          <div
-            style={{
-              maxHeight:  expanded ? '1200px' : '0px',
-              overflow:   'hidden',
-              opacity:    expanded ? 1 : 0,
-              transition: 'max-height 350ms ease, opacity 250ms ease',
-            }}
-          >
-            {hasLayer2 && (
-              <Layer2Content l2={zone.layer2!} bylaw12800={zone.bylaw_12800_equiv} />
-            )}
+        {tier === 'free' ? (
+          /* FREE: single combined gate — score teaser as preview content */
+          <div className="mt-2">
+            {/* Neighbourhood score teaser (blurred) */}
+            <div className="relative overflow-hidden rounded-t-lg"
+                 style={{ maxHeight: 76, pointerEvents: 'none', userSelect: 'none' }}
+                 aria-hidden>
+              <div style={{ opacity: 0.28, filter: 'blur(3px)' }}>
+                <div className="p-3" style={{ background: 'rgba(45,106,45,0.15)', border: '1px solid #2d6a2d', borderBottom: 'none' }}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[11px] font-bold tracking-widest uppercase text-[#6ab86a]"
+                          style={{ fontFamily: 'var(--font-rajdhani)' }}>● HIGH NEIGHBOURHOOD</span>
+                    <span className="text-sm font-semibold text-[#6ab86a]" style={{ fontFamily: 'var(--font-mono)' }}>71</span>
+                  </div>
+                  <div className="space-y-1.5">
+                    {[['Transit',75],['Amenities',100],['Commercial',60],['Development',55]].map(([l,v]) => (
+                      <div key={l as string} className="flex items-center gap-2">
+                        <span className="text-[9px] text-[#8a8070] w-20">{l}</span>
+                        <div className="flex-1 h-1 rounded-full bg-[#1e2530] overflow-hidden">
+                          <div className="h-full rounded-full bg-[#6ab86a]" style={{ width: `${v}%` }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              {/* Smooth 40px fade into gate card */}
+              <div className="absolute inset-x-0 bottom-0" style={{ height: 40, background: 'linear-gradient(to bottom, transparent, #141820)' }} />
+            </div>
+            {/* Single combined gate card */}
+            <CombinedGate />
           </div>
-        </GateBlur>
+        ) : (
+          /* PRO or INVESTOR: individual section content */
+          <>
+            {/* MORE / LESS DETAIL toggle */}
+            <button
+              type="button"
+              onClick={() => setExpanded(e => !e)}
+              className="w-full flex items-center justify-center gap-1.5 py-2 mb-4 text-[#4a5568] hover:text-[#8a8070] text-[11px] tracking-widest uppercase transition-colors duration-200 rounded border border-[#1a2535] hover:border-[#2a2e38]"
+              style={{ fontFamily: 'var(--font-rajdhani)' }}
+              disabled={!hasLayer2}
+            >
+              {expanded ? 'LESS DETAIL' : 'MORE DETAIL'}
+              <svg
+                viewBox="0 0 16 16" width="12" height="12" fill="currentColor"
+                style={{ transition: 'transform 300ms ease', transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+              >
+                <path d="M8 10.94L2.47 5.41l.94-.94L8 9.06l4.59-4.59.94.94z"/>
+              </svg>
+            </button>
 
-        {/* Layer 3 — Feasibility — Investor tier */}
-        <div className="mt-1">
-          {zone.dc_warning ? (
-            <div className="p-3 rounded-md"
-                 style={{ background: 'rgba(139,26,26,0.12)', border: '1px solid #8b1a1a' }}>
-              <p className="text-[#cf6679] text-[11px] leading-relaxed">
-                ⚡ Feasibility analysis not available for DC zones — rules vary by parcel.
-                Contact the City of Edmonton for site-specific development potential.
-              </p>
+            {/* Layer 2 */}
+            <div
+              style={{
+                maxHeight:  expanded ? '1200px' : '0px',
+                overflow:   'hidden',
+                opacity:    expanded ? 1 : 0,
+                transition: 'max-height 350ms ease, opacity 250ms ease',
+              }}
+            >
+              {hasLayer2 && (
+                <Layer2Content l2={zone.layer2!} bylaw12800={zone.bylaw_12800_equiv} />
+              )}
             </div>
-          ) : (
-            <GateBlur locked={!tierAtLeast(tier, 'investor')} tier="investor">
-              {(() => {
-                const feasibility = calculateFeasibility(zone)
-                if (!feasibility) return null
-                return <FeasibilityPanel result={feasibility} />
-              })()}
+
+            {/* Layer 3 — Feasibility */}
+            <div className="mt-1">
+              {zone.dc_warning ? (
+                <div className="p-3 rounded-md"
+                     style={{ background: 'rgba(139,26,26,0.12)', border: '1px solid #8b1a1a' }}>
+                  <p className="text-[#cf6679] text-[11px] leading-relaxed">
+                    ⚡ Feasibility analysis not available for DC zones — rules vary by parcel.
+                    Contact the City of Edmonton for site-specific development potential.
+                  </p>
+                </div>
+              ) : (
+                <GateBlur locked={!tierAtLeast(tier, 'investor')} tier="investor">
+                  {(() => {
+                    const feasibility = calculateFeasibility(zone)
+                    if (!feasibility) return null
+                    return <FeasibilityPanel result={feasibility} />
+                  })()}
+                </GateBlur>
+              )}
+            </div>
+
+            {/* Nearby permits */}
+            <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro">
+              {zone.permits !== undefined ? (
+                <PermitsPanel permits={zone.permits} loading={false} />
+              ) : (
+                <div className="mt-2 space-y-2">
+                  <div className="h-14 bg-[#141820] rounded-lg border border-[#2a2e38] animate-pulse" />
+                  <div className="h-14 bg-[#141820] rounded-lg border border-[#2a2e38] animate-pulse" />
+                </div>
+              )}
             </GateBlur>
-          )}
-        </div>
-
-
-        {/* Nearby development permits — Pro+ tier, skeleton while loading */}
-        <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro">
-          {zone.permits !== undefined ? (
-            <PermitsPanel permits={zone.permits} loading={false} />
-          ) : (
-            <div className="mt-2 space-y-2">
-              <div className="h-14 bg-[#141820] rounded-lg border border-[#2a2e38] animate-pulse" />
-              <div className="h-14 bg-[#141820] rounded-lg border border-[#2a2e38] animate-pulse" />
-            </div>
-          )}
-        </GateBlur>
+          </>
+        )}
 
         {/* Email capture — always last, gold top separator */}
         <div className="mt-4 pt-3 pb-2" style={{ borderTop: '1px solid #c8a951' }}>

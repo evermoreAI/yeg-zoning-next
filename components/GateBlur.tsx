@@ -42,26 +42,25 @@ export default function GateBlur({ locked, tier, children, headline }: GateBlurP
 
   return (
     <div className="mt-2">
-      {/* Teaser — clipped content with gradient fade, no overlap */}
+      {/* Teaser — clipped content with smooth gradient fade, no overlap */}
       <div
-        className="relative rounded-lg overflow-hidden"
-        style={{ maxHeight: 72, pointerEvents: 'none', userSelect: 'none' }}
+        className="relative overflow-hidden"
+        style={{ maxHeight: 76, pointerEvents: 'none', userSelect: 'none' }}
         aria-hidden
       >
-        {/* Content rendered at full fidelity, just clipped */}
-        <div style={{ opacity: 0.35, filter: 'blur(2px)' }}>
+        <div style={{ opacity: 0.30, filter: 'blur(3px)' }}>
           {children}
         </div>
-        {/* Gradient fade-out at bottom */}
+        {/* 40px gradient fade: transparent → gate card background colour */}
         <div
-          className="absolute inset-x-0 bottom-0 h-10"
-          style={{ background: 'linear-gradient(to bottom, transparent, #0a0c10)' }}
+          className="absolute inset-x-0 bottom-0"
+          style={{ height: 40, background: 'linear-gradient(to bottom, transparent, #141820)' }}
         />
       </div>
 
-      {/* Gate card — sits directly below teaser, no overlap */}
+      {/* Gate card — butts directly against gradient, no gap */}
       <div
-        className="mt-0 px-4 py-3 rounded-b-lg flex items-center justify-between gap-3"
+        className="px-4 py-3 rounded-b-lg flex items-center justify-between gap-3"
         style={{
           background:   '#141820',
           border:       `1px solid ${copy.accent}`,

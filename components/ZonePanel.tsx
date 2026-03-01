@@ -390,45 +390,42 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
           </svg>
         </button>
 
-        {/* Layer 2 — smooth expand/collapse via max-height */}
+        {/* Layer 2 — expand/collapse (unlocked) or teaser+gate (locked) */}
         <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro">
-        <div
-          style={{
-            maxHeight:  expanded ? '1200px' : '0px',
-            overflow:   'hidden',
-            opacity:    expanded ? 1 : 0,
-            transition: 'max-height 350ms ease, opacity 250ms ease',
-          }}
-        >
-          {hasLayer2 && (
-            <Layer2Content l2={zone.layer2!} bylaw12800={zone.bylaw_12800_equiv} />
-          )}
-        </div>
-
+          <div
+            style={{
+              maxHeight:  expanded ? '1200px' : '0px',
+              overflow:   'hidden',
+              opacity:    expanded ? 1 : 0,
+              transition: 'max-height 350ms ease, opacity 250ms ease',
+            }}
+          >
+            {hasLayer2 && (
+              <Layer2Content l2={zone.layer2!} bylaw12800={zone.bylaw_12800_equiv} />
+            )}
+          </div>
         </GateBlur>
 
         {/* Layer 3 — Feasibility — Investor tier */}
-        {zone.dc_warning ? (
-          <div className="mt-3 p-3 rounded-md"
-               style={{ background: 'rgba(139,26,26,0.12)', border: '1px solid #8b1a1a' }}>
-            <p className="text-[#cf6679] text-[11px] leading-relaxed">
-              ⚡ Feasibility analysis not available for DC zones — rules vary by parcel.
-              Contact the City of Edmonton for site-specific development potential.
-            </p>
-          </div>
-        ) : (
-          <GateBlur locked={!tierAtLeast(tier, 'investor')} tier="investor">
-            {(() => {
-              const feasibility = calculateFeasibility(zone)
-              if (!feasibility) return null
-              return (
-                <div className="mt-2">
-                  <FeasibilityPanel result={feasibility} />
-                </div>
-              )
-            })()}
-          </GateBlur>
-        )}
+        <div className="mt-1">
+          {zone.dc_warning ? (
+            <div className="p-3 rounded-md"
+                 style={{ background: 'rgba(139,26,26,0.12)', border: '1px solid #8b1a1a' }}>
+              <p className="text-[#cf6679] text-[11px] leading-relaxed">
+                ⚡ Feasibility analysis not available for DC zones — rules vary by parcel.
+                Contact the City of Edmonton for site-specific development potential.
+              </p>
+            </div>
+          ) : (
+            <GateBlur locked={!tierAtLeast(tier, 'investor')} tier="investor">
+              {(() => {
+                const feasibility = calculateFeasibility(zone)
+                if (!feasibility) return null
+                return <FeasibilityPanel result={feasibility} />
+              })()}
+            </GateBlur>
+          )}
+        </div>
 
 
         {/* Nearby development permits — Pro+ tier, skeleton while loading */}

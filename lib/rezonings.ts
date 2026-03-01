@@ -159,16 +159,18 @@ async function getActiveRezonings(): Promise<RezoningApplication[]> {
 /**
  * Parse zone code after "from" or "to" in a description string.
  * Handles: "from (RS) Small Scale Residential to (RSM)..."
- * Also handles: "from RF3 to RF6"
+ * Also handles: "from RF3 to RF6", "To rezone from DC1 to CMU"
  */
 function parseZoneCode(desc: string, direction: 'from' | 'to'): string | null {
-  // Pattern 1: "(ZONE)" after keyword
-  const parenRe = new RegExp(`${direction}\\s+\\(([^)]+)\\)`, 'i')
+  // Pattern 1: "(ZONE)" after keyword — most reliable
+  const parenRe = new RegExp(`\\b${direction}\\s+\\(([^)]+)\\)`, 'i')
   const parenM  = desc.match(parenRe)
   if (parenM) return parenM[1].trim()
 
-  // Pattern 2: bare zone code after keyword (e.g. "from RF3 to RF6")
-  const bareRe = new RegExp(`${direction}\\s+([A-Z][A-Z0-9/-]{0,10})(?:\\s|$)`, 'i')
+  // Pattern 2: bare zone code — must start with 1-2 uppercase letters followed by digit or more letters
+  // Excludes common words like "rezone", "the", etc.
+  // Valid codes: RS, RSM, RF3, RF6, DC1, DC2, CMU, IM, IB, CSC, AGI, AGU, RSL, RPL, RMD, etc.
+  const bareRe = new RegExp(`\\b${direction}\\s+([A-Z]{1,3}[0-9]{0,2}(?:[/-][A-Z0-9]+)?)(?:\\s|,|\\.|$)`)
   const bareM  = desc.match(bareRe)
   if (bareM) return bareM[1].trim()
 

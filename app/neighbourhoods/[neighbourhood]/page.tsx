@@ -76,18 +76,18 @@ const NEIGHBOURHOODS: Record<string, NeighbourhoodData> = {
     feasibilityNote: 'Wood frame multi-family estimate. Before land, financing, and operating costs. McKernan rental premium based on University of Alberta and Mazankowski proximity. Always obtain professional quotes before making investment decisions.',
     keyFactsTitle: 'Four Things Every McKernan Investor Needs to Know',
     keyFacts: [
-      'McKernan added 376 new infill units in 2025 — the highest volume of any Edmonton neighbourhood. Demand from developers remains strong heading into 2026.',
-      'Land is priced on potential, not condition. Most buyers are acquiring teardowns or tenanted as-is properties to unlock the RS zone\'s 8-unit capacity.',
-      'University of Alberta and Mazankowski Heart Institute create two distinct rental demand pools — students and medical professionals — driving vacancy below 4.5% consistently.',
-      'The market moves fast: average 18–20 days to sale. McKernan is one of Edmonton\'s most competitive infill acquisition markets. Quality lots receive multiple offers.',
+      'University Anchor Vacancy — McKernan vacancy hovers at 4–4.5% in 2026. The rental pool — students, medical professionals, University staff — is virtually recession-proof. Investors pay a premium here because demand is structural, not cyclical.',
+      'Transit Premium — Properties within a 2-minute walk of McKernan/Belgravia LRT station or major bus routes on 114th Street command 10–15% higher values than identical lots further east toward 109th Street. Transit proximity is the single biggest value driver after lot size.',
+      "Tree Canopy Conflict — A University of Alberta study found infilled lots in McKernan often lose 50% of their mature trees. This has created neighbourhood friction and a push for tighter landscaping requirements in 2026 planning reviews. Factor landscaping costs and community relations into your project planning.",
+      'Fast Market — 18–20 days average on market. McKernan lots move fast. Investors who have done their zone analysis in advance move faster than those who have not. Check your address before you make an offer.',
     ],
     faqs: [
-      { q: 'Is McKernan Edmonton zoned RS?', a: "The majority of McKernan's residential lots are RS (Small Scale Residential) under Bylaw 20001, introduced via Edmonton's 2024 blanket rezoning. Some lots may retain different zoning — always verify your specific address." },
-      { q: 'How many units can I build in McKernan?', a: 'Up to 8 units on a qualifying lot of 600 m² or larger. Smaller lots may qualify for 3–6 units depending on frontage and configuration. Use the free zone lookup tool above to check your exact address.' },
-      { q: 'What are typical land values in McKernan Edmonton in 2026?', a: 'McKernan RS lots are trading in the $415,000 to $700,000+ range. Standard mid-block lots start around $415,000–$475,000. Corner lots and larger parcels exceed $700,000.' },
-      { q: 'Does the April 7 2026 public hearing affect McKernan development?', a: 'Yes — if height limits or building length restrictions are amended at the April 7 2026 public hearing, McKernan RS projects will be affected. Verify current rules with the City before finalizing designs.' },
-      { q: 'Is McKernan a good neighbourhood for Edmonton infill investment?', a: "McKernan is consistently regarded as one of Edmonton's top RS zone investment areas due to university proximity, walkability, and strong rental demand from students and medical professionals." },
-      { q: 'How competitive is the McKernan infill market?', a: 'Very competitive. McKernan averages 18–20 days to sale for qualifying lots, and quality infill sites frequently receive multiple offers. Acting quickly with financing in place is essential.' },
+      { q: 'How many units can I build on a McKernan lot?', a: 'Up to 8 units on a lot of 600 m² or larger zoned RS. Check your specific address — lot size and configuration affect maximum units.' },
+      { q: 'What is the minimum lot size for 8 units in McKernan?', a: '600 square metres for a mid-block lot under Bylaw 20001. Corner lots may qualify for additional density.' },
+      { q: 'Is McKernan a good investment in 2026?', a: "McKernan has the highest infill activity in Edmonton, 4–4.5% vacancy, and University of Alberta anchor demand. Land values are rising. Whether it is right for your specific project depends on lot size, purchase price, and financing — check the feasibility numbers for your specific address." },
+      { q: 'What is the April 7 2026 RS zone hearing about?', a: 'The City of Edmonton has scheduled a public hearing that may affect RS zone height limits and building length restrictions. If you are planning a McKernan project, verify current rules with the City before finalizing designs.' },
+      { q: 'What is the transit premium in McKernan?', a: 'Lots within a 2-minute walk of McKernan/Belgravia LRT typically command 10–15% higher values than comparable lots further from transit.' },
+      { q: 'How fast do McKernan lots sell?', a: 'Average 18–20 days on market as of early 2026. The market moves fast — preparation is key.' },
     ],
   },
 
@@ -551,8 +551,8 @@ export default async function NeighbourhoodPage(
           <h2 className="text-xl font-bold mb-1 text-[#c8a951]"
               style={{ fontFamily: 'var(--font-rajdhani)' }}>Check Any {name} Address Instantly</h2>
           <p className="text-[#8a8070] text-sm mb-4">
-            Search any {name} address for live zone data, development rules, feasibility numbers, and
-            amendment warnings — direct from City of Edmonton GIS. Free, no account required.
+            See the zone, development rules, feasibility numbers, and amendment warnings for any {name}
+            address — live from City of Edmonton GIS data. Free, no account required.
           </p>
           <SearchBarRedirect />
         </section>
@@ -560,9 +560,10 @@ export default async function NeighbourhoodPage(
         {/* Footer */}
         <footer className="border-t border-[#1e2530] pt-6">
           <p className="text-[10px] text-[#2a3040] leading-relaxed mb-4">
-            Zoning data is for reference only. Always verify with the City of Edmonton before making
-            development decisions. Contact Urban Planning via 311 for official interpretations.
-            Not legally binding. Last verified February 2026.
+            Zoning data is for reference only. The City of Edmonton does not assume responsibility for
+            accuracy of online reproductions. Always verify with the City of Edmonton before making
+            development decisions. Land values and market data are estimates only — always consult a
+            licensed real estate professional. Not legally binding. Last verified February 2026.
           </p>
           <div className="flex items-center gap-4">
             <Link href="/" className="text-[10px] text-[#4a5568] hover:text-[#c8a951] transition-colors no-underline">← Back to Map</Link>

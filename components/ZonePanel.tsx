@@ -11,7 +11,6 @@ import GateBlur      from './GateBlur'
 import CombinedGate from './CombinedGate'
 import BookmarkButton from './BookmarkButton'
 import PermitsPanel from './PermitsPanel'
-import EmailCapture from './EmailCapture'
 import { tierAtLeast, type Tier } from '@/lib/tierContext'
 
 // ── Sub-components ─────────────────────────────────────────────────────────
@@ -499,11 +498,7 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
           </>
         )}
 
-        {/* Email capture — compact footer strip */}
-        <div className="-mx-4 px-4 pt-3 pb-3 mt-4"
-             style={{ background: '#1a1f2e', borderTop: '2px solid #c8a951' }}>
-          <EmailCapture />
-        </div>
+
 
         <Disclaimer />
       </div>

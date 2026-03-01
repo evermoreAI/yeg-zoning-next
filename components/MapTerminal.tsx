@@ -34,6 +34,7 @@ export default function MapTerminal() {
         height_note: '', coverage: '—', coverage_note: '',
         lot_threshold: '—', lot_threshold_note: '',
         amendment_warning: false, amendment_text: '', dc_warning: false,
+        layer2: null, bylaw_12800_equiv: null,
         bylaw_url: null, fetched_at: new Date().toISOString(),
         error: 'Unable to load zone data. Verify with City of Edmonton via 311.',
       })

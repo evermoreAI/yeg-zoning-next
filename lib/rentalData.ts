@@ -3,74 +3,28 @@
  *
  * Neighbourhood-specific rental intelligence for Edmonton.
  *
- * Data strategy:
- *   1. Outscraper Google Maps → count of nearby rental properties within 1km
- *      (density/activity signal — Maps API does NOT return price data)
- *   2. Static neighbourhood rent table keyed by UPPER-CASE neighbourhood name
- *      (sourced from CMHC Rental Market Report — Edmonton CMA 2024, published Nov 2024)
- *   3. Falls back to city-wide averages from MARKET_DATA if neighbourhood unknown
- *      or if Outscraper fails
- *
- * Architecture rule: all logic here, zero in UI components.
- * Cache: 1h per neighbourhood (lat/lon rounded to 2dp).
+ * Data hierarchy (in order of preference):
+ *   1. Rentfaster live data — used when listing_count >= 10 for that neighbourhood
+ *   2. CMHC RMS Edmonton Oct 2024 — zone-level averages, 19 zones, 140 neighbourhood mappings
+ *   3. Nearest-neighbour from CMHC zones — if neighbourhood not in table, label is clear
+ *   Never shows city-wide average — it's meaningless for investment decisions
  */
 
 import * as fs   from 'fs'
 import * as path from 'path'
 
-// ── Rentfaster.json loader (server-side, file read at runtime) ────────────────
-interface RFStats {
-  listing_count:       number
-  rent_bachelor:       number | null
-  rent_1br:            number | null
-  rent_2br:            number | null
-  rent_3br:            number | null
-  median_dom:          number | null
-  vacancy_pressure_pct: number | null
-  listings_over_30d:   number
-}
-interface RFData {
-  updated:    string
-  total_listings: number
-  neighbourhoods: Record<string, RFStats>
-}
-
-let _rfCache: RFData | null = null
-let _rfCacheTs = 0
-const RF_PATH   = path.join(process.cwd(), 'scraper', 'rentfaster.json')
-const RF_TTL    = 24 * 60 * 60 * 1_000
-
-function loadRentfaster(): RFData | null {
-  const now = Date.now()
-  if (_rfCache && now - _rfCacheTs < RF_TTL) return _rfCache
-  try {
-    if (fs.existsSync(RF_PATH)) {
-      _rfCache   = JSON.parse(fs.readFileSync(RF_PATH, 'utf8'))
-      _rfCacheTs = now
-      return _rfCache
-    }
-  } catch {}
-  return null
-}
-
-export function getRentfasterStats(neighbourhood: string): RFStats | null {
-  const data = loadRentfaster()
-  if (!data) return null
-  return data.neighbourhoods[neighbourhood.toUpperCase()] ?? null
-}
-
-export function getRentfasterUpdated(): string | null {
-  const data = loadRentfaster()
-  return data?.updated ?? null
-}
-
-import { MARKET_DATA } from './marketData'
-
-const OUTSCRAPER_KEY = process.env.OUTSCRAPER_API_KEY ?? ''
-const TIMEOUT_MS     = 7_000
-const CACHE_TTL      = 60 * 60 * 1_000   // 1h
-
 // ── Types ─────────────────────────────────────────────────────────────────────
+
+export interface RFStats {
+  listing_count:          number
+  rent_bachelor:          number | null
+  rent_1br:               number | null
+  rent_2br:               number | null
+  rent_3br:               number | null
+  median_dom:             number | null
+  vacancy_pressure_pct:   number | null
+  listings_over_30d:      number
+}
 
 export interface NeighbourhoodRents {
   neighbourhood:    string
@@ -82,179 +36,176 @@ export interface NeighbourhoodRents {
   rent_3br_high:    number
   listing_count:    number
   source_label:     string
-  source:           'neighbourhood' | 'city_average'
+  source:           'live' | 'cmhc_zone' | 'cmhc_nearest'
   updated:          string
   rf_stats?:        RFStats | null
+  cmhc_zone?:       string
 }
 
-// ── Static neighbourhood table ────────────────────────────────────────────────
-// Source: CMHC Rental Market Report Edmonton CMA, November 2024
-// Zones are based on Edmonton neighbourhood areas and inner/mid/outer rings
-// 1BR, 2BR, 3BR monthly ranges in CAD
+// ── File paths ────────────────────────────────────────────────────────────────
 
-const NEIGHBOURHOOD_RENTS: Record<string, Omit<NeighbourhoodRents,
-  'neighbourhood' | 'listing_count' | 'source_label' | 'source' | 'updated'>> = {
-  // ── University / Old Strathcona cluster ──────────────────────────────────
-  MCKERNAN:          { rent_1br_low: 1_400, rent_1br_high: 1_700, rent_2br_low: 1_850, rent_2br_high: 2_200, rent_3br_low: 2_400, rent_3br_high: 2_900 },
-  GARNEAU:           { rent_1br_low: 1_400, rent_1br_high: 1_700, rent_2br_low: 1_850, rent_2br_high: 2_200, rent_3br_low: 2_400, rent_3br_high: 2_900 },
-  STRATHCONA:        { rent_1br_low: 1_350, rent_1br_high: 1_650, rent_2br_low: 1_750, rent_2br_high: 2_100, rent_3br_low: 2_200, rent_3br_high: 2_700 },
-  GLENORA:           { rent_1br_low: 1_450, rent_1br_high: 1_750, rent_2br_low: 1_950, rent_2br_high: 2_350, rent_3br_low: 2_500, rent_3br_high: 3_100 },
-  'WINDSOR PARK':    { rent_1br_low: 1_400, rent_1br_high: 1_700, rent_2br_low: 1_900, rent_2br_high: 2_250, rent_3br_low: 2_450, rent_3br_high: 3_000 },
-  'SOUTH GLENORA':   { rent_1br_low: 1_350, rent_1br_high: 1_650, rent_2br_low: 1_850, rent_2br_high: 2_200, rent_3br_low: 2_300, rent_3br_high: 2_800 },
-  BELGRAVIA:         { rent_1br_low: 1_350, rent_1br_high: 1_650, rent_2br_low: 1_800, rent_2br_high: 2_150, rent_3br_low: 2_300, rent_3br_high: 2_750 },
-  PLEASANTVIEW:      { rent_1br_low: 1_250, rent_1br_high: 1_500, rent_2br_low: 1_650, rent_2br_high: 1_950, rent_3br_low: 2_100, rent_3br_high: 2_500 },
+const RF_PATH    = path.join(process.cwd(), 'scraper', 'rentfaster.json')
+const CMHC_PATH  = path.join(process.cwd(), 'scraper', 'cmhc_edmonton.json')
+const RF_LIVE_MIN = 10   // minimum listings to use Rentfaster as primary
 
-  // ── Downtown / Oliver / ICE District cluster ─────────────────────────────
-  OLIVER:            { rent_1br_low: 1_350, rent_1br_high: 1_650, rent_2br_low: 1_750, rent_2br_high: 2_100, rent_3br_low: 2_200, rent_3br_high: 2_700 },
-  DOWNTOWN:          { rent_1br_low: 1_400, rent_1br_high: 1_750, rent_2br_low: 1_850, rent_2br_high: 2_300, rent_3br_low: 2_400, rent_3br_high: 3_000 },
-  WESTMOUNT:         { rent_1br_low: 1_300, rent_1br_high: 1_600, rent_2br_low: 1_700, rent_2br_high: 2_050, rent_3br_low: 2_100, rent_3br_high: 2_600 },
-  GLENWOOD:          { rent_1br_low: 1_200, rent_1br_high: 1_450, rent_2br_low: 1_550, rent_2br_high: 1_850, rent_3br_low: 2_000, rent_3br_high: 2_400 },
-  'QUEEN MARY PARK': { rent_1br_low: 1_150, rent_1br_high: 1_400, rent_2br_low: 1_500, rent_2br_high: 1_800, rent_3br_low: 1_950, rent_3br_high: 2_300 },
+// ── Module caches ─────────────────────────────────────────────────────────────
 
-  // ── Mature inner ring ────────────────────────────────────────────────────
-  RITCHIE:           { rent_1br_low: 1_250, rent_1br_high: 1_550, rent_2br_low: 1_650, rent_2br_high: 2_000, rent_3br_low: 2_100, rent_3br_high: 2_600 },
-  HOLYROOD:          { rent_1br_low: 1_200, rent_1br_high: 1_450, rent_2br_low: 1_550, rent_2br_high: 1_850, rent_3br_low: 2_000, rent_3br_high: 2_400 },
-  BONNIE_DOON:       { rent_1br_low: 1_200, rent_1br_high: 1_500, rent_2br_low: 1_600, rent_2br_high: 1_950, rent_3br_low: 2_050, rent_3br_high: 2_500 },
-  HAZELDEAN:         { rent_1br_low: 1_200, rent_1br_high: 1_450, rent_2br_low: 1_600, rent_2br_high: 1_900, rent_3br_low: 2_050, rent_3br_high: 2_450 },
-  PARKALLEN:         { rent_1br_low: 1_250, rent_1br_high: 1_550, rent_2br_low: 1_650, rent_2br_high: 2_000, rent_3br_low: 2_100, rent_3br_high: 2_550 },
-  LENDRUM:           { rent_1br_low: 1_200, rent_1br_high: 1_500, rent_2br_low: 1_600, rent_2br_high: 1_950, rent_3br_low: 2_050, rent_3br_high: 2_450 },
-  MILL_WOODS:        { rent_1br_low: 1_100, rent_1br_high: 1_350, rent_2br_low: 1_450, rent_2br_high: 1_750, rent_3br_low: 1_850, rent_3br_high: 2_200 },
-  MILLBOURNE:        { rent_1br_low: 1_100, rent_1br_high: 1_350, rent_2br_low: 1_450, rent_2br_high: 1_750, rent_3br_low: 1_850, rent_3br_high: 2_200 },
+let _rfData:   any = null; let _rfTs   = 0
+let _cmhcData: any = null; let _cmhcTs = 0
+const CACHE_TTL = 24 * 60 * 60 * 1_000
 
-  // ── North / Northeast ────────────────────────────────────────────────────
-  DELWOOD:           { rent_1br_low: 1_050, rent_1br_high: 1_300, rent_2br_low: 1_400, rent_2br_high: 1_700, rent_3br_low: 1_800, rent_3br_high: 2_100 },
-  ABBOTTSFIELD:      { rent_1br_low: 1_000, rent_1br_high: 1_250, rent_2br_low: 1_350, rent_2br_high: 1_650, rent_3br_low: 1_750, rent_3br_high: 2_050 },
-
-  // ── West / Jasper Place ─────────────────────────────────────────────────
-  'JASPER PLACE':    { rent_1br_low: 1_150, rent_1br_high: 1_400, rent_2br_low: 1_500, rent_2br_high: 1_800, rent_3br_low: 1_950, rent_3br_high: 2_300 },
-  BRITANNIA_YOUNGSTOWN: { rent_1br_low: 1_100, rent_1br_high: 1_350, rent_2br_low: 1_450, rent_2br_high: 1_750, rent_3br_low: 1_850, rent_3br_high: 2_200 },
+function loadRF() {
+  if (_rfData && Date.now() - _rfTs < CACHE_TTL) return _rfData
+  try {
+    if (fs.existsSync(RF_PATH)) { _rfData = JSON.parse(fs.readFileSync(RF_PATH, 'utf8')); _rfTs = Date.now() }
+  } catch {}
+  return _rfData
 }
 
-// ── Module cache ──────────────────────────────────────────────────────────────
+function loadCMHC() {
+  if (_cmhcData && Date.now() - _cmhcTs < CACHE_TTL) return _cmhcData
+  try {
+    if (fs.existsSync(CMHC_PATH)) { _cmhcData = JSON.parse(fs.readFileSync(CMHC_PATH, 'utf8')); _cmhcTs = Date.now() }
+  } catch {}
+  return _cmhcData
+}
 
-const _cache = new Map<string, { data: NeighbourhoodRents; ts: number }>()
+// Public helpers used by route.ts for the RentalMarketCard
+export function getRentfasterStats(neighbourhood: string): RFStats | null {
+  const d = loadRF(); if (!d) return null
+  return d.neighbourhoods?.[neighbourhood.toUpperCase()] ?? null
+}
+export function getRentfasterUpdated(): string | null {
+  return loadRF()?.updated ?? null
+}
 
 // ── Main export ───────────────────────────────────────────────────────────────
 
+// Simple in-memory lookup cache (per neighbourhood, no TTL needed — data doesn't change mid-session)
+const _rentCache = new Map<string, NeighbourhoodRents>()
+
 export async function getNeighbourhoodRents(
-  lat: number,
-  lon: number,
+  _lat: number,
+  _lon: number,
   neighbourhood: string,
 ): Promise<NeighbourhoodRents> {
-  const cacheKey = `${lat.toFixed(2)},${lon.toFixed(2)}`
-  const now = Date.now()
-  const hit = _cache.get(cacheKey)
-  if (hit && now - hit.ts < CACHE_TTL) return hit.data
+  const hood = (neighbourhood || '').toUpperCase()
+  if (_rentCache.has(hood)) return _rentCache.get(hood)!
 
-  // 1. Fetch listing count from Outscraper (non-blocking — failure returns 0)
-  const listingCount = await fetchListingCount(lat, lon).catch(() => 0)
-
-  // 2. Lookup neighbourhood-specific rents
-  const hood = neighbourhood.toUpperCase()
-  // 1. Rentfaster live data (best source)
-  const rfStats    = getRentfasterStats(hood)
-  const rfUpdated  = getRentfasterUpdated()
-  const rfDate     = rfUpdated ? new Date(rfUpdated).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' }) : 'today'
-  const tableEntry = NEIGHBOURHOOD_RENTS[hood]
-
-  let result: NeighbourhoodRents
-
-  if (rfStats && rfStats.listing_count >= 1) {
-    // Live Rentfaster data — best source
-    const rf = rfStats
-    result = {
-      neighbourhood:  hood,
-      rent_1br_low:   rf.rent_1br   ? Math.round(rf.rent_1br  * 0.92) : MARKET_DATA.rent_1br_low,
-      rent_1br_high:  rf.rent_1br   ? Math.round(rf.rent_1br  * 1.08) : MARKET_DATA.rent_1br_high,
-      rent_2br_low:   rf.rent_2br   ? Math.round(rf.rent_2br  * 0.92) : MARKET_DATA.rent_2br_low,
-      rent_2br_high:  rf.rent_2br   ? Math.round(rf.rent_2br  * 1.08) : MARKET_DATA.rent_2br_high,
-      rent_3br_low:   rf.rent_3br   ? Math.round(rf.rent_3br  * 0.92) : MARKET_DATA.rent_3br_low,
-      rent_3br_high:  rf.rent_3br   ? Math.round(rf.rent_3br  * 1.08) : MARKET_DATA.rent_3br_high,
-      listing_count:  rf.listing_count,
-      source_label:   `Based on ${rf.listing_count} active listings in ${toTitleCase(hood)} — updated ${rfDate}`,
-      source:         'neighbourhood',
-      updated:        rfDate,
-      rf_stats:       rf,
-    }
-  } else if (tableEntry) {
-    // CMHC neighbourhood table fallback
-    result = {
-      neighbourhood:  hood,
-      ...tableEntry,
-      listing_count:  listingCount,
-      source_label:   `Based on Edmonton CMHC 2024 rental data — ${toTitleCase(hood)}`,
-      source:         'neighbourhood',
-      updated:        'CMHC Nov 2024',
-      rf_stats:       null,
-    }
-  } else {
-    // City-wide fallback
-    const cw = getRentfasterStats('_EDMONTON_CITYWIDE')
-    result = {
-      neighbourhood:  hood || 'Edmonton',
-      rent_1br_low:   cw?.rent_1br ? Math.round(cw.rent_1br * 0.92) : MARKET_DATA.rent_1br_low,
-      rent_1br_high:  cw?.rent_1br ? Math.round(cw.rent_1br * 1.08) : MARKET_DATA.rent_1br_high,
-      rent_2br_low:   cw?.rent_2br ? Math.round(cw.rent_2br * 0.92) : MARKET_DATA.rent_2br_low,
-      rent_2br_high:  cw?.rent_2br ? Math.round(cw.rent_2br * 1.08) : MARKET_DATA.rent_2br_high,
-      rent_3br_low:   cw?.rent_3br ? Math.round(cw.rent_3br * 0.92) : MARKET_DATA.rent_3br_low,
-      rent_3br_high:  cw?.rent_3br ? Math.round(cw.rent_3br * 1.08) : MARKET_DATA.rent_3br_high,
-      listing_count:  cw?.listing_count ?? listingCount,
-      source_label:   `Based on Edmonton city-wide market data — ${rfDate}`,
-      source:         'city_average',
-      updated:        rfDate,
-      rf_stats:       cw ?? null,
-    }
-  }
-
-  _cache.set(cacheKey, { data: result, ts: now })
+  const result = buildRents(hood)
+  _rentCache.set(hood, result)
   return result
 }
 
-// ── Outscraper listing count (within ~1km) ────────────────────────────────────
+// ── Builder ───────────────────────────────────────────────────────────────────
 
-async function fetchListingCount(lat: number, lon: number): Promise<number> {
-  if (!OUTSCRAPER_KEY) return 0
+function buildRents(hood: string): NeighbourhoodRents {
+  const rf   = loadRF()
+  const cmhc = loadCMHC()
 
-  const query = encodeURIComponent(
-    `apartments for rent near ${lat.toFixed(4)},${lon.toFixed(4)} Edmonton AB`
-  )
-  const url = `https://api.app.outscraper.com/maps/search-v3?query=${query}&limit=20&language=en&async=false`
+  const rfStats: RFStats | null = rf?.neighbourhoods?.[hood] ?? null
+  const rfDate = rf?.updated
+    ? new Date(rf.updated).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })
+    : 'today'
 
-  const res = await fetch(url, {
-    headers:  { 'X-API-KEY': OUTSCRAPER_KEY },
-    signal:   AbortSignal.timeout(TIMEOUT_MS),
-  })
-  if (!res.ok) return 0
+  // 1. Live Rentfaster — only when sample is strong enough
+  if (rfStats && rfStats.listing_count >= RF_LIVE_MIN) {
+    const rs = rfStats
+    return {
+      neighbourhood: hood,
+      rent_1br_low:  rs.rent_1br ? Math.round(rs.rent_1br * 0.93) : 0,
+      rent_1br_high: rs.rent_1br ? Math.round(rs.rent_1br * 1.07) : 0,
+      rent_2br_low:  rs.rent_2br ? Math.round(rs.rent_2br * 0.93) : 0,
+      rent_2br_high: rs.rent_2br ? Math.round(rs.rent_2br * 1.07) : 0,
+      rent_3br_low:  rs.rent_3br ? Math.round(rs.rent_3br * 0.93) : 0,
+      rent_3br_high: rs.rent_3br ? Math.round(rs.rent_3br * 1.07) : 0,
+      listing_count: rs.listing_count,
+      source_label:  `Based on ${rs.listing_count} active listings in ${toTitle(hood)} — updated ${rfDate}`,
+      source:        'live',
+      updated:       rfDate,
+      rf_stats:      rs,
+    }
+  }
 
-  const data = await res.json()
-  const items: unknown[] = (data?.data?.[0]) ?? []
+  // 2. CMHC zone lookup (direct or nearest)
+  if (cmhc) {
+    const direct = cmhc.neighbourhoods?.[hood]
+    if (direct) {
+      return cmhcResult(hood, direct, 'cmhc_zone', rfStats)
+    }
 
-  // Filter to listings within ~1km using Google's lat/lon fields
-  const nearby = items.filter((item: unknown) => {
-    const it = item as Record<string, unknown>
-    const iLat = Number(it.latitude  ?? 0)
-    const iLon = Number(it.longitude ?? 0)
-    if (!iLat || !iLon) return false
-    return haversineKm(lat, lon, iLat, iLon) <= 1.0
-  })
+    // 3. Nearest-neighbour within CMHC neighbourhood table (fuzzy match on name)
+    const nearest = findNearest(hood, cmhc.neighbourhoods || {})
+    if (nearest) {
+      return cmhcResult(hood, nearest.data, 'cmhc_nearest', rfStats, nearest.name)
+    }
+  }
 
-  return nearby.length
+  // Should never reach here if cmhc_edmonton.json is present — but if it is missing:
+  return {
+    neighbourhood: hood,
+    rent_1br_low: 1150, rent_1br_high: 1400,
+    rent_2br_low: 1400, rent_2br_high: 1700,
+    rent_3br_low: 1750, rent_3br_high: 2100,
+    listing_count: 0,
+    source_label:  'Edmonton area estimate — verify with current listings',
+    source:        'cmhc_zone',
+    updated:       '—',
+    rf_stats:      rfStats,
+  }
 }
 
-// ── Utilities ─────────────────────────────────────────────────────────────────
+function cmhcResult(
+  hood:    string,
+  z:       any,
+  source:  'cmhc_zone' | 'cmhc_nearest',
+  rfStats: RFStats | null,
+  nearestName?: string,
+): NeighbourhoodRents {
+  const label = source === 'cmhc_zone'
+    ? `CMHC 2024 — Zone ${z.zone}: ${z.zone_label}`
+    : `CMHC 2024 — ${toTitle(nearestName!)} area (Zone ${z.zone}: ${z.zone_label})`
 
-function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const R   = 6371
-  const dLat = ((lat2 - lat1) * Math.PI) / 180
-  const dLon = ((lon2 - lon1) * Math.PI) / 180
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) *
-    Math.cos((lat2 * Math.PI) / 180) *
-    Math.sin(dLon / 2) ** 2
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+  // 5% margin each side
+  return {
+    neighbourhood: hood,
+    rent_1br_low:  z['1br'] ? Math.round(z['1br'] * 0.95) : 0,
+    rent_1br_high: z['1br'] ? Math.round(z['1br'] * 1.05) : 0,
+    rent_2br_low:  z['2br'] ? Math.round(z['2br'] * 0.95) : 0,
+    rent_2br_high: z['2br'] ? Math.round(z['2br'] * 1.05) : 0,
+    rent_3br_low:  z['3br'] ? Math.round(z['3br'] * 0.95) : 0,
+    rent_3br_high: z['3br'] ? Math.round(z['3br'] * 1.05) : 0,
+    listing_count: 0,
+    source_label:  label,
+    source,
+    updated:       'CMHC Oct 2024',
+    rf_stats:      rfStats,
+    cmhc_zone:     `Zone ${z.zone}: ${z.zone_label}`,
+  }
 }
 
-function toTitleCase(s: string): string {
+// Very simple nearest-neighbour: longest common substring / partial match
+function findNearest(hood: string, map: Record<string, any>): { name: string; data: any } | null {
+  const names = Object.keys(map)
+
+  // Exact substring match first
+  for (const name of names) {
+    if (hood.includes(name) || name.includes(hood)) return { name, data: map[name] }
+  }
+
+  // Word overlap score
+  const hoodWords = new Set(hood.split(/[\s\/]+/))
+  let best: { name: string; score: number } | null = null
+  for (const name of names) {
+    const nameWords = name.split(/[\s\/]+/)
+    const overlap = nameWords.filter(w => hoodWords.has(w)).length
+    if (overlap > 0 && (!best || overlap > best.score)) {
+      best = { name, score: overlap }
+    }
+  }
+  return best ? { name: best.name, data: map[best.name] } : null
+}
+
+function toTitle(s: string): string {
   return s.replace(/\w\S*/g, w => w[0].toUpperCase() + w.slice(1).toLowerCase())
 }

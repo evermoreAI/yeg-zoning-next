@@ -1,0 +1,1280 @@
+{
+  "source": "CMHC Rental Market Survey \u2014 Edmonton CMA, October 2024",
+  "published": "2024-11-xx",
+  "zones": {
+    "1": {
+      "zone_label": "Downtown",
+      "bach": 1093,
+      "1br": 1285,
+      "2br": 1655,
+      "3br": 2191,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "2": {
+      "zone_label": "Hudson's Bay Reserve",
+      "bach": 889,
+      "1br": 1104,
+      "2br": 1432,
+      "3br": 1588,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "3": {
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "4": {
+      "zone_label": "West Central",
+      "bach": 871,
+      "1br": 1058,
+      "2br": 1264,
+      "3br": 1845,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "5": {
+      "zone_label": "Jasper Place",
+      "bach": 913,
+      "1br": 1052,
+      "2br": 1285,
+      "3br": 1478,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "6": {
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "7": {
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "8": {
+      "zone_label": "East Central",
+      "bach": 1129,
+      "1br": 1097,
+      "2br": 1384,
+      "3br": 1610,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "9": {
+      "zone_label": "Millwoods",
+      "bach": null,
+      "1br": 1359,
+      "2br": 1646,
+      "3br": 1806,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "10": {
+      "zone_label": "North Central",
+      "bach": 830,
+      "1br": 1081,
+      "2br": 1271,
+      "3br": 1514,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "11": {
+      "zone_label": "North East",
+      "bach": 960,
+      "1br": 1217,
+      "2br": 1424,
+      "3br": 1586,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "12": {
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "13": {
+      "zone_label": "St. Albert",
+      "bach": null,
+      "1br": 1504,
+      "2br": 1830,
+      "3br": 1741,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "14": {
+      "zone_label": "Other Outlying Areas",
+      "bach": null,
+      "1br": 1231,
+      "2br": 1422,
+      "3br": null,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "15": {
+      "zone_label": "Fort Saskatchewan",
+      "bach": null,
+      "1br": 1210,
+      "2br": 1403,
+      "3br": null,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "16": {
+      "zone_label": "Leduc",
+      "bach": null,
+      "1br": 1387,
+      "2br": 1467,
+      "3br": null,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "17": {
+      "zone_label": "Spruce Grove",
+      "bach": null,
+      "1br": 1424,
+      "2br": 1575,
+      "3br": null,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "18": {
+      "zone_label": "Stony Plain",
+      "bach": null,
+      "1br": null,
+      "2br": null,
+      "3br": null,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    },
+    "19": {
+      "zone_label": "Strathcona County",
+      "bach": null,
+      "1br": 1509,
+      "2br": 1825,
+      "3br": 2126,
+      "source": "CMHC RMS Edmonton Oct 2024"
+    }
+  },
+  "neighbourhoods": {
+    "DOWNTOWN": {
+      "zone": 1,
+      "zone_label": "Downtown",
+      "bach": 1093,
+      "1br": 1285,
+      "2br": 1655,
+      "3br": 2191
+    },
+    "GRANDIN": {
+      "zone": 1,
+      "zone_label": "Downtown",
+      "bach": 1093,
+      "1br": 1285,
+      "2br": 1655,
+      "3br": 2191
+    },
+    "OLIVER": {
+      "zone": 1,
+      "zone_label": "Downtown",
+      "bach": 1093,
+      "1br": 1285,
+      "2br": 1655,
+      "3br": 2191
+    },
+    "MCCAULEY": {
+      "zone": 1,
+      "zone_label": "Downtown",
+      "bach": 1093,
+      "1br": 1285,
+      "2br": 1655,
+      "3br": 2191
+    },
+    "CENTRAL MCDOUGALL": {
+      "zone": 2,
+      "zone_label": "Hudson's Bay Reserve",
+      "bach": 889,
+      "1br": 1104,
+      "2br": 1432,
+      "3br": 1588
+    },
+    "QUEEN MARY PARK": {
+      "zone": 2,
+      "zone_label": "Hudson's Bay Reserve",
+      "bach": 889,
+      "1br": 1104,
+      "2br": 1432,
+      "3br": 1588
+    },
+    "GARNEAU": {
+      "zone": 3,
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694
+    },
+    "UNIVERSITY": {
+      "zone": 3,
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694
+    },
+    "BELGRAVIA": {
+      "zone": 3,
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694
+    },
+    "MCKERNAN": {
+      "zone": 3,
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694
+    },
+    "PLEASANTVIEW": {
+      "zone": 3,
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694
+    },
+    "PARKALLEN": {
+      "zone": 3,
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694
+    },
+    "LENDRUM": {
+      "zone": 3,
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694
+    },
+    "WINDSOR PARK": {
+      "zone": 3,
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694
+    },
+    "SOUTH GLENORA": {
+      "zone": 3,
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694
+    },
+    "GLENORA": {
+      "zone": 3,
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694
+    },
+    "STRATHCONA": {
+      "zone": 3,
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694
+    },
+    "BONNIE DOON": {
+      "zone": 3,
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694
+    },
+    "HOLYROOD": {
+      "zone": 3,
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694
+    },
+    "RITCHIE": {
+      "zone": 3,
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694
+    },
+    "HAZELDEAN": {
+      "zone": 3,
+      "zone_label": "University",
+      "bach": 1163,
+      "1br": 1244,
+      "2br": 1619,
+      "3br": 1694
+    },
+    "WEST CENTRAL (SOUTH)": {
+      "zone": 4,
+      "zone_label": "West Central",
+      "bach": 871,
+      "1br": 1058,
+      "2br": 1264,
+      "3br": 1845
+    },
+    "WOODCROFT/INGLEWOOD": {
+      "zone": 4,
+      "zone_label": "West Central",
+      "bach": 871,
+      "1br": 1058,
+      "2br": 1264,
+      "3br": 1845
+    },
+    "WEST CENTRAL (NORTH)": {
+      "zone": 4,
+      "zone_label": "West Central",
+      "bach": 871,
+      "1br": 1058,
+      "2br": 1264,
+      "3br": 1845
+    },
+    "WESTMOUNT": {
+      "zone": 4,
+      "zone_label": "West Central",
+      "bach": 871,
+      "1br": 1058,
+      "2br": 1264,
+      "3br": 1845
+    },
+    "INGLEWOOD": {
+      "zone": 4,
+      "zone_label": "West Central",
+      "bach": 871,
+      "1br": 1058,
+      "2br": 1264,
+      "3br": 1845
+    },
+    "WOODCROFT": {
+      "zone": 4,
+      "zone_label": "West Central",
+      "bach": 871,
+      "1br": 1058,
+      "2br": 1264,
+      "3br": 1845
+    },
+    "GLENWOOD": {
+      "zone": 4,
+      "zone_label": "West Central",
+      "bach": 871,
+      "1br": 1058,
+      "2br": 1264,
+      "3br": 1845
+    },
+    "SOUTH JASPER PLACE": {
+      "zone": 5,
+      "zone_label": "Jasper Place",
+      "bach": 913,
+      "1br": 1052,
+      "2br": 1285,
+      "3br": 1478
+    },
+    "GENWOOD/WEST JASPER PLACE": {
+      "zone": 5,
+      "zone_label": "Jasper Place",
+      "bach": 913,
+      "1br": 1052,
+      "2br": 1285,
+      "3br": 1478
+    },
+    "BRITANNIA": {
+      "zone": 5,
+      "zone_label": "Jasper Place",
+      "bach": 913,
+      "1br": 1052,
+      "2br": 1285,
+      "3br": 1478
+    },
+    "NORTH JASPER PLACE": {
+      "zone": 5,
+      "zone_label": "Jasper Place",
+      "bach": 913,
+      "1br": 1052,
+      "2br": 1285,
+      "3br": 1478
+    },
+    "BRITANNIA YOUNGSTOWN": {
+      "zone": 5,
+      "zone_label": "Jasper Place",
+      "bach": 913,
+      "1br": 1052,
+      "2br": 1285,
+      "3br": 1478
+    },
+    "JASPER PLACE": {
+      "zone": 5,
+      "zone_label": "Jasper Place",
+      "bach": 913,
+      "1br": 1052,
+      "2br": 1285,
+      "3br": 1478
+    },
+    "NORTH WEST JASPER PLACE": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "THORNCLIFFE/ALDERGROVE": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "CALLINGWOOD": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "SOUTH WEST JASPER PLACE": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "WEST JASPER PLACE/RURAL": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "WEST JASPER PLACE": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "ALDERGROVE": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "THORNCLIFFE": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "SOUTHGATE DISTRICT": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "CONFEDERATION PARK": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "RIVERBEND/WHITEMUD CREEK": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "CENTRAL SOUTH WEST": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "GATEWAY BLVD WEST": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "TERWILLEGAR/RURAL SOUTHWEST": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "TERWILLEGAR": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "RIVERBEND": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "WINDERMERE": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "KESWICK": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "AMBLESIDE": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "GLENRIDDING": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "WALKER": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "ALLARD": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "PAISLEY": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "HERITAGE VALLEY": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "BLACKMUD CREEK": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "BONNY DOON": {
+      "zone": 8,
+      "zone_label": "East Central",
+      "bach": 1129,
+      "1br": 1097,
+      "2br": 1384,
+      "3br": 1610
+    },
+    "STRATHEARN/HOLYROOD": {
+      "zone": 8,
+      "zone_label": "East Central",
+      "bach": 1129,
+      "1br": 1097,
+      "2br": 1384,
+      "3br": 1610
+    },
+    "CAPILANO/UPPER EAST CENTRAL": {
+      "zone": 8,
+      "zone_label": "East Central",
+      "bach": 1129,
+      "1br": 1097,
+      "2br": 1384,
+      "3br": 1610
+    },
+    "LOWER EAST CENTRAL": {
+      "zone": 8,
+      "zone_label": "East Central",
+      "bach": 1129,
+      "1br": 1097,
+      "2br": 1384,
+      "3br": 1610
+    },
+    "FULTON PLACE": {
+      "zone": 8,
+      "zone_label": "East Central",
+      "bach": 1129,
+      "1br": 1097,
+      "2br": 1384,
+      "3br": 1610
+    },
+    "CAPILANO": {
+      "zone": 8,
+      "zone_label": "East Central",
+      "bach": 1129,
+      "1br": 1097,
+      "2br": 1384,
+      "3br": 1610
+    },
+    "FOREST HEIGHTS": {
+      "zone": 8,
+      "zone_label": "East Central",
+      "bach": 1129,
+      "1br": 1097,
+      "2br": 1384,
+      "3br": 1610
+    },
+    "CLOVERDALE": {
+      "zone": 8,
+      "zone_label": "East Central",
+      "bach": 1129,
+      "1br": 1097,
+      "2br": 1384,
+      "3br": 1610
+    },
+    "KING EDWARD PARK": {
+      "zone": 8,
+      "zone_label": "East Central",
+      "bach": 1129,
+      "1br": 1097,
+      "2br": 1384,
+      "3br": 1610
+    },
+    "OTTEWELL": {
+      "zone": 8,
+      "zone_label": "East Central",
+      "bach": 1129,
+      "1br": 1097,
+      "2br": 1384,
+      "3br": 1610
+    },
+    "IDYLWYLDE": {
+      "zone": 8,
+      "zone_label": "East Central",
+      "bach": 1129,
+      "1br": 1097,
+      "2br": 1384,
+      "3br": 1610
+    },
+    "NORTH MILLWOODS": {
+      "zone": 9,
+      "zone_label": "Millwoods",
+      "bach": null,
+      "1br": 1359,
+      "2br": 1646,
+      "3br": 1806
+    },
+    "CENTRAL MILLWOODS": {
+      "zone": 9,
+      "zone_label": "Millwoods",
+      "bach": null,
+      "1br": 1359,
+      "2br": 1646,
+      "3br": 1806
+    },
+    "SOUTH MILLWOODS": {
+      "zone": 9,
+      "zone_label": "Millwoods",
+      "bach": null,
+      "1br": 1359,
+      "2br": 1646,
+      "3br": 1806
+    },
+    "MILLWOODS": {
+      "zone": 9,
+      "zone_label": "Millwoods",
+      "bach": null,
+      "1br": 1359,
+      "2br": 1646,
+      "3br": 1806
+    },
+    "MILL WOODS": {
+      "zone": 9,
+      "zone_label": "Millwoods",
+      "bach": null,
+      "1br": 1359,
+      "2br": 1646,
+      "3br": 1806
+    },
+    "MILLBOURNE": {
+      "zone": 9,
+      "zone_label": "Millwoods",
+      "bach": null,
+      "1br": 1359,
+      "2br": 1646,
+      "3br": 1806
+    },
+    "MILLHURST": {
+      "zone": 9,
+      "zone_label": "Millwoods",
+      "bach": null,
+      "1br": 1359,
+      "2br": 1646,
+      "3br": 1806
+    },
+    "SILVER BERRY": {
+      "zone": 9,
+      "zone_label": "Millwoods",
+      "bach": null,
+      "1br": 1359,
+      "2br": 1646,
+      "3br": 1806
+    },
+    "TAMARACK": {
+      "zone": 9,
+      "zone_label": "Millwoods",
+      "bach": null,
+      "1br": 1359,
+      "2br": 1646,
+      "3br": 1806
+    },
+    "THE ORCHARDS": {
+      "zone": 9,
+      "zone_label": "Millwoods",
+      "bach": null,
+      "1br": 1359,
+      "2br": 1646,
+      "3br": 1806
+    },
+    "HIGHLANDS/ALBERTA AVENUE": {
+      "zone": 10,
+      "zone_label": "North Central",
+      "bach": 830,
+      "1br": 1081,
+      "2br": 1271,
+      "3br": 1514
+    },
+    "DELTON/EASTWOOD": {
+      "zone": 10,
+      "zone_label": "North Central",
+      "bach": 830,
+      "1br": 1081,
+      "2br": 1271,
+      "3br": 1514
+    },
+    "WESTWOOD": {
+      "zone": 10,
+      "zone_label": "North Central",
+      "bach": 830,
+      "1br": 1081,
+      "2br": 1271,
+      "3br": 1514
+    },
+    "NORTH CENTRAL (WEST)": {
+      "zone": 10,
+      "zone_label": "North Central",
+      "bach": 830,
+      "1br": 1081,
+      "2br": 1271,
+      "3br": 1514
+    },
+    "NORTH CENTRAL (EAST)": {
+      "zone": 10,
+      "zone_label": "North Central",
+      "bach": 830,
+      "1br": 1081,
+      "2br": 1271,
+      "3br": 1514
+    },
+    "ALBERTA AVENUE": {
+      "zone": 10,
+      "zone_label": "North Central",
+      "bach": 830,
+      "1br": 1081,
+      "2br": 1271,
+      "3br": 1514
+    },
+    "DELTON": {
+      "zone": 10,
+      "zone_label": "North Central",
+      "bach": 830,
+      "1br": 1081,
+      "2br": 1271,
+      "3br": 1514
+    },
+    "EASTWOOD": {
+      "zone": 10,
+      "zone_label": "North Central",
+      "bach": 830,
+      "1br": 1081,
+      "2br": 1271,
+      "3br": 1514
+    },
+    "CROMDALE": {
+      "zone": 10,
+      "zone_label": "North Central",
+      "bach": 830,
+      "1br": 1081,
+      "2br": 1271,
+      "3br": 1514
+    },
+    "DELWOOD": {
+      "zone": 10,
+      "zone_label": "North Central",
+      "bach": 830,
+      "1br": 1081,
+      "2br": 1271,
+      "3br": 1514
+    },
+    "ABBOTTSFIELD": {
+      "zone": 10,
+      "zone_label": "North Central",
+      "bach": 830,
+      "1br": 1081,
+      "2br": 1271,
+      "3br": 1514
+    },
+    "BEVERLY/RUNDLE HEIGHTS": {
+      "zone": 11,
+      "zone_label": "North East",
+      "bach": 960,
+      "1br": 1217,
+      "2br": 1424,
+      "3br": 1586
+    },
+    "CLAIRVIEW": {
+      "zone": 11,
+      "zone_label": "North East",
+      "bach": 960,
+      "1br": 1217,
+      "2br": 1424,
+      "3br": 1586
+    },
+    "MCLEOD PARK/CASSELMAN": {
+      "zone": 11,
+      "zone_label": "North East",
+      "bach": 960,
+      "1br": 1217,
+      "2br": 1424,
+      "3br": 1586
+    },
+    "NORTH EAST": {
+      "zone": 11,
+      "zone_label": "North East",
+      "bach": 960,
+      "1br": 1217,
+      "2br": 1424,
+      "3br": 1586
+    },
+    "RUNDLE HEIGHTS": {
+      "zone": 11,
+      "zone_label": "North East",
+      "bach": 960,
+      "1br": 1217,
+      "2br": 1424,
+      "3br": 1586
+    },
+    "BEVERLY": {
+      "zone": 11,
+      "zone_label": "North East",
+      "bach": 960,
+      "1br": 1217,
+      "2br": 1424,
+      "3br": 1586
+    },
+    "FRASER": {
+      "zone": 11,
+      "zone_label": "North East",
+      "bach": 960,
+      "1br": 1217,
+      "2br": 1424,
+      "3br": 1586
+    },
+    "HERMITAGE": {
+      "zone": 11,
+      "zone_label": "North East",
+      "bach": 960,
+      "1br": 1217,
+      "2br": 1424,
+      "3br": 1586
+    },
+    "HOMESTEADER": {
+      "zone": 11,
+      "zone_label": "North East",
+      "bach": 960,
+      "1br": 1217,
+      "2br": 1424,
+      "3br": 1586
+    },
+    "LONDONDERRY": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "NORTHMOUNT/EVANSDALE": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "EAST CASTLE DOWNS": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "WEST CASTLEDOWNS": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "CASTLEDOWNS": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "CASTLE DOWNS": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "GRIESBACH": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "EVANSDALE": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "NORTHMOUNT": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "ST. ALBERT": {
+      "zone": 13,
+      "zone_label": "St. Albert",
+      "bach": null,
+      "1br": 1504,
+      "2br": 1830,
+      "3br": 1741
+    },
+    "MORINVILLE": {
+      "zone": 14,
+      "zone_label": "Other Outlying Areas",
+      "bach": null,
+      "1br": 1231,
+      "2br": 1422,
+      "3br": null
+    },
+    "DEVON": {
+      "zone": 14,
+      "zone_label": "Other Outlying Areas",
+      "bach": null,
+      "1br": 1231,
+      "2br": 1422,
+      "3br": null
+    },
+    "FORT SASKATCHEWAN": {
+      "zone": 15,
+      "zone_label": "Fort Saskatchewan",
+      "bach": null,
+      "1br": 1210,
+      "2br": 1403,
+      "3br": null
+    },
+    "SPRUCE GROVE": {
+      "zone": 17,
+      "zone_label": "Spruce Grove",
+      "bach": null,
+      "1br": 1424,
+      "2br": 1575,
+      "3br": null
+    },
+    "SHERWOOD PARK": {
+      "zone": 19,
+      "zone_label": "Strathcona County",
+      "bach": null,
+      "1br": 1509,
+      "2br": 1825,
+      "3br": 2126
+    },
+    "ROSENTHAL": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "EDGEMONT": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "SECORD": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "HAMPTONS": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "CHARLESBOURG": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "SUMMERSIDE": {
+      "zone": 9,
+      "zone_label": "Millwoods",
+      "bach": null,
+      "1br": 1359,
+      "2br": 1646,
+      "3br": 1806
+    },
+    "LAGO LINDO": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "CY BECKER": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "MATRIX": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "HUDSON": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "GLENRIDDING RAVINE": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "MAPLE RIDGE": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "CAVANAGH": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    },
+    "GLASTONBURY": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "JAMIESON PLACE": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "BRECKENRIDGE GREENS": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "TRUMPETER": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "OXFORD": {
+      "zone": 6,
+      "zone_label": "West Jasper Place",
+      "bach": 1094,
+      "1br": 1301,
+      "2br": 1503,
+      "3br": 1700
+    },
+    "ALBANY": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "CRYSTALLINA NERA": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "RAPPERSWILL": {
+      "zone": 12,
+      "zone_label": "Castledown",
+      "bach": 890,
+      "1br": 1267,
+      "2br": 1480,
+      "3br": 1665
+    },
+    "PILOT SOUND": {
+      "zone": 11,
+      "zone_label": "North East",
+      "bach": 960,
+      "1br": 1217,
+      "2br": 1424,
+      "3br": 1586
+    },
+    "SCHONSEE": {
+      "zone": 11,
+      "zone_label": "North East",
+      "bach": 960,
+      "1br": 1217,
+      "2br": 1424,
+      "3br": 1586
+    },
+    "MATT BERRY": {
+      "zone": 11,
+      "zone_label": "North East",
+      "bach": 960,
+      "1br": 1217,
+      "2br": 1424,
+      "3br": 1586
+    },
+    "MARQUIS": {
+      "zone": 7,
+      "zone_label": "South West",
+      "bach": 1068,
+      "1br": 1326,
+      "2br": 1550,
+      "3br": 1744
+    }
+  }
+}

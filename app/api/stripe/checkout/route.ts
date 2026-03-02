@@ -26,8 +26,6 @@ export async function POST(req: NextRequest) {
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL
 
-    console.log(`[checkout] Creating session: tier=${tier}, priceId=${priceId}`)
-
     const stripe = getStripe()
 
     const session = await stripe.checkout.sessions.create({
@@ -42,10 +40,7 @@ export async function POST(req: NextRequest) {
       success_url: `${appUrl}/stripe/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appUrl}/stripe/cancel`,
       billing_address_collection: 'required',
-      customer_creation: 'always',
     })
-
-    console.log(`[checkout] Session created successfully: ${session.id}`)
 
     return NextResponse.json(
       { url: session.url },
@@ -54,8 +49,6 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error)
     console.error(`[checkout] Stripe error: ${errorMsg}`)
-    
-    // Return actual error for debugging (should be safe since it's test mode)
     return NextResponse.json(
       { error: `Stripe error: ${errorMsg}` },
       { status: 500 }

@@ -1,38 +1,16 @@
 'use client'
 
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 export default function SuccessPage() {
-  const searchParams = useSearchParams()
-  const sessionId = searchParams.get('session_id')
-  const [tier, setTier] = useState<'pro' | 'investor' | null>(null)
-  const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
   useEffect(() => {
-    if (!sessionId) {
-      setLoading(false)
-      return
-    }
-
-    // TODO: Query session to determine tier
-    // For now, assume tier from sessionId lookup
-    setTier('pro')
-    setLoading(false)
-  }, [sessionId])
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0c10] text-[#e8e0d0]">
-        <div className="text-center">
-          <div className="animate-pulse text-2xl font-bold text-[#c8a951]">
-            Setting up your subscription...
-          </div>
-        </div>
-      </div>
-    )
-  }
+    // Verify session on mount if needed
+    // For now, just show success page
+  }, [])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0a0c10] px-4 py-12">
@@ -41,10 +19,10 @@ export default function SuccessPage() {
           <div className="text-6xl mb-4">✓</div>
           <h1 className="text-4xl font-bold text-[#c8a951] mb-2">Success!</h1>
           <p className="text-xl text-[#e8e0d0] mb-4">
-            You're now on {tier ? tier.charAt(0).toUpperCase() + tier.slice(1) : 'InfillIQ'}
+            Your subscription is now active
           </p>
           <p className="text-[#8a8070] mb-8">
-            Your subscription is active. Start analyzing Edmonton properties now.
+            Start analyzing Edmonton properties now.
           </p>
         </div>
 

@@ -156,39 +156,43 @@ export default function LandingPage() {
 
             <div className="grid md:grid-cols-3 gap-8">
               {/* Free tier */}
-              <div className="p-8 rounded-lg border border-[#2a2e38] transition-all duration-300" style={{ background: '#141820' }}>
-                <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'var(--font-rajdhani)' }}>Free</h3>
-                <div className="text-3xl font-bold text-[#c8a951] mb-6">$0<span className="text-sm text-[#4a5568]">/mo</span></div>
-                <ul className="space-y-3 text-[13px] text-[#8a8070] mb-8">
-                  <li><CheckmarkIcon /> Zone data & amendments</li>
-                  <li><CheckmarkIcon /> Rezoning alerts</li>
-                  <li><CheckmarkIcon /> Development permits nearby</li>
-                  <li><DashIcon /> Pro features gated</li>
-                </ul>
+              <div className="flex flex-col p-8 rounded-lg border border-[#2a2e38] transition-all duration-300" style={{ background: '#141820' }}>
+                <div>
+                  <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'var(--font-rajdhani)' }}>Free</h3>
+                  <div className="text-3xl font-bold text-[#c8a951] mb-6">$0<span className="text-sm text-[#4a5568]">/mo</span></div>
+                  <ul className="space-y-3 text-[13px] text-[#8a8070]">
+                    <li><CheckmarkIcon /> Zone data & amendments</li>
+                    <li><CheckmarkIcon /> Rezoning alerts</li>
+                    <li><CheckmarkIcon /> Development permits nearby</li>
+                    <li><DashIcon /> Pro features gated</li>
+                  </ul>
+                </div>
                 <Link href="/map"
-                      className="block w-full px-6 py-3 rounded-lg bg-[#c8a951] text-[#0a0c10] font-bold text-center hover:bg-[#d4b86a] transition-colors">
-                  Search Now
+                      className="mt-auto block w-full px-6 py-3 rounded-lg bg-[#c8a951] text-[#0a0c10] font-bold text-center hover:bg-[#d4b86a] transition-colors">
+                  Start Free
                 </Link>
               </div>
 
               {/* Pro tier */}
-              <div className="p-8 rounded-lg border-2 border-[#c8a951] relative transition-all duration-300" style={{ background: '#141820' }}>
+              <div className="flex flex-col p-8 rounded-lg border-2 border-[#c8a951] relative transition-all duration-300" style={{ background: '#141820' }}>
                 <div className="absolute -top-3 left-6 bg-[#0a0c10] px-2">
                   <span className="text-[10px] font-bold text-[#c8a951] tracking-wider uppercase">Most Popular</span>
                 </div>
-                <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'var(--font-rajdhani)' }}>Pro</h3>
-                <div className="text-3xl font-bold text-[#c8a951] mb-6">$29<span className="text-sm text-[#4a5568]">/mo CAD</span></div>
-                <ul className="space-y-3 text-[13px] text-[#8a8070] mb-8">
-                  <li><CheckmarkIcon /> Everything in Free</li>
-                  <li><CheckmarkIcon /> Unlimited searches</li>
-                  <li><CheckmarkIcon /> Permit approval rates</li>
-                  <li><CheckmarkIcon /> Neighbourhood profiles</li>
-                  <li><DashIcon /> Feasibility locked</li>
-                </ul>
+                <div>
+                  <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'var(--font-rajdhani)' }}>Pro</h3>
+                  <div className="text-3xl font-bold text-[#c8a951] mb-6">$29<span className="text-sm text-[#4a5568]">/mo CAD</span></div>
+                  <ul className="space-y-3 text-[13px] text-[#8a8070]">
+                    <li><CheckmarkIcon /> Everything in Free</li>
+                    <li><CheckmarkIcon /> Unlimited searches</li>
+                    <li><CheckmarkIcon /> Permit approval rates</li>
+                    <li><CheckmarkIcon /> Neighbourhood profiles</li>
+                    <li><DashIcon /> Feasibility locked</li>
+                  </ul>
+                </div>
                 <button
                   onClick={handleProCheckout}
                   disabled={proLoading}
-                  className="w-full px-6 py-3 rounded-lg bg-[#c8a951] text-[#0a0c10] font-bold text-center hover:bg-[#d4b86a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                  className="mt-auto w-full px-6 py-3 rounded-lg bg-[#c8a951] text-[#0a0c10] font-bold text-center hover:bg-[#d4b86a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                   {proLoading ? 'Loading...' : 'Get Pro'}
                 </button>
                 {proError && (
@@ -200,7 +204,7 @@ export default function LandingPage() {
               <div className="investor-card-border"
                    onMouseEnter={() => setHoveredCard('investor')}
                    onMouseLeave={() => setHoveredCard(null)}>
-                <div className="p-8"
+                <div className="flex flex-col p-8 h-full"
                      style={{
                        background: 'linear-gradient(135deg, #1a1810 0%, #141820 50%, #1a1810 100%)',
                        boxShadow: hoveredCard === 'investor'
@@ -209,34 +213,36 @@ export default function LandingPage() {
                        transition: 'box-shadow 300ms ease',
                      }}>
                   
-                  <div className="text-[9px] font-bold text-[#c8a951] tracking-widest uppercase mb-2">Most Complete</div>
-                  <h3 className="text-2xl font-bold mb-1" style={{ fontFamily: 'var(--font-rajdhani)' }}>Investor</h3>
-                  
-                  <div className="mb-8">
-                    <div className="text-5xl font-bold mb-1"
-                         style={{
-                           background: 'linear-gradient(135deg, #c8a951 0%, #d4b86a 100%)',
-                           WebkitBackgroundClip: 'text',
-                           WebkitTextFillColor: 'transparent',
-                           backgroundClip: 'text',
-                         }}>
-                      $79
+                  <div>
+                    <div className="text-[9px] font-bold text-[#c8a951] tracking-widest uppercase mb-2">Most Complete</div>
+                    <h3 className="text-2xl font-bold mb-1" style={{ fontFamily: 'var(--font-rajdhani)' }}>Investor</h3>
+                    
+                    <div className="mb-8">
+                      <div className="text-5xl font-bold mb-1"
+                           style={{
+                             background: 'linear-gradient(135deg, #c8a951 0%, #d4b86a 100%)',
+                             WebkitBackgroundClip: 'text',
+                             WebkitTextFillColor: 'transparent',
+                             backgroundClip: 'text',
+                           }}>
+                        $79
+                      </div>
+                      <div className="text-xs text-[#c8a951]">per month CAD</div>
                     </div>
-                    <div className="text-xs text-[#c8a951]">per month CAD</div>
-                  </div>
 
-                  <ul className="space-y-3 text-[13px] text-[#8a8070] mb-8">
-                    <li><CheckmarkIcon /> Everything in Pro</li>
-                    <li><CheckmarkIcon /> Feasibility analysis</li>
-                    <li><CheckmarkIcon /> Construction cost models</li>
-                    <li><CheckmarkIcon /> Rental market intel</li>
-                    <li className="text-[#c8a951] font-bold"><CheckmarkIcon /> All features unlocked</li>
-                  </ul>
+                    <ul className="space-y-3 text-[13px] text-[#8a8070]">
+                      <li><CheckmarkIcon /> Everything in Pro</li>
+                      <li><CheckmarkIcon /> Feasibility analysis</li>
+                      <li><CheckmarkIcon /> Construction cost models</li>
+                      <li><CheckmarkIcon /> Rental market intel</li>
+                      <li className="text-[#c8a951] font-bold"><CheckmarkIcon /> All features unlocked</li>
+                    </ul>
+                  </div>
                   
                   <button
                     onClick={handleInvestorCheckout}
                     disabled={investorLoading}
-                    className="w-full px-6 py-3 rounded-lg bg-[#c8a951] text-[#0a0c10] font-bold text-center hover:bg-[#d4b86a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    className="mt-auto w-full px-6 py-3 rounded-lg bg-[#c8a951] text-[#0a0c10] font-bold text-center hover:bg-[#d4b86a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     {investorLoading ? 'Loading...' : 'Get Investor Access'}
                   </button>
                   {investorError && (

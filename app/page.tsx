@@ -59,10 +59,18 @@ export default function LandingPage() {
 
       {/* Content */}
       <div className="relative z-10">
+        {/* Header with wordmark */}
+        <header className="fixed top-0 left-0 right-0 z-40 bg-[#0a0c10] border-b border-[#1e2530] px-6 py-4">
+          <Link href="/" className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <span className="text-2xl font-bold text-[#c8a951]" style={{ fontFamily: 'var(--font-rajdhani)' }}>⚡</span>
+            <span className="text-lg font-bold text-[#e8e0d0]" style={{ fontFamily: 'var(--font-rajdhani)' }}>InfillIQ</span>
+          </Link>
+        </header>
+
         {/* Hero Section */}
-        <section className="min-h-screen flex flex-col items-center justify-center px-4 py-12 md:py-16">
+        <section className="min-h-screen flex flex-col items-center justify-center px-4 py-12 md:py-16 pt-32">
           {/* Gold badge */}
-          <div className="mb-8 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#c8a951] bg-[rgba(200,169,81,0.1)]">
+          <div className="mb-6 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#c8a951] bg-[rgba(200,169,81,0.1)]">
             <span className="text-lg">⚡</span>
             <span className="text-[11px] font-semibold text-[#c8a951] tracking-wider uppercase">Official City of Edmonton data — updated daily</span>
           </div>
@@ -72,11 +80,11 @@ export default function LandingPage() {
             Edmonton infill intelligence
           </h1>
 
-          <p className="text-lg md:text-2xl text-[#c8a951] text-center mb-12 max-w-2xl leading-relaxed">
+          <p className="text-lg md:text-2xl text-[#c8a951] text-center mb-8 max-w-2xl leading-relaxed">
             Find the lot. Know the rules. Model the deal.
           </p>
 
-          <div className="w-full max-w-2xl mb-6">
+          <div className="w-full max-w-2xl mb-4">
             <SearchBar onSelect={handleSearch} token={process.env.NEXT_PUBLIC_MAPBOX_TOKEN || ''} />
           </div>
 
@@ -97,13 +105,11 @@ export default function LandingPage() {
             </h2>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {/* Feature 1 */}
+              {/* Feature 1 — Zone Intelligence with building icon */}
               <div className="p-6 rounded-lg border border-[#2a2e38]" style={{ background: '#141820' }}>
-                <svg className="w-8 h-8 mb-4 text-[#c8a951]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="3" y="3" width="8" height="8" />
-                  <rect x="13" y="3" width="8" height="8" />
-                  <rect x="3" y="13" width="8" height="8" />
-                  <rect x="13" y="13" width="8" height="8" />
+                <svg className="w-8 h-8 mb-4 text-[#c8a951]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M12 2L2 7v10a8 8 0 0 0 8 8 8 8 0 0 0 8-8V7l-10-5z"/>
+                  <path d="M9 13h6M9 17h6"/>
                 </svg>
                 <h3 className="text-lg font-bold mb-2" style={{ fontFamily: 'var(--font-rajdhani)' }}>Zone Intelligence</h3>
                 <p className="text-[13px] text-[#8a8070]">Real-time zoning rules, unit capacity, and bylaw interpretation for every Edmonton address.</p>
@@ -152,6 +158,7 @@ export default function LandingPage() {
                 <ul className="space-y-3 text-[13px] text-[#8a8070]">
                   <li><CheckmarkIcon /> Zone data & amendments</li>
                   <li><CheckmarkIcon /> Rezoning alerts</li>
+                  <li><CheckmarkIcon /> Development permits nearby</li>
                   <li><DashIcon /> Pro features gated</li>
                 </ul>
               </div>
@@ -185,9 +192,7 @@ export default function LandingPage() {
                        transition: 'box-shadow 300ms ease',
                      }}>
                   
-                  {/* MOST COMPLETE label above tier name */}
                   <div className="text-[9px] font-bold text-[#c8a951] tracking-widest uppercase mb-2">Most Complete</div>
-                  
                   <h3 className="text-2xl font-bold mb-1" style={{ fontFamily: 'var(--font-rajdhani)' }}>Investor</h3>
                   
                   <div className="mb-8">

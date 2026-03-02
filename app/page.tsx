@@ -43,8 +43,13 @@ export default function LandingPage() {
           </h1>
 
           {/* Subheadline */}
-          <p className="text-xl md:text-2xl text-[#c8a951] text-center mb-12 max-w-2xl leading-relaxed">
+          <p className="text-xl md:text-2xl text-[#c8a951] text-center mb-3 max-w-2xl leading-relaxed">
             Find the lot. Know the rules. Model the deal.
+          </p>
+
+          {/* Tagline */}
+          <p className="text-sm md:text-base text-[#8a8070] text-center mb-12 max-w-2xl">
+            Due diligence in seconds. Not days.
           </p>
 
           {/* Search Bar */}

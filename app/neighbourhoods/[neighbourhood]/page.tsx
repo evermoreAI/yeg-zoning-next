@@ -356,12 +356,12 @@ export default async function NeighbourhoodPage(
 
       {/* Nav */}
       <nav className="border-b border-[#1a2535] px-6 py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 no-underline">
+        <Link href="/map" className="flex items-center gap-2 no-underline">
           <span className="text-[#c8a951] text-lg">⚡</span>
           <span className="text-[#e8e0d0] font-bold text-sm tracking-[0.15em] uppercase"
                 style={{ fontFamily: 'var(--font-rajdhani)' }}>YEG ZONING</span>
         </Link>
-        <Link href="/"
+        <Link href="/map"
               className="text-[10px] uppercase tracking-widest text-[#c8a951] border border-[#c8a951] px-3 py-1.5 rounded hover:bg-[#c8a951] hover:text-[#0a0c10] transition-all duration-150 no-underline"
               style={{ fontFamily: 'var(--font-rajdhani)' }}>
           Open Map →
@@ -573,7 +573,7 @@ export default async function NeighbourhoodPage(
             licensed real estate professional. Not legally binding. Last verified February 2026.
           </p>
           <div className="flex items-center gap-4">
-            <Link href="/" className="text-[10px] text-[#4a5568] hover:text-[#c8a951] transition-colors no-underline">← Back to Map</Link>
+            <Link href="/map" className="text-[10px] text-[#4a5568] hover:text-[#c8a951] transition-colors no-underline">← Back to Map</Link>
             <a href="https://zoningbylaw.edmonton.ca/bylaw/rs" target="_blank" rel="noopener noreferrer"
                className="text-[10px] text-[#4a5568] hover:text-[#c8a951] transition-colors no-underline">Official RS Bylaw ↗</a>
             <Link href="/zones/rs" className="text-[10px] text-[#4a5568] hover:text-[#c8a951] transition-colors no-underline">RS Zone Guide ↗</Link>

@@ -230,7 +230,7 @@ export default function LandingPage() {
                       <div className="text-xs text-[#c8a951]">per month CAD</div>
                     </div>
 
-                    <ul className="mt-auto space-y-3 text-[13px] text-[#8a8070]">
+                    <ul className="mt-auto pb-4 space-y-3 text-[13px] text-[#8a8070]">
                       <li><CheckmarkIcon /> Everything in Pro</li>
                       <li><CheckmarkIcon /> Feasibility analysis</li>
                       <li><CheckmarkIcon /> Construction cost models</li>
@@ -242,7 +242,7 @@ export default function LandingPage() {
                   <button
                     onClick={handleInvestorCheckout}
                     disabled={investorLoading}
-                    className="mt-auto w-full px-6 py-3 rounded-lg bg-[#c8a951] text-[#0a0c10] font-bold text-center hover:bg-[#d4b86a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    className="pt-2 mt-auto w-full px-6 py-3 rounded-lg bg-[#c8a951] text-[#0a0c10] font-bold text-center hover:bg-[#d4b86a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     {investorLoading ? 'Loading...' : 'Get Investor Access'}
                   </button>
                   {investorError && (

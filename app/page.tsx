@@ -4,13 +4,13 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import SearchBar from '@/components/SearchBar'
-import { useCheckout } from '@/lib/useCheckout'
+import EmailModal from '@/components/EmailModal'
 
 export default function LandingPage() {
   const router = useRouter()
   const [hoveredCard, setHoveredCard] = useState<string | null>(null)
-  const { startCheckout: startProCheckout, loading: proLoading, error: proError } = useCheckout()
-  const { startCheckout: startInvestorCheckout, loading: investorLoading, error: investorError } = useCheckout()
+  const [emailModalOpen, setEmailModalOpen] = useState(false)
+  const [emailModalTier, setEmailModalTier] = useState<'pro' | 'investor'>('pro')
 
   const handleSearch = (result: any) => {
     if (result.address) {
@@ -18,8 +18,36 @@ export default function LandingPage() {
     }
   }
 
-  const handleProCheckout = () => startProCheckout('pro')
-  const handleInvestorCheckout = () => startInvestorCheckout('investor')
+  const handleProClick = () => {
+    setEmailModalTier('pro')
+    setEmailModalOpen(true)
+  }
+
+  const handleInvestorClick = () => {
+    setEmailModalTier('investor')
+    setEmailModalOpen(true)
+  }
+
+  const handleEmailModalSubmit = async (email: string) => {
+    try {
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tier: emailModalTier, email }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok || !data.url) {
+        throw new Error(data.error || 'Failed to create checkout session')
+      }
+
+      // Redirect to Stripe checkout
+      window.location.href = data.url
+    } catch (error) {
+      throw error
+    }
+  }
 
   const CheckmarkIcon = () => (
     <svg className="w-4 h-4 text-[#c8a951] inline mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
@@ -190,14 +218,10 @@ export default function LandingPage() {
                   </ul>
                 </div>
                 <button
-                  onClick={handleProCheckout}
-                  disabled={proLoading}
-                  className="mt-auto w-full px-6 py-3 rounded-lg bg-[#c8a951] text-[#0a0c10] font-bold text-center hover:bg-[#d4b86a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                  {proLoading ? 'Loading...' : 'Get Pro'}
+                  onClick={handleProClick}
+                  className="mt-auto w-full px-6 py-3 rounded-lg bg-[#c8a951] text-[#0a0c10] font-bold text-center hover:bg-[#d4b86a] transition-colors">
+                  Get Pro
                 </button>
-                {proError && (
-                  <div className="mt-2 text-[11px] text-[#8b1a1a]">{proError}</div>
-                )}
               </div>
 
               {/* Investor tier (PREMIUM) */}
@@ -240,14 +264,10 @@ export default function LandingPage() {
                   </div>
                   
                   <button
-                    onClick={handleInvestorCheckout}
-                    disabled={investorLoading}
-                    className="pt-2 mt-auto w-full px-6 py-3 rounded-lg bg-[#c8a951] text-[#0a0c10] font-bold text-center hover:bg-[#d4b86a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                    {investorLoading ? 'Loading...' : 'Get Investor Access'}
+                    onClick={handleInvestorClick}
+                    className="pt-2 mt-auto w-full px-6 py-3 rounded-lg bg-[#c8a951] text-[#0a0c10] font-bold text-center hover:bg-[#d4b86a] transition-colors">
+                    Get Investor Access
                   </button>
-                  {investorError && (
-                    <div className="mt-2 text-[11px] text-[#8b1a1a]">{investorError}</div>
-                  )}
                 </div>
               </div>
             </div>
@@ -275,6 +295,14 @@ export default function LandingPage() {
           </div>
         </footer>
       </div>
+
+      {/* Email Modal */}
+      <EmailModal
+        tier={emailModalTier}
+        isOpen={emailModalOpen}
+        onClose={() => setEmailModalOpen(false)}
+        onSubmit={handleEmailModalSubmit}
+      />
     </div>
   )
 }

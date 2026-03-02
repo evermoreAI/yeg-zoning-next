@@ -3,11 +3,18 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
   try {
-    const { tier } = await req.json()
+    const { tier, email } = await req.json()
 
     if (!tier || !['pro', 'investor'].includes(tier)) {
       return NextResponse.json(
         { error: 'Invalid tier' },
+        { status: 400 }
+      )
+    }
+
+    if (!email || !email.includes('@')) {
+      return NextResponse.json(
+        { error: 'Valid email required' },
         { status: 400 }
       )
     }
@@ -30,6 +37,7 @@ export async function POST(req: NextRequest) {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'subscription',
+      customer_email: email,
       line_items: [
         {
           price: priceId,
@@ -39,6 +47,10 @@ export async function POST(req: NextRequest) {
       success_url: `${appUrl}/stripe/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appUrl}/stripe/cancel`,
       billing_address_collection: 'required',
+      metadata: {
+        tier,
+        email,
+      },
     })
 
     return NextResponse.json(
@@ -46,14 +58,12 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     )
   } catch (error: any) {
-    console.error('STRIPE FULL ERROR:', JSON.stringify(error, null, 2))
+    console.error('[checkout] Error:', error.message)
     return NextResponse.json(
       {
-        error: error.message,
+        error: error.message || 'Checkout failed',
         type: error?.type,
         code: error?.code,
-        param: error?.param,
-        decline_code: error?.decline_code,
       },
       { status: 500 }
     )

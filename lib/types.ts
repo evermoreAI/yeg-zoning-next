@@ -60,7 +60,6 @@ export interface ZoneDisplay {
   rezoning_alert?: import('@/lib/rezonings').RezoningApplication | null
   permit_stats?: import('@/lib/permitStats').PermitStats | null
   rental_data?: import('@/lib/rentalData').NeighbourhoodRents | null
-  neighbourhood_profile?: import('@/lib/neighbourhoodProfiles').NeighbourhoodProfile | null
   dc_rules?: import('@/lib/dcZoneExtractor').DCZoneRules | null
 }
 

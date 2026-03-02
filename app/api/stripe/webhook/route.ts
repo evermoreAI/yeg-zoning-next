@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { stripe } from '@/lib/stripe'
+import { getStripe } from '@/lib/stripe'
 import { createOrUpdateUser } from '@/lib/db'
 import { generateMagicLinkToken } from '@/lib/auth'
 import { sendMagicLinkEmail } from '@/lib/emails'
@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
   let event
 
   try {
+    const stripe = getStripe()
     event = stripe.webhooks.constructEvent(
       body,
       signature,
@@ -43,6 +44,7 @@ export async function POST(req: NextRequest) {
       expiry.setDate(expiry.getDate() + 30)
 
       if (subscriptionId) {
+        const stripe = getStripe()
         const subscription = await stripe.subscriptions.retrieve(subscriptionId)
         expiry = new Date((subscription as any).current_period_end * 1000)
       }

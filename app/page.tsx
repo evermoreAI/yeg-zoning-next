@@ -104,9 +104,9 @@ export default function LandingPage() {
               {/* Feature 2 — Amendment Tracking */}
               <div className="p-6 rounded-lg border border-[#2a2e38]"
                    style={{ background: '#141820' }}>
-                <svg className="w-8 h-8 mb-4 text-[#c8a951]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                <svg className="w-8 h-8 mb-4" viewBox="0 0 24 24" fill="none" stroke="#c8a951" strokeWidth="1.5">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
                 </svg>
                 <h3 className="text-lg font-bold mb-2"
                     style={{ fontFamily: 'var(--font-rajdhani)' }}>
@@ -189,7 +189,7 @@ export default function LandingPage() {
 
               {/* Investor tier (PREMIUM) */}
               <div 
-                className="p-8 rounded-lg relative transition-all duration-300 overflow-hidden"
+                className="p-8 rounded-lg transition-all duration-300 overflow-hidden"
                 style={{
                   background: '#1a1f2e',
                   border: hoveredCard === 'investor' ? '2px solid #c8a951' : '2px solid #c8a951',
@@ -200,12 +200,7 @@ export default function LandingPage() {
                 onMouseEnter={() => setHoveredCard('investor')}
                 onMouseLeave={() => setHoveredCard(null)}>
                 
-                {/* Investor badge */}
-                <div className="absolute top-4 right-4">
-                  <span className="inline-block px-2 py-1 rounded text-[9px] font-bold text-[#c8a951] border border-[#c8a951] bg-[rgba(200,169,81,0.1)]">
-                    INVESTOR
-                  </span>
-                </div>
+
 
                 <h3 className="text-2xl font-bold mb-2"
                     style={{ fontFamily: 'var(--font-rajdhani)' }}>

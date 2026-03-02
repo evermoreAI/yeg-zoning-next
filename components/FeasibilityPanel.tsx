@@ -9,7 +9,7 @@ interface FeasibilityPanelProps {
   rents?: NeighbourhoodRents | null
 }
 
-// ── Sub-components ─────────────────────────────────────────────────────────
+// ── Sub-components ─────────────────────────────────────────────────────
 
 function Section({ heading, children }: { heading: string; children: React.ReactNode }) {
   return (
@@ -23,23 +23,30 @@ function Section({ heading, children }: { heading: string; children: React.React
 }
 
 function FinancialRow({
-  label, low, high, sub,
-}: { label: string; low: string; high: string; sub?: string }) {
+  label, low, high, sub, cta,
+}: { label: string; low: string; high: string; sub?: string; cta?: string }) {
   return (
-    <div className="flex items-start justify-between py-2 border-b border-[#1e2530] last:border-b-0">
-      <div>
-        <div className="text-[11px] text-[#8a8070]">{label}</div>
-        {sub && <div className="text-[9px] text-[#4a5568] mt-0.5 italic">{sub}</div>}
+    <div>
+      <div className="flex items-start justify-between py-2 border-b border-[#1e2530]">
+        <div>
+          <div className="text-[11px] text-[#8a8070]">{label}</div>
+          {sub && <div className="text-[9px] text-[#4a5568] mt-0.5 italic">{sub}</div>}
+        </div>
+        <div className="text-right flex-shrink-0 ml-3">
+          <span className="text-sm font-semibold text-[#c8a951]" style={{ fontFamily: 'var(--font-mono)' }}>
+            {low}
+          </span>
+          <span className="text-[#4a5568] text-xs mx-1">–</span>
+          <span className="text-sm font-semibold text-[#c8a951]" style={{ fontFamily: 'var(--font-mono)' }}>
+            {high}
+          </span>
+        </div>
       </div>
-      <div className="text-right flex-shrink-0 ml-3">
-        <span className="text-sm font-semibold text-[#c8a951]" style={{ fontFamily: 'var(--font-mono)' }}>
-          {low}
-        </span>
-        <span className="text-[#4a5568] text-xs mx-1">–</span>
-        <span className="text-sm font-semibold text-[#c8a951]" style={{ fontFamily: 'var(--font-mono)' }}>
-          {high}
-        </span>
-      </div>
+      {cta && (
+        <div className="text-[7px] text-[#3a4050] italic mt-1 pb-2">
+          {cta}
+        </div>
+      )}
     </div>
   )
 }
@@ -140,6 +147,7 @@ export default function FeasibilityPanel({ result, rents }: FeasibilityPanelProp
           low={formatCAD(result.cost_low)}
           high={formatCAD(result.cost_high)}
           sub={result.cost_label}
+          cta={result.cost_label_cta}
         />
       </Section>
 

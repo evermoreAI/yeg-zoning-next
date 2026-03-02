@@ -90,6 +90,7 @@ export interface FeasibilityResult {
   cost_low:  number
   cost_high: number
   cost_label: string
+  cost_label_cta: string
 
   /** Monthly gross revenue range (CAD) */
   monthly_low:  number

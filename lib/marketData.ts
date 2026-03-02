@@ -13,7 +13,8 @@ export const MARKET_DATA = {
   /** Wood frame multi-family construction, all-in per unit (CAD) — Feb 2026 */
   construction_cost_low_per_unit:  180_000,
   construction_cost_high_per_unit: 250_000,
-  construction_label: 'Wood frame multi-family estimate — Feb 2026',
+  construction_label: 'Edmonton wood frame estimate — updated Feb 2026',
+  construction_cta: 'Contributing a real build? Email connor@yegzoning.ca for 6 months Investor free',
 
   /** Monthly rental rates, Edmonton — Feb 2026 (CAD) */
   rent_1br_low:  1_200,

@@ -103,6 +103,7 @@ export function calculateFeasibility(
     cost_low:      costLow,
     cost_high:     costHigh,
     cost_label:    md.construction_label,
+    cost_label_cta: md.construction_cta,
     monthly_low:   monthlyLow,
     monthly_high:  monthlyHigh,
     annual_low:    annualLow,

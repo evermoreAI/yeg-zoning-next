@@ -15,14 +15,12 @@ export default function LandingPage() {
     }
   }
 
-  // SVG checkmark component
   const CheckmarkIcon = () => (
     <svg className="w-4 h-4 text-[#c8a951] inline mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
       <polyline points="20 6 9 17 4 12" />
     </svg>
   )
 
-  // SVG dash component (for excluded)
   const DashIcon = () => (
     <span className="text-[#4a5568] mr-2">−</span>
   )
@@ -32,7 +30,7 @@ export default function LandingPage() {
       {/* Scanline overlay */}
       <div className="fixed inset-0 pointer-events-none opacity-[0.03] bg-[repeating-linear-gradient(0deg,transparent,transparent_1px,rgba(255,255,255,0.05)_1px,rgba(255,255,255,0.05)_2px)] z-50" />
 
-      {/* Grid background — parcel lot lines */}
+      {/* Grid background */}
       <div className="fixed inset-0 pointer-events-none opacity-[0.035]"
            style={{
              backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(200,169,81,0.05) 25%, rgba(200,169,81,0.05) 26%, transparent 27%, transparent 74%, rgba(200,169,81,0.05) 75%, rgba(200,169,81,0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(200,169,81,0.05) 25%, rgba(200,169,81,0.05) 26%, transparent 27%, transparent 74%, rgba(200,169,81,0.05) 75%, rgba(200,169,81,0.05) 76%, transparent 77%, transparent)',
@@ -111,11 +109,14 @@ export default function LandingPage() {
                 <p className="text-[13px] text-[#8a8070]">Real-time zoning rules, unit capacity, and bylaw interpretation for every Edmonton address.</p>
               </div>
 
-              {/* Feature 2 */}
+              {/* Feature 2 — Amendment Tracking with radar icon */}
               <div className="p-6 rounded-lg border border-[#2a2e38]" style={{ background: '#141820' }}>
                 <svg className="w-8 h-8 mb-4" viewBox="0 0 24 24" fill="none" stroke="#c8a951" strokeWidth="1.5">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                  <circle cx="12" cy="12" r="2"/>
+                  <path d="M16.24 7.76a6 6 0 0 1 0 8.49"/>
+                  <path d="M7.76 7.76a6 6 0 0 0 0 8.49"/>
+                  <path d="M20.07 4.93a10 10 0 0 1 0 14.14"/>
+                  <path d="M3.93 4.93a10 10 0 0 0 0 14.14"/>
                 </svg>
                 <h3 className="text-lg font-bold mb-2" style={{ fontFamily: 'var(--font-rajdhani)' }}>Amendment Tracking</h3>
                 <p className="text-[13px] text-[#8a8070]">Know about zoning changes before they affect your strategy. Track rezonings in progress.</p>
@@ -184,13 +185,9 @@ export default function LandingPage() {
                        transition: 'box-shadow 300ms ease',
                      }}>
                   
-                  {/* MOST COMPLETE rule and label */}
-                  <div className="flex items-center gap-3 mb-6 -mx-8 px-8 pb-6 border-b border-[#c8a951]">
-                    <div className="flex-1 h-px bg-gradient-to-r from-transparent to-[#c8a951]" />
-                    <span className="text-[9px] font-bold text-[#c8a951] tracking-widest uppercase whitespace-nowrap">Most Complete</span>
-                    <div className="flex-1 h-px bg-gradient-to-l from-transparent to-[#c8a951]" />
-                  </div>
-
+                  {/* MOST COMPLETE label above tier name */}
+                  <div className="text-[9px] font-bold text-[#c8a951] tracking-widest uppercase mb-2">Most Complete</div>
+                  
                   <h3 className="text-2xl font-bold mb-1" style={{ fontFamily: 'var(--font-rajdhani)' }}>Investor</h3>
                   
                   <div className="mb-8">

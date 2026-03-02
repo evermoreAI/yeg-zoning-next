@@ -24,9 +24,9 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    console.log(`[stripe/checkout] Creating session for ${tier} tier with price: ${priceId}`)
-    console.log(`[stripe/checkout] Success URL: ${process.env.NEXT_PUBLIC_APP_URL}/stripe/success`)
-    console.log(`[stripe/checkout] Cancel URL: ${process.env.NEXT_PUBLIC_APP_URL}/stripe/cancel`)
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL
+
+    console.log(`[checkout] Creating session: tier=${tier}, priceId=${priceId}`)
 
     const stripe = getStripe()
 
@@ -39,23 +39,25 @@ export async function POST(req: NextRequest) {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/stripe/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/stripe/cancel`,
+      success_url: `${appUrl}/stripe/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${appUrl}/stripe/cancel`,
       billing_address_collection: 'required',
       customer_creation: 'always',
     })
 
-    console.log(`[stripe/checkout] Session created: ${session.id}`)
+    console.log(`[checkout] Session created successfully: ${session.id}`)
 
     return NextResponse.json(
       { url: session.url },
       { status: 200 }
     )
   } catch (error) {
-    console.error('[stripe/checkout] Error:', error instanceof Error ? error.message : error)
-    console.error('[stripe/checkout] Full error:', error)
+    const errorMsg = error instanceof Error ? error.message : String(error)
+    console.error(`[checkout] Stripe error: ${errorMsg}`)
+    
+    // Return actual error for debugging (should be safe since it's test mode)
     return NextResponse.json(
-      { error: 'Checkout failed. Please try again.' },
+      { error: `Stripe error: ${errorMsg}` },
       { status: 500 }
     )
   }

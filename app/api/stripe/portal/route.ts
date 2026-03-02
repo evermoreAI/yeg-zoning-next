@@ -1,4 +1,4 @@
-import { stripe } from '@/lib/stripe'
+import { getStripe } from '@/lib/stripe'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
@@ -11,6 +11,8 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       )
     }
+
+    const stripe = getStripe()
 
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: customerId,

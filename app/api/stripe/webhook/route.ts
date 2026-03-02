@@ -52,10 +52,10 @@ export async function POST(req: NextRequest) {
       await createOrUpdateUser(email, tier, customerId, expiry)
       console.log('DB: User saved')
 
-      const token = generateMagicLinkToken(email, tier)
+      const token = generateMagicLinkToken(email)
       const magicLink = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/magic-link?token=${token}&email=${encodeURIComponent(email)}`
 
-      await sendMagicLinkEmail(email, magicLink, tier)
+      await sendMagicLinkEmail(email, magicLink)
       console.log('EMAIL: Magic link sent to', email)
     } catch (err: any) {
       console.error('WEBHOOK PROCESSING ERROR:', err.message)

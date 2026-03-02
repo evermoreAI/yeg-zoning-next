@@ -80,15 +80,15 @@ export default function LandingPage() {
             Edmonton infill intelligence
           </h1>
 
-          <p className="text-lg md:text-2xl text-[#c8a951] text-center mb-8 max-w-2xl leading-relaxed">
+          <p className="text-lg md:text-2xl text-[#c8a951] text-center mb-6 max-w-2xl leading-relaxed">
             Find the lot. Know the rules. Model the deal.
           </p>
 
-          <div className="w-full max-w-2xl mb-4">
+          <div className="w-full max-w-2xl mb-2">
             <SearchBar onSelect={handleSearch} token={process.env.NEXT_PUBLIC_MAPBOX_TOKEN || ''} />
           </div>
 
-          <p className="text-[12px] text-[#4a5568] text-center">
+          <p className="text-[12px] text-[#4a5568] text-center mb-8">
             Search any Edmonton address — free, no account required
           </p>
         </section>
@@ -105,11 +105,13 @@ export default function LandingPage() {
             </h2>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {/* Feature 1 — Zone Intelligence with building icon */}
+              {/* Feature 1 — Zone Intelligence with building grid */}
               <div className="p-6 rounded-lg border border-[#2a2e38]" style={{ background: '#141820' }}>
-                <svg className="w-8 h-8 mb-4 text-[#c8a951]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M12 2L2 7v10a8 8 0 0 0 8 8 8 8 0 0 0 8-8V7l-10-5z"/>
-                  <path d="M9 13h6M9 17h6"/>
+                <svg className="w-8 h-8 mb-4" viewBox="0 0 24 24" fill="none" stroke="#c8a951" strokeWidth="1.5">
+                  <rect x="3" y="3" width="7" height="7"/>
+                  <rect x="14" y="3" width="7" height="7"/>
+                  <rect x="14" y="14" width="7" height="7"/>
+                  <rect x="3" y="14" width="7" height="7"/>
                 </svg>
                 <h3 className="text-lg font-bold mb-2" style={{ fontFamily: 'var(--font-rajdhani)' }}>Zone Intelligence</h3>
                 <p className="text-[13px] text-[#8a8070]">Real-time zoning rules, unit capacity, and bylaw interpretation for every Edmonton address.</p>

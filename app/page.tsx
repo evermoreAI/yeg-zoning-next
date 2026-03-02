@@ -156,7 +156,7 @@ export default function LandingPage() {
 
             <div className="grid md:grid-cols-3 gap-8">
               {/* Free tier */}
-              <div className="flex flex-col p-8 rounded-lg border border-[#2a2e38] transition-all duration-300" style={{ background: '#141820' }}>
+              <div className="flex flex-col justify-between p-8 rounded-lg border border-[#2a2e38] transition-all duration-300" style={{ background: '#141820' }}>
                 <div>
                   <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'var(--font-rajdhani)' }}>Free</h3>
                   <div className="text-3xl font-bold text-[#c8a951] mb-6">$0<span className="text-sm text-[#4a5568]">/mo</span></div>
@@ -174,7 +174,7 @@ export default function LandingPage() {
               </div>
 
               {/* Pro tier */}
-              <div className="flex flex-col p-8 rounded-lg border-2 border-[#c8a951] relative transition-all duration-300" style={{ background: '#141820' }}>
+              <div className="flex flex-col justify-between p-8 rounded-lg border-2 border-[#c8a951] relative transition-all duration-300" style={{ background: '#141820' }}>
                 <div className="absolute -top-3 left-6 bg-[#0a0c10] px-2">
                   <span className="text-[10px] font-bold text-[#c8a951] tracking-wider uppercase">Most Popular</span>
                 </div>
@@ -204,7 +204,7 @@ export default function LandingPage() {
               <div className="investor-card-border"
                    onMouseEnter={() => setHoveredCard('investor')}
                    onMouseLeave={() => setHoveredCard(null)}>
-                <div className="flex flex-col p-8 h-full"
+                <div className="flex flex-col justify-between p-8"
                      style={{
                        background: 'linear-gradient(135deg, #1a1810 0%, #141820 50%, #1a1810 100%)',
                        boxShadow: hoveredCard === 'investor'
@@ -217,7 +217,7 @@ export default function LandingPage() {
                     <div className="text-[9px] font-bold text-[#c8a951] tracking-widest uppercase mb-2">Most Complete</div>
                     <h3 className="text-2xl font-bold mb-1" style={{ fontFamily: 'var(--font-rajdhani)' }}>Investor</h3>
                     
-                    <div className="mb-8">
+                    <div className="mb-6">
                       <div className="text-5xl font-bold mb-1"
                            style={{
                              background: 'linear-gradient(135deg, #c8a951 0%, #d4b86a 100%)',
@@ -230,7 +230,7 @@ export default function LandingPage() {
                       <div className="text-xs text-[#c8a951]">per month CAD</div>
                     </div>
 
-                    <ul className="space-y-3 text-[13px] text-[#8a8070]">
+                    <ul className="mt-auto space-y-3 text-[13px] text-[#8a8070]">
                       <li><CheckmarkIcon /> Everything in Pro</li>
                       <li><CheckmarkIcon /> Feasibility analysis</li>
                       <li><CheckmarkIcon /> Construction cost models</li>

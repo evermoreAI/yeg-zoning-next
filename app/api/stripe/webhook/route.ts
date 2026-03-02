@@ -1,132 +1,71 @@
-import { getStripe } from '@/lib/stripe'
-import { createOrUpdateUser, downgradeUserToFree, getUserByStripeCustomerId } from '@/lib/db'
-import { generateMagicLinkToken } from '@/lib/auth'
-import { sendMagicLinkEmail, sendSubscriptionCancelledEmail } from '@/lib/emails'
-import { headers } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
-import Stripe from 'stripe'
+import { stripe } from '@/lib/stripe'
+import { createOrUpdateUser } from '@/lib/db'
+import { generateMagicLinkToken } from '@/lib/auth'
+import { sendMagicLinkEmail } from '@/lib/emails'
 
 export async function POST(req: NextRequest) {
   const body = await req.text()
-  const signature = (await headers()).get('stripe-signature')
+  const signature = req.headers.get('stripe-signature')
 
-  if (!signature || !process.env.STRIPE_WEBHOOK_SECRET) {
-    return NextResponse.json(
-      { error: 'Missing signature or webhook secret' },
-      { status: 400 }
-    )
+  console.log('WEBHOOK HIT - signature present:', !!signature)
+  console.log('WEBHOOK SECRET present:', !!process.env.STRIPE_WEBHOOK_SECRET)
+
+  if (!signature) {
+    return NextResponse.json({ error: 'No signature' }, { status: 400 })
   }
 
-  let event: Stripe.Event
+  let event
 
   try {
-    const stripe = getStripe()
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET
+      process.env.STRIPE_WEBHOOK_SECRET!
     )
-  } catch (error) {
-    console.error('[webhook] Signature verification failed:', error)
-    return NextResponse.json(
-      { error: 'Webhook signature verification failed' },
-      { status: 400 }
-    )
+    console.log('WEBHOOK EVENT:', event.type)
+  } catch (err: any) {
+    console.error('SIGNATURE FAILED:', err.message)
+    return NextResponse.json({ error: 'Webhook signature verification failed' }, { status: 400 })
   }
 
-  try {
-    switch (event.type) {
-      case 'checkout.session.completed': {
-        console.log('WEBHOOK: Event received:', event.type)
-        
-        const session = event.data.object as Stripe.Checkout.Session
-        const email = session.customer_email
-        const tier = (session.metadata?.tier || 'pro') as string
-        const customerId = session.customer as string
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object as any
+    const email = session.metadata?.email || session.customer_details?.email
+    const tier = session.metadata?.tier || 'pro'
+    const customerId = session.customer
+    const subscriptionId = session.subscription
 
-        console.log('WEBHOOK: Session email:', email)
-        console.log('WEBHOOK: Metadata:', session.metadata)
-        console.log('WEBHOOK: Customer ID:', customerId)
+    console.log('CHECKOUT COMPLETE - email:', email, 'tier:', tier)
 
-        if (!email || !customerId) {
-          console.error('[webhook] Missing email or customer ID')
-          break
-        }
+    try {
+      let expiry = new Date()
+      expiry.setDate(expiry.getDate() + 30)
 
-        // Get subscription details for expiry
-        const stripe = getStripe()
-        const subscriptions = await stripe.subscriptions.list({
-          customer: customerId,
-          limit: 1,
-        })
-
-        let subscriptionExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // Default to 30 days
-        if (subscriptions.data[0]) {
-          const sub = subscriptions.data[0] as any
-          if (sub.current_period_end) {
-            subscriptionExpiry = new Date(sub.current_period_end * 1000)
-          }
-        }
-
-        // Save user to database
-        try {
-          await createOrUpdateUser(email, tier, customerId, subscriptionExpiry)
-          console.log('DB: User saved successfully:', email, tier)
-        } catch (dbError: any) {
-          console.error('DB ERROR:', dbError.message)
-          console.error('DB ERROR STACK:', dbError.stack)
-          throw dbError
-        }
-
-        // Send magic link email
-        try {
-          const magicToken = generateMagicLinkToken(email)
-          console.log('MAGIC LINK: Generated successfully for:', email)
-          
-          const magicLink = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/magic-link?token=${magicToken}&email=${encodeURIComponent(email)}`
-          console.log('MAGIC LINK: Full URL:', magicLink)
-          
-          await sendMagicLinkEmail(email, magicLink)
-          console.log('RESEND: Email sent successfully to:', email)
-        } catch (emailError: any) {
-          console.error('EMAIL ERROR:', emailError.message)
-          console.error('EMAIL ERROR STACK:', emailError.stack)
-          throw emailError
-        }
-
-        break
+      if (subscriptionId) {
+        const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+        expiry = new Date((subscription as any).current_period_end * 1000)
       }
 
-      case 'customer.subscription.deleted': {
-        const subscription = event.data.object as Stripe.Subscription
-        const customerId = subscription.customer as string
+      await createOrUpdateUser(email, tier, customerId, expiry)
+      console.log('DB: User saved')
 
-        if (!customerId) {
-          console.error('[webhook] Missing customer ID in subscription deletion')
-          break
-        }
+      const token = generateMagicLinkToken(email, tier)
+      const magicLink = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/magic-link?token=${token}&email=${encodeURIComponent(email)}`
 
-        // Find user with this customer ID and downgrade to free
-        const user = await getUserByStripeCustomerId(customerId)
-        if (user) {
-          await downgradeUserToFree(user.email)
-          await sendSubscriptionCancelledEmail(user.email)
-          console.log('[webhook] User downgraded to free and email sent:', user.email)
-        }
-
-        break
-      }
-
-      default:
-        console.log('[webhook] Unhandled event type:', event.type)
+      await sendMagicLinkEmail(email, magicLink, tier)
+      console.log('EMAIL: Magic link sent to', email)
+    } catch (err: any) {
+      console.error('WEBHOOK PROCESSING ERROR:', err.message)
     }
-
-    return NextResponse.json({ received: true })
-  } catch (error) {
-    console.error('[webhook] Error processing event:', error)
-    return NextResponse.json(
-      { error: 'Webhook processing failed' },
-      { status: 500 }
-    )
   }
+
+  if (event.type === 'customer.subscription.deleted') {
+    const subscription = event.data.object as any
+    const customerId = subscription.customer
+
+    console.log('SUBSCRIPTION CANCELLED - customer:', customerId)
+  }
+
+  return NextResponse.json({ received: true })
 }

@@ -96,13 +96,9 @@ export default function LandingPage() {
         {/* Features Section */}
         <section className="py-16 px-4">
           <div className="max-w-6xl mx-auto">
-            <p className="text-sm text-[#8a8070] text-center mb-8">
+            <p className="text-sm text-[#8a8070] text-center mb-12">
               Due diligence in seconds. Not days.
             </p>
-            <h2 className="text-4xl font-bold text-center mb-12"
-                style={{ fontFamily: 'var(--font-rajdhani)' }}>
-              Edmonton Infill Intelligence
-            </h2>
 
             <div className="grid md:grid-cols-3 gap-8">
               {/* Feature 1 — Zone Intelligence with building grid */}

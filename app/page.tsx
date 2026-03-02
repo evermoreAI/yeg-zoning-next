@@ -43,13 +43,8 @@ export default function LandingPage() {
           </h1>
 
           {/* Subheadline */}
-          <p className="text-xl md:text-2xl text-[#c8a951] text-center mb-3 max-w-2xl leading-relaxed">
+          <p className="text-xl md:text-2xl text-[#c8a951] text-center mb-12 max-w-2xl leading-relaxed">
             Find the lot. Know the rules. Model the deal.
-          </p>
-
-          {/* Tagline */}
-          <p className="text-sm md:text-base text-[#8a8070] text-center mb-12 max-w-2xl">
-            Due diligence in seconds. Not days.
           </p>
 
           {/* Search Bar */}
@@ -66,6 +61,9 @@ export default function LandingPage() {
         {/* Features Section */}
         <section className="py-20 px-4">
           <div className="max-w-6xl mx-auto">
+            <p className="text-sm text-[#8a8070] text-center mb-4">
+              Due diligence in seconds. Not days.
+            </p>
             <h2 className="text-4xl font-bold text-center mb-16"
                 style={{ fontFamily: 'var(--font-rajdhani)' }}>
               Built for Edmonton Investors

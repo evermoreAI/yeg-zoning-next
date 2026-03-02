@@ -17,7 +17,6 @@ export async function POST(req: NextRequest) {
       : process.env.STRIPE_INVESTOR_PRICE_ID
 
     if (!priceId) {
-      console.error(`Missing price ID for tier: ${tier}`)
       return NextResponse.json(
         { error: 'Subscription unavailable' },
         { status: 500 }
@@ -46,11 +45,16 @@ export async function POST(req: NextRequest) {
       { url: session.url },
       { status: 200 }
     )
-  } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : String(error)
-    console.error(`[checkout] Stripe error: ${errorMsg}`)
+  } catch (error: any) {
+    console.error('STRIPE FULL ERROR:', JSON.stringify(error, null, 2))
     return NextResponse.json(
-      { error: `Stripe error: ${errorMsg}` },
+      {
+        error: error.message,
+        type: error?.type,
+        code: error?.code,
+        param: error?.param,
+        decline_code: error?.decline_code,
+      },
       { status: 500 }
     )
   }

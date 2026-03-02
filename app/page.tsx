@@ -33,7 +33,7 @@ export default function LandingPage() {
           {/* Gold badge */}
           <div className="mb-6 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#c8a951] bg-[rgba(200,169,81,0.1)]">
             <span className="text-lg">⚡</span>
-            <span className="text-[11px] font-semibold text-[#c8a951] tracking-wider uppercase">Live from City of Edmonton GIS</span>
+            <span className="text-[11px] font-semibold text-[#c8a951] tracking-wider uppercase">Official City of Edmonton data — updated daily</span>
           </div>
 
           {/* Headline */}

@@ -14,6 +14,7 @@ import PermitsPanel           from './PermitsPanel'
 import ApprovalIntelligence   from './ApprovalIntelligence'
 import DCRulesPanel            from './DCRulesPanel'
 import { tierAtLeast, type Tier } from '@/lib/tierContext'
+import NeighbourhoodProfileCard from './NeighbourhoodProfileCard'
 
 // ── Sub-components ─────────────────────────────────────────────────────────
 
@@ -513,6 +514,18 @@ export default function ZonePanel({ zone, loading, address, tier, onBookmarkChan
                 </div>
               )}
             </GateBlur>
+
+            {/* Neighbourhood Profile */}
+            {zone.neighbourhood_profile && (
+              <GateBlur locked={!tierAtLeast(tier, 'pro')} tier="pro">
+                <div className="mt-4">
+                  <div className="text-[9px] text-[#8a8070] tracking-[2px] uppercase mb-2.5 pt-3 border-t border-[#1e2530]">
+                    NEIGHBOURHOOD PROFILE
+                  </div>
+                  <NeighbourhoodProfileCard profile={zone.neighbourhood_profile} />
+                </div>
+              </GateBlur>
+            )}
           </>
         )}
 

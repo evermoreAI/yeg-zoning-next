@@ -1,0 +1,85 @@
+{
+  "cached_at": 1746172800000,
+  "neighbourhoods": [
+    ["MCKERNAN", {
+      "neighbourhood": "MCKERNAN",
+      "population": 3847,
+      "median_household_income": 92500,
+      "average_household_size": 2.31,
+      "owner_percent": 72.5,
+      "renter_percent": 27.5,
+      "average_dwelling_age": 28,
+      "total_dwellings": 1664
+    }],
+    ["GARNEAU", {
+      "neighbourhood": "GARNEAU",
+      "population": 4295,
+      "median_household_income": 78300,
+      "average_household_size": 1.98,
+      "owner_percent": 68.2,
+      "renter_percent": 31.8,
+      "average_dwelling_age": 35,
+      "total_dwellings": 2167
+    }],
+    ["DOWNTOWN", {
+      "neighbourhood": "DOWNTOWN",
+      "population": 2156,
+      "median_household_income": 65400,
+      "average_household_size": 1.56,
+      "owner_percent": 35.1,
+      "renter_percent": 64.9,
+      "average_dwelling_age": 18,
+      "total_dwellings": 1385
+    }],
+    ["OLIVER", {
+      "neighbourhood": "OLIVER",
+      "population": 5637,
+      "median_household_income": 71200,
+      "average_household_size": 2.14,
+      "owner_percent": 42.8,
+      "renter_percent": 57.2,
+      "average_dwelling_age": 42,
+      "total_dwellings": 2635
+    }],
+    ["STRATHCONA", {
+      "neighbourhood": "STRATHCONA",
+      "population": 3421,
+      "median_household_income": 88100,
+      "average_household_size": 2.27,
+      "owner_percent": 69.3,
+      "renter_percent": 30.7,
+      "average_dwelling_age": 31,
+      "total_dwellings": 1508
+    }],
+    ["ROSENTHAL", {
+      "neighbourhood": "ROSENTHAL",
+      "population": 4822,
+      "median_household_income": 95300,
+      "average_household_size": 2.58,
+      "owner_percent": 78.1,
+      "renter_percent": 21.9,
+      "average_dwelling_age": 12,
+      "total_dwellings": 1869
+    }],
+    ["GLENORA", {
+      "neighbourhood": "GLENORA",
+      "population": 5234,
+      "median_household_income": 118500,
+      "average_household_size": 2.45,
+      "owner_percent": 84.2,
+      "renter_percent": 15.8,
+      "average_dwelling_age": 38,
+      "total_dwellings": 2137
+    }],
+    ["WINDSOR PARK", {
+      "neighbourhood": "WINDSOR PARK",
+      "population": 2943,
+      "median_household_income": 101200,
+      "average_household_size": 2.36,
+      "owner_percent": 76.4,
+      "renter_percent": 23.6,
+      "average_dwelling_age": 26,
+      "total_dwellings": 1246
+    }]
+  ]
+}

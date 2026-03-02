@@ -36,7 +36,8 @@ export const MARKET_DATA = {
 
   /** Feasibility disclaimer — required on every estimate */
   feasibility_disclaimer:
-    'Construction costs based on Edmonton wood frame multi-family averages Feb 2026 ($180K–$250K per unit). ' +
+    'Construction costs are industry estimates only (Feb 2026: $180K–$250K per unit wood frame). ' +
+    'Verify with Edmonton contractors before making investment decisions. ' +
     'Revenue based on Edmonton 2BR market rents ($1,600–$1,900/month). Neighbourhood rental premium applied where applicable. ' +
     'These are estimates only — not a quote or guarantee. Always obtain professional quotes and verify with a ' +
     'qualified real estate professional before making investment decisions.',

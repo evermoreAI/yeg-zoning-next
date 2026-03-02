@@ -37,10 +37,16 @@ export async function POST(req: NextRequest) {
   try {
     switch (event.type) {
       case 'checkout.session.completed': {
+        console.log('WEBHOOK: Event received:', event.type)
+        
         const session = event.data.object as Stripe.Checkout.Session
         const email = session.customer_email
         const tier = (session.metadata?.tier || 'pro') as string
         const customerId = session.customer as string
+
+        console.log('WEBHOOK: Session email:', email)
+        console.log('WEBHOOK: Metadata:', session.metadata)
+        console.log('WEBHOOK: Customer ID:', customerId)
 
         if (!email || !customerId) {
           console.error('[webhook] Missing email or customer ID')
@@ -63,14 +69,30 @@ export async function POST(req: NextRequest) {
         }
 
         // Save user to database
-        await createOrUpdateUser(email, tier, customerId, subscriptionExpiry)
-        console.log('[webhook] User created/updated:', email, tier)
+        try {
+          await createOrUpdateUser(email, tier, customerId, subscriptionExpiry)
+          console.log('DB: User saved successfully:', email, tier)
+        } catch (dbError: any) {
+          console.error('DB ERROR:', dbError.message)
+          console.error('DB ERROR STACK:', dbError.stack)
+          throw dbError
+        }
 
         // Send magic link email
-        const magicToken = generateMagicLinkToken(email)
-        const magicLink = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/magic-link?token=${magicToken}&email=${encodeURIComponent(email)}`
-        await sendMagicLinkEmail(email, magicLink)
-        console.log('[webhook] Magic link sent to:', email)
+        try {
+          const magicToken = generateMagicLinkToken(email)
+          console.log('MAGIC LINK: Generated successfully for:', email)
+          
+          const magicLink = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/magic-link?token=${magicToken}&email=${encodeURIComponent(email)}`
+          console.log('MAGIC LINK: Full URL:', magicLink)
+          
+          await sendMagicLinkEmail(email, magicLink)
+          console.log('RESEND: Email sent successfully to:', email)
+        } catch (emailError: any) {
+          console.error('EMAIL ERROR:', emailError.message)
+          console.error('EMAIL ERROR STACK:', emailError.stack)
+          throw emailError
+        }
 
         break
       }

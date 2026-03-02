@@ -7,12 +7,25 @@ import SearchBar from '@/components/SearchBar'
 
 export default function LandingPage() {
   const router = useRouter()
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null)
 
   const handleSearch = (result: any) => {
     if (result.address) {
       router.push(`/map?address=${encodeURIComponent(result.address)}&lat=${result.lat}&lng=${result.lng}`)
     }
   }
+
+  // SVG checkmark component
+  const CheckmarkIcon = () => (
+    <svg className="w-4 h-4 text-[#c8a951] inline mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  )
+
+  // SVG dash component (for excluded)
+  const DashIcon = () => (
+    <span className="text-[#4a5568] mr-2">−</span>
+  )
 
   return (
     <div className="relative min-h-screen bg-[#0a0c10] text-[#e8e0d0] overflow-x-hidden">
@@ -70,7 +83,7 @@ export default function LandingPage() {
             </h2>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {/* Feature 1 — Zone Intelligence (icon: layered squares) */}
+              {/* Feature 1 — Zone Intelligence */}
               <div className="p-6 rounded-lg border border-[#2a2e38]"
                    style={{ background: '#141820' }}>
                 <svg className="w-8 h-8 mb-4 text-[#c8a951]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -88,7 +101,7 @@ export default function LandingPage() {
                 </p>
               </div>
 
-              {/* Feature 2 — Amendment Tracking (icon: bell) */}
+              {/* Feature 2 — Amendment Tracking */}
               <div className="p-6 rounded-lg border border-[#2a2e38]"
                    style={{ background: '#141820' }}>
                 <svg className="w-8 h-8 mb-4 text-[#c8a951]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -104,7 +117,7 @@ export default function LandingPage() {
                 </p>
               </div>
 
-              {/* Feature 3 — Feasibility Analysis (icon: chart bars) */}
+              {/* Feature 3 — Feasibility Analysis */}
               <div className="p-6 rounded-lg border border-[#2a2e38]"
                    style={{ background: '#141820' }}>
                 <svg className="w-8 h-8 mb-4 text-[#c8a951]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -127,14 +140,14 @@ export default function LandingPage() {
         {/* Pricing Section */}
         <section className="py-16 px-4">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-4xl font-bold text-center mb-12"
+            <h2 className="text-sm font-bold text-center mb-12 tracking-widest uppercase"
                 style={{ fontFamily: 'var(--font-rajdhani)' }}>
               Pricing
             </h2>
 
             <div className="grid md:grid-cols-3 gap-8">
               {/* Free tier */}
-              <div className="p-8 rounded-lg border border-[#2a2e38]"
+              <div className="p-8 rounded-lg border border-[#2a2e38] transition-all duration-300"
                    style={{ background: '#141820' }}>
                 <h3 className="text-2xl font-bold mb-2"
                     style={{ fontFamily: 'var(--font-rajdhani)' }}>
@@ -144,15 +157,14 @@ export default function LandingPage() {
                   $0<span className="text-sm text-[#4a5568]">/mo</span>
                 </div>
                 <ul className="space-y-3 text-[13px] text-[#8a8070]">
-                  <li>✓ Zone data & amendments</li>
-                  <li>✓ 5 searches/day</li>
-                  <li>✓ Rezoning alerts</li>
-                  <li>✗ Pro features gated</li>
+                  <li><CheckmarkIcon /> Zone data & amendments</li>
+                  <li><CheckmarkIcon /> Rezoning alerts</li>
+                  <li><DashIcon /> Pro features gated</li>
                 </ul>
               </div>
 
               {/* Pro tier (highlighted) */}
-              <div className="p-8 rounded-lg border-2 border-[#c8a951] relative"
+              <div className="p-8 rounded-lg border-2 border-[#c8a951] relative transition-all duration-300"
                    style={{ background: '#141820' }}>
                 <div className="absolute -top-3 left-6 bg-[#0a0c10] px-2">
                   <span className="text-[10px] font-bold text-[#c8a951] tracking-wider uppercase">
@@ -167,30 +179,53 @@ export default function LandingPage() {
                   $29<span className="text-sm text-[#4a5568]">/mo CAD</span>
                 </div>
                 <ul className="space-y-3 text-[13px] text-[#8a8070]">
-                  <li>✓ Everything in Free</li>
-                  <li>✓ Unlimited searches</li>
-                  <li>✓ Permit approval rates</li>
-                  <li>✓ Neighbourhood profiles</li>
-                  <li>✗ Feasibility locked</li>
+                  <li><CheckmarkIcon /> Everything in Free</li>
+                  <li><CheckmarkIcon /> Unlimited searches</li>
+                  <li><CheckmarkIcon /> Permit approval rates</li>
+                  <li><CheckmarkIcon /> Neighbourhood profiles</li>
+                  <li><DashIcon /> Feasibility locked</li>
                 </ul>
               </div>
 
-              {/* Investor tier (gold border) */}
-              <div className="p-8 rounded-lg border-2 border-[#c8a951]"
-                   style={{ background: '#141820' }}>
+              {/* Investor tier (PREMIUM) */}
+              <div 
+                className="p-8 rounded-lg relative transition-all duration-300 overflow-hidden"
+                style={{
+                  background: '#1a1f2e',
+                  border: hoveredCard === 'investor' ? '2px solid #c8a951' : '2px solid #c8a951',
+                  boxShadow: hoveredCard === 'investor' 
+                    ? '0 0 20px rgba(200,169,81,0.4), inset 0 0 20px rgba(200,169,81,0.1)' 
+                    : '0 0 10px rgba(200,169,81,0.2), inset 0 0 10px rgba(200,169,81,0.05)',
+                }}
+                onMouseEnter={() => setHoveredCard('investor')}
+                onMouseLeave={() => setHoveredCard(null)}>
+                
+                {/* Investor badge */}
+                <div className="absolute top-4 right-4">
+                  <span className="inline-block px-2 py-1 rounded text-[9px] font-bold text-[#c8a951] border border-[#c8a951] bg-[rgba(200,169,81,0.1)]">
+                    INVESTOR
+                  </span>
+                </div>
+
                 <h3 className="text-2xl font-bold mb-2"
                     style={{ fontFamily: 'var(--font-rajdhani)' }}>
                   Investor
                 </h3>
-                <div className="text-3xl font-bold text-[#c8a951] mb-6">
-                  $79<span className="text-sm text-[#4a5568]">/mo CAD</span>
+                <div className="text-4xl font-bold mb-6"
+                     style={{
+                       background: 'linear-gradient(135deg, #c8a951 0%, #d4b86a 100%)',
+                       WebkitBackgroundClip: 'text',
+                       WebkitTextFillColor: 'transparent',
+                       backgroundClip: 'text',
+                     }}>
+                  $79<span className="text-sm text-[#4a5568]" style={{ WebkitTextFillColor: '#4a5568' }}>/mo CAD</span>
                 </div>
                 <ul className="space-y-3 text-[13px] text-[#8a8070]">
-                  <li>✓ Everything in Pro</li>
-                  <li>✓ Feasibility analysis</li>
-                  <li>✓ Construction cost models</li>
-                  <li>✓ Rental market intel</li>
-                  <li>✓ All features unlocked</li>
+                  <li><CheckmarkIcon /> Everything in Pro</li>
+                  <li><CheckmarkIcon /> Feasibility analysis</li>
+                  <li><CheckmarkIcon /> Construction cost models</li>
+                  <li><CheckmarkIcon /> Rental market intel</li>
+                  <li><CheckmarkIcon /> All features unlocked</li>
                 </ul>
               </div>
             </div>

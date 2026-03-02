@@ -10,8 +10,8 @@ export const metadata: Metadata = {
     title: 'Edmonton RS Zone Guide 2026 — What Can You Build?',
     description:
       'Everything Edmonton property owners and developers need to know about the RS zone in 2026. Units, height, coverage, setbacks, and the April 7 2026 amendment explained.',
-    url: 'https://yeg-zoning-next.vercel.app/zones/rs',
-    siteName: 'YEG Zoning Command Center',
+    url: 'https://infilliq.ca/zones/rs',
+    siteName: 'InfillIQ',
   },
 }
 

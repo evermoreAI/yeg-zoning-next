@@ -21,8 +21,8 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'YEG Zoning Command',
-  description: 'Edmonton real estate intelligence — zoning, feasibility, investment signals',
+  title: 'InfillIQ — Edmonton Infill Intelligence',
+  description: 'InfillIQ — Edmonton infill intelligence. Zoning analysis, feasibility estimates, investment signals.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

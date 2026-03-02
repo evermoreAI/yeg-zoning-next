@@ -24,6 +24,10 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    console.log(`[stripe/checkout] Creating session for ${tier} tier with price: ${priceId}`)
+    console.log(`[stripe/checkout] Success URL: ${process.env.NEXT_PUBLIC_APP_URL}/stripe/success`)
+    console.log(`[stripe/checkout] Cancel URL: ${process.env.NEXT_PUBLIC_APP_URL}/stripe/cancel`)
+
     const stripe = getStripe()
 
     const session = await stripe.checkout.sessions.create({
@@ -41,12 +45,15 @@ export async function POST(req: NextRequest) {
       customer_creation: 'always',
     })
 
+    console.log(`[stripe/checkout] Session created: ${session.id}`)
+
     return NextResponse.json(
       { url: session.url },
       { status: 200 }
     )
   } catch (error) {
-    console.error('[stripe/checkout]', error)
+    console.error('[stripe/checkout] Error:', error instanceof Error ? error.message : error)
+    console.error('[stripe/checkout] Full error:', error)
     return NextResponse.json(
       { error: 'Checkout failed. Please try again.' },
       { status: 500 }

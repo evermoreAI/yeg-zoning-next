@@ -4,16 +4,22 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import SearchBar from '@/components/SearchBar'
+import { useCheckout } from '@/lib/useCheckout'
 
 export default function LandingPage() {
   const router = useRouter()
   const [hoveredCard, setHoveredCard] = useState<string | null>(null)
+  const { startCheckout: startProCheckout, loading: proLoading, error: proError } = useCheckout()
+  const { startCheckout: startInvestorCheckout, loading: investorLoading, error: investorError } = useCheckout()
 
   const handleSearch = (result: any) => {
     if (result.address) {
       router.push(`/map?address=${encodeURIComponent(result.address)}&lat=${result.lat}&lng=${result.lng}`)
     }
   }
+
+  const handleProCheckout = () => startProCheckout('pro')
+  const handleInvestorCheckout = () => startInvestorCheckout('investor')
 
   const CheckmarkIcon = () => (
     <svg className="w-4 h-4 text-[#c8a951] inline mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
@@ -153,12 +159,16 @@ export default function LandingPage() {
               <div className="p-8 rounded-lg border border-[#2a2e38] transition-all duration-300" style={{ background: '#141820' }}>
                 <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'var(--font-rajdhani)' }}>Free</h3>
                 <div className="text-3xl font-bold text-[#c8a951] mb-6">$0<span className="text-sm text-[#4a5568]">/mo</span></div>
-                <ul className="space-y-3 text-[13px] text-[#8a8070]">
+                <ul className="space-y-3 text-[13px] text-[#8a8070] mb-8">
                   <li><CheckmarkIcon /> Zone data & amendments</li>
                   <li><CheckmarkIcon /> Rezoning alerts</li>
                   <li><CheckmarkIcon /> Development permits nearby</li>
                   <li><DashIcon /> Pro features gated</li>
                 </ul>
+                <Link href="/map"
+                      className="block w-full px-6 py-3 rounded-lg bg-[#c8a951] text-[#0a0c10] font-bold text-center hover:bg-[#d4b86a] transition-colors">
+                  Search Now
+                </Link>
               </div>
 
               {/* Pro tier */}
@@ -168,13 +178,22 @@ export default function LandingPage() {
                 </div>
                 <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'var(--font-rajdhani)' }}>Pro</h3>
                 <div className="text-3xl font-bold text-[#c8a951] mb-6">$29<span className="text-sm text-[#4a5568]">/mo CAD</span></div>
-                <ul className="space-y-3 text-[13px] text-[#8a8070]">
+                <ul className="space-y-3 text-[13px] text-[#8a8070] mb-8">
                   <li><CheckmarkIcon /> Everything in Free</li>
                   <li><CheckmarkIcon /> Unlimited searches</li>
                   <li><CheckmarkIcon /> Permit approval rates</li>
                   <li><CheckmarkIcon /> Neighbourhood profiles</li>
                   <li><DashIcon /> Feasibility locked</li>
                 </ul>
+                <button
+                  onClick={handleProCheckout}
+                  disabled={proLoading}
+                  className="w-full px-6 py-3 rounded-lg bg-[#c8a951] text-[#0a0c10] font-bold text-center hover:bg-[#d4b86a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                  {proLoading ? 'Loading...' : 'Get Pro'}
+                </button>
+                {proError && (
+                  <div className="mt-2 text-[11px] text-[#8b1a1a]">{proError}</div>
+                )}
               </div>
 
               {/* Investor tier (PREMIUM) */}
@@ -206,13 +225,23 @@ export default function LandingPage() {
                     <div className="text-xs text-[#c8a951]">per month CAD</div>
                   </div>
 
-                  <ul className="space-y-3 text-[13px] text-[#8a8070]">
+                  <ul className="space-y-3 text-[13px] text-[#8a8070] mb-8">
                     <li><CheckmarkIcon /> Everything in Pro</li>
                     <li><CheckmarkIcon /> Feasibility analysis</li>
                     <li><CheckmarkIcon /> Construction cost models</li>
                     <li><CheckmarkIcon /> Rental market intel</li>
                     <li className="text-[#c8a951] font-bold"><CheckmarkIcon /> All features unlocked</li>
                   </ul>
+                  
+                  <button
+                    onClick={handleInvestorCheckout}
+                    disabled={investorLoading}
+                    className="w-full px-6 py-3 rounded-lg bg-[#c8a951] text-[#0a0c10] font-bold text-center hover:bg-[#d4b86a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    {investorLoading ? 'Loading...' : 'Get Investor Access'}
+                  </button>
+                  {investorError && (
+                    <div className="mt-2 text-[11px] text-[#8b1a1a]">{investorError}</div>
+                  )}
                 </div>
               </div>
             </div>

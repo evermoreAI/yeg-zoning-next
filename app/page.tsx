@@ -15,12 +15,12 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[#0a0c10] text-[#e8e0d0] overflow-hidden">
+    <div className="relative min-h-screen bg-[#0a0c10] text-[#e8e0d0] overflow-x-hidden">
       {/* Scanline overlay */}
       <div className="fixed inset-0 pointer-events-none opacity-[0.03] bg-[repeating-linear-gradient(0deg,transparent,transparent_1px,rgba(255,255,255,0.05)_1px,rgba(255,255,255,0.05)_2px)] z-50" />
 
-      {/* Grid background */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.04]"
+      {/* Grid background — parcel lot lines */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.035]"
            style={{
              backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(200,169,81,0.05) 25%, rgba(200,169,81,0.05) 26%, transparent 27%, transparent 74%, rgba(200,169,81,0.05) 75%, rgba(200,169,81,0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(200,169,81,0.05) 25%, rgba(200,169,81,0.05) 26%, transparent 27%, transparent 74%, rgba(200,169,81,0.05) 75%, rgba(200,169,81,0.05) 76%, transparent 77%, transparent)',
              backgroundSize: '50px 50px',
@@ -28,22 +28,22 @@ export default function LandingPage() {
 
       {/* Content */}
       <div className="relative z-10">
-        {/* Hero Section */}
-        <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20">
+        {/* Hero Section — tight vertical padding */}
+        <section className="min-h-screen flex flex-col items-center justify-center px-4 py-12 md:py-16">
           {/* Gold badge */}
-          <div className="mb-6 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#c8a951] bg-[rgba(200,169,81,0.1)]">
+          <div className="mb-8 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#c8a951] bg-[rgba(200,169,81,0.1)]">
             <span className="text-lg">⚡</span>
             <span className="text-[11px] font-semibold text-[#c8a951] tracking-wider uppercase">Official City of Edmonton data — updated daily</span>
           </div>
 
           {/* Headline */}
-          <h1 className="text-5xl md:text-7xl font-bold text-center mb-3 leading-tight"
+          <h1 className="text-6xl md:text-7xl font-bold text-center mb-4 leading-tight max-w-4xl"
               style={{ fontFamily: 'var(--font-rajdhani)' }}>
             Edmonton infill intelligence
           </h1>
 
           {/* Subheadline */}
-          <p className="text-xl md:text-2xl text-[#c8a951] text-center mb-12 max-w-2xl leading-relaxed">
+          <p className="text-lg md:text-2xl text-[#c8a951] text-center mb-12 max-w-2xl leading-relaxed">
             Find the lot. Know the rules. Model the deal.
           </p>
 
@@ -59,21 +59,26 @@ export default function LandingPage() {
         </section>
 
         {/* Features Section */}
-        <section className="py-20 px-4">
+        <section className="py-16 px-4">
           <div className="max-w-6xl mx-auto">
-            <p className="text-sm text-[#8a8070] text-center mb-4">
+            <p className="text-sm text-[#8a8070] text-center mb-8">
               Due diligence in seconds. Not days.
             </p>
-            <h2 className="text-4xl font-bold text-center mb-16"
+            <h2 className="text-4xl font-bold text-center mb-12"
                 style={{ fontFamily: 'var(--font-rajdhani)' }}>
-              Built for Edmonton Investors
+              Edmonton Infill Intelligence
             </h2>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {/* Feature 1 */}
+              {/* Feature 1 — Zone Intelligence (icon: layered squares) */}
               <div className="p-6 rounded-lg border border-[#2a2e38]"
                    style={{ background: '#141820' }}>
-                <div className="text-3xl mb-3">⚡</div>
+                <svg className="w-8 h-8 mb-4 text-[#c8a951]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="3" width="8" height="8" />
+                  <rect x="13" y="3" width="8" height="8" />
+                  <rect x="3" y="13" width="8" height="8" />
+                  <rect x="13" y="13" width="8" height="8" />
+                </svg>
                 <h3 className="text-lg font-bold mb-2"
                     style={{ fontFamily: 'var(--font-rajdhani)' }}>
                   Zone Intelligence
@@ -83,10 +88,13 @@ export default function LandingPage() {
                 </p>
               </div>
 
-              {/* Feature 2 */}
+              {/* Feature 2 — Amendment Tracking (icon: bell) */}
               <div className="p-6 rounded-lg border border-[#2a2e38]"
                    style={{ background: '#141820' }}>
-                <div className="text-3xl mb-3">🔔</div>
+                <svg className="w-8 h-8 mb-4 text-[#c8a951]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
                 <h3 className="text-lg font-bold mb-2"
                     style={{ fontFamily: 'var(--font-rajdhani)' }}>
                   Amendment Tracking
@@ -96,10 +104,14 @@ export default function LandingPage() {
                 </p>
               </div>
 
-              {/* Feature 3 */}
+              {/* Feature 3 — Feasibility Analysis (icon: chart bars) */}
               <div className="p-6 rounded-lg border border-[#2a2e38]"
                    style={{ background: '#141820' }}>
-                <div className="text-3xl mb-3">📊</div>
+                <svg className="w-8 h-8 mb-4 text-[#c8a951]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="12" width="4" height="8" />
+                  <rect x="10" y="5" width="4" height="15" />
+                  <rect x="17" y="3" width="4" height="17" />
+                </svg>
                 <h3 className="text-lg font-bold mb-2"
                     style={{ fontFamily: 'var(--font-rajdhani)' }}>
                   Feasibility Analysis
@@ -113,11 +125,11 @@ export default function LandingPage() {
         </section>
 
         {/* Pricing Section */}
-        <section className="py-20 px-4">
+        <section className="py-16 px-4">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-4xl font-bold text-center mb-16"
+            <h2 className="text-4xl font-bold text-center mb-12"
                 style={{ fontFamily: 'var(--font-rajdhani)' }}>
-              Simple Pricing
+              Pricing
             </h2>
 
             <div className="grid md:grid-cols-3 gap-8">
@@ -186,7 +198,7 @@ export default function LandingPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 px-4 text-center border-t border-[#1e2530]">
+        <section className="py-12 px-4 text-center border-t border-[#1e2530]">
           <h2 className="text-2xl font-bold mb-4"
               style={{ fontFamily: 'var(--font-rajdhani)' }}>
             Ready to analyze your lot?
